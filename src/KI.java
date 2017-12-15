@@ -1,5 +1,5 @@
-/**
- * Created by moritz on 15.12.17.
- */
 public class KI extends Spielfeld {
+    public KI(int spieler) {
+        super(spieler);
+    }
 }

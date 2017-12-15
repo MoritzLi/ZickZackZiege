@@ -1,6 +1,6 @@
 public class Start {
     public static void main(String[] arguments) throws Exception {
-        MenuGUI menuGUI = new MenuGUI();
-        menuGUI.setVisible(true);
+        SpielfeldGUI gui = new SpielfeldGUI(2);
+        gui.setVisible(true);
     }
 }

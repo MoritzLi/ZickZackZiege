@@ -1,5 +1,11 @@
-/**
- * Created by moritz on 15.12.17.
- */
 public class Spieler {
+    private final int id;
+
+    public Spieler(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
 }
