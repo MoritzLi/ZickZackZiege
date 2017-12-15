@@ -1,7 +1,7 @@
 import javax.swing.*;
 
-class StartGUI extends JFrame {
-    StartGUI() {
+class MenuGUI extends JFrame {
+    MenuGUI() {
         super("ZickZackZiege");
 
         setSize(400, 800);
