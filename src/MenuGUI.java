@@ -5,8 +5,5 @@ class MenuGUI extends JFrame {
         super("ZickZackZiege");
 
         setSize(400, 800);
-
-
-        //setVisible(true);
     }
 }

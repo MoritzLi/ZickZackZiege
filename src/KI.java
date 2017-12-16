@@ -1,5 +1,5 @@
 public class KI extends Spielfeld {
-    public KI(int spieler) {
-        super(spieler);
+    public KI() {
+        super(2);
     }
 }

@@ -24,6 +24,7 @@ public class SpielfeldGUI extends JFrame implements ActionListener {
                 buttons[i][j].setOpaque(false);
                 buttons[i][j].setContentAreaFilled(false);
                 buttons[i][j].setBounds(padding + i * fieldSize, padding + j * fieldSize, fieldSize, fieldSize);
+                buttons[i][j].addActionListener(this);
                 add(buttons[i][j]);
             }
         }
@@ -40,6 +41,9 @@ public class SpielfeldGUI extends JFrame implements ActionListener {
             for (int j = 0; j < buttons[i].length; j++) {
                 if (buttons[i][j] == source) {
                     spielfeld.setze(1, i, j);
+                    buttons[i][j].setText(String.valueOf(1));
+                    buttons[i][j].setEnabled(false);
+                    return;
                 }
             }
         }
