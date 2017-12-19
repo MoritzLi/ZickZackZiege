@@ -40,7 +40,11 @@ public class SpielfeldGUI extends JFrame implements ActionListener {
         for (int i = 0; i < buttons.length; i++) {
             for (int j = 0; j < buttons[i].length; j++) {
                 if (buttons[i][j] == source) {
-                    spielfeld.setze(1, i, j);
+                    try {
+                        spielfeld.setze(1, i, j);
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                    }
                     buttons[i][j].setText(String.valueOf(1));
                     buttons[i][j].setEnabled(false);
                     return;
