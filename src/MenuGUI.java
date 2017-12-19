@@ -2,6 +2,9 @@ import javax.swing.*;
 
 @SuppressWarnings("FieldCanBeLocal")
 class MenuGUI extends JFrame {
+    private static final int buttonHeight = 75;
+    private static final int buttonWidth = 200;
+
     private final JPanel panelMenu;
     private final JPanel panelSettings;
     private final JPanel panelStart;
@@ -13,12 +16,16 @@ class MenuGUI extends JFrame {
     private final JButton buttonServerBeitreten;
     private final JButton buttonSpielStarten;
 
+    private final JFrame ipInput;
+    private final JTextField textFieldIp;
+    private final JButton buttonIpInput;
+
     private String ipAdresse;
 
     MenuGUI() {
         super("ZickZackZiege");
 
-        setSize(400, 800);
+        setSize(290, 500);
         setLayout(null);
 
         panelMenu = new JPanel();
@@ -34,44 +41,48 @@ class MenuGUI extends JFrame {
         panelStart.setLayout(null);
 
         buttonNeuesSpiel = new JButton();
-        buttonNeuesSpiel.setBounds(40, 80, 200, 75);
+        buttonNeuesSpiel.setBounds(40, 80, buttonWidth, buttonHeight);
         buttonNeuesSpiel.setText("Neues Spiel");
         buttonNeuesSpiel.addActionListener(e -> setContentPane(panelStart));
         buttonEinstellungen = new JButton();
-        buttonEinstellungen.setBounds(40, 200, 200, 75);
+        buttonEinstellungen.setBounds(40, 200, buttonWidth, buttonHeight);
         buttonEinstellungen.setText("Einstellungen");
         buttonEinstellungen.addActionListener(e -> setContentPane(panelSettings));
 
         panelMenu.add(buttonNeuesSpiel);
         panelMenu.add(buttonEinstellungen);
 
+        ipInput = new JFrame("Server beitreten");
+        ipInput.setSize(buttonWidth, 150);
+        ipInput.setLayout(null);
+
+        textFieldIp = new JTextField();
+        textFieldIp.setBounds(20, 20, 150, 35);
+
+        buttonIpInput = new JButton();
+        buttonIpInput.setBounds(65, 70, 60, 25);
+        buttonIpInput.setText("OK");
+        buttonIpInput.addActionListener(e1 -> {
+            ipAdresse = textFieldIp.getText();
+            ipInput.setVisible(false);
+            System.out.println(ipAdresse);
+        });
+
+        ipInput.add(textFieldIp);
+        ipInput.add(buttonIpInput);
+
         buttonSingleplayer = new JButton();
-        buttonSingleplayer.setBounds(40, 80, 200, 75);
+        buttonSingleplayer.setBounds(40, 80, buttonWidth, buttonHeight);
         buttonSingleplayer.setText("Singleplayer");
         buttonSingleplayer.addActionListener(e -> System.out.println("TODO"));
         buttonServerBeitreten = new JButton();
-        buttonServerBeitreten.setBounds(40, 200, 200, 75);
+        buttonServerBeitreten.setBounds(40, 200, buttonWidth, buttonHeight);
         buttonServerBeitreten.setText("Netzwerkspiel beitreten");
         buttonServerBeitreten.addActionListener(e -> {
-            JFrame input = new JFrame("Server beitreten");
-            input.setSize(200, 150);
-            input.setLayout(null);
-            JTextField ip = new JTextField();
-            ip.setBounds(20, 20, 150, 35);
-            JButton ok = new JButton();
-            ok.setBounds(65, 70, 60, 25);
-            ok.setText("OK");
-            ok.addActionListener(e1 -> {
-                ipAdresse = ip.getText();
-                input.setVisible(false);
-                System.out.println(ipAdresse);
-            });
-            input.add(ip);
-            input.add(ok);
-            input.setVisible(true);
+            ipInput.setVisible(true);
         });
         buttonServerErstellen = new JButton();
-        buttonServerErstellen.setBounds(40, 320, 200, 75);
+        buttonServerErstellen.setBounds(40, 320, buttonWidth, buttonHeight);
         buttonServerErstellen.setText("Neues Spiel erstellen");
 
         panelStart.add(buttonSingleplayer);
