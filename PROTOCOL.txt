@@ -1,0 +1,15 @@
+REGISTER:
+Client -> Server
+Wird als Spieler registriert
+
+SET x,y:
+Client -> Server
+Client setzt sein Zeichen auf ein Spielfeld
+
+SET id,x,y:
+Server -> Client
+Ein Client hat sein Zeichen auf ein Spielfeld gesetzt
+
+START n,id:
+Server -> Client
+Spiel startet.

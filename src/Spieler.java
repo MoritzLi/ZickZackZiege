@@ -1,4 +1,4 @@
-public class Spieler {
+class Spieler {
     private final int id;
     private final String IP;
     private final int port;
@@ -9,21 +9,35 @@ public class Spieler {
         this.port = port;
     }
 
-    public int getId() {
+    public Spieler(String IP) {
+        this.id = 0;
+        this.IP = IP;
+        this.port = 0;
+    }
+
+    int getId() {
         return id;
     }
 
-    public String getIP() {
+    String getIP() {
         return IP;
     }
 
-    public int getPort() {
+    int getPort() {
         return port;
     }
 
     @Override
     public boolean equals(Object obj) {
-        Spieler other = (Spieler) obj;
-        return other.getIP().equals(this.getIP());
+        if (obj instanceof Spieler) {
+            Spieler other = (Spieler) obj;
+            return other.getIP().equals(this.getIP());
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return getIP() + ':' + getPort();
     }
 }

@@ -10,7 +10,7 @@ public abstract class Server {
 
     private class ServerConnection extends Connection {
         // Objekte
-        Server server;
+        final Server server;
 
         public ServerConnection(Socket pSocket, Server pServer) {
             super(pSocket);
@@ -38,7 +38,7 @@ public abstract class Server {
     }
 
     private class ServerSchleife extends Thread {
-        private Server server;
+        private final Server server;
 
         public ServerSchleife(Server pServer) {
             server = pServer;

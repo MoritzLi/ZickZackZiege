@@ -4,12 +4,13 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class Connection extends Thread {
-    private Socket s;
-    private BufferedReader vomHost;
-    private PrintWriter zumHost;
-    private String serverName;
-    private int port;
+@SuppressWarnings("unused")
+class Connection extends Thread {
+    private       Socket         s;
+    private       BufferedReader vomHost;
+    private       PrintWriter    zumHost;
+    private       String         serverName;
+    private final int            port;
 
     public Connection(String serverName, int port) {
         this.serverName = serverName;
@@ -17,7 +18,7 @@ public class Connection extends Thread {
         connect();
     }
 
-    public Connection(Socket socket) {
+    Connection(Socket socket) {
         s = socket;
         port = s.getLocalPort();
         try {
@@ -59,11 +60,12 @@ public class Connection extends Thread {
         zumHost.flush();
     }
 
+    @SuppressWarnings("unused")
     public boolean isConnected() {
         return s.isConnected();
     }
 
-    public boolean isClosed() {
+    boolean isClosed() {
         return s.isClosed();
     }
 
@@ -80,7 +82,7 @@ public class Connection extends Thread {
         return s.getPort();
     }
 
-    public int getLocalPort() {
+    private int getLocalPort() {
         return s.getLocalPort();
     }
 

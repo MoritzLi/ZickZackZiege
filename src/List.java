@@ -9,7 +9,7 @@ import java.util.Iterator;
  * @version 2017.2810
  * @since 0.0.1
  */
-@SuppressWarnings({"WeakerAccess", "unused"})
+@SuppressWarnings({"WeakerAccess", "unused", "UnusedReturnValue"})
 public class List<ContentType> implements Iterable<ContentType> {
 
     private Node first, last, current;

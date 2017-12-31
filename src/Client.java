@@ -1,12 +1,13 @@
-public abstract class Client {
+@SuppressWarnings("unused")
+abstract class Client {
     //Objektbeziehungen
-    private Connection hatVerbindung;
-    private Clientempfaenger hatEmpfaenger;
+    private final Connection       hatVerbindung;
+    private       Clientempfaenger hatEmpfaenger;
 
     class Clientempfaenger extends Thread {
         // Objekte
-        private Client kenntClient;
-        private Connection kenntVerbindung;
+        private final Client     kenntClient;
+        private final Connection kenntVerbindung;
 
         // Attribute
         private boolean zVerbindungAktiv;
@@ -17,7 +18,7 @@ public abstract class Client {
          * @param pClient     zugeh&ouml;riger Client, der die einkommenden Nachrichten bearbeitet
          * @param pConnection zugeh&ouml;rige Connection, die die einkommenden Nachrichten empf�ngt
          */
-        public Clientempfaenger(Client pClient, Connection pConnection) {
+        Clientempfaenger(Client pClient, Connection pConnection) {
             kenntClient = pClient;
             kenntVerbindung = pConnection;
             zVerbindungAktiv = true;
@@ -43,13 +44,13 @@ public abstract class Client {
         /**
          * Der ClientEmpfaenger arbeitet nicht mehr
          */
-        public void gibFrei() {
+        void gibFrei() {
             zVerbindungAktiv = false;
         }
 
     }
 
-    public Client(String pIPAdresse, int pPortNr) {
+    Client(String pIPAdresse, int pPortNr) {
         hatVerbindung = new Connection(pIPAdresse, pPortNr);
 
         try {
@@ -66,17 +67,14 @@ public abstract class Client {
     }
 
     public boolean istVerbunden() {
-        if (hatEmpfaenger != null)
-            return hatEmpfaenger.zVerbindungAktiv;
-        else
-            return false;
+        return hatEmpfaenger != null && hatEmpfaenger.zVerbindungAktiv;
     }
 
     public String toString() {
         return "Verbindung mit Socket: " + hatVerbindung.verbindungsSocket();
     }
 
-    public abstract void processMessage(String pMessage);
+    protected abstract void processMessage(String pMessage);
 
     public void close() {
         if (hatEmpfaenger != null)
