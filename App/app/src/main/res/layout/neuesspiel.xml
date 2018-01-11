@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/neuesSpielLayout"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/neuesSpiel"
+        android:layout_width="wrap_content"
+        android:layout_height="239dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="19dp"
+        android:layout_marginRight="35dp"
+        android:layout_weight="0.55"
+        android:clickable="true"
+        android:src="@android:drawable/ic_menu_delete"
+        app:fabSize="mini" />
+</RelativeLayout>
