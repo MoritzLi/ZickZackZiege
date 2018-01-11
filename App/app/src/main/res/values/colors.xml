@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#607d8b</color>
     <color name="colorPrimaryDark">#455a64</color>
-    <color name="colorAccent">#b71c1c</color>
+    <color name="colorAccent">#FF0097A7</color>
 
     <color name="materialRed">#b71c1c</color>
     <color name="materialPink">#ff4081</color>
@@ -12,4 +12,5 @@
     <color name="materialGreen">#5db61e</color>
     <color name="materialPurple">#9c27b0</color>
     <color name="materialCyan">#00bfa5</color>
+    <color name="accent_material_dark">#0097a7</color>
 </resources>

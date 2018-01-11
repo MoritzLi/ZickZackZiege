@@ -1,11 +1,8 @@
 package com.example.user.zzzmitview;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -18,13 +15,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SharedPreferences s = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
-        initToolbar();
-        initButtons();
-    }
-
-    private void initButtons() {
         findViewById(R.id.einzelspieler).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startActivity(
@@ -78,18 +68,24 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.regeln).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                toast("Demnächst verfügbar.");
+                startActivity(
+                        new Intent(
+                                getApplicationContext(),
+                                RegelActivity.class
+                        )
+                );
+            }
+        });
+
+        findViewById(R.id.name).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new ChangeNameDialog(MainActivity.this).show();
             }
         });
     }
 
-    private void initToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        setTitle("ZickZackZiege");
-    }
-
-    private void toast(String pText) {
+    void toast(String pText) {
         Toast t = Toast.makeText(getApplicationContext(), pText, Toast.LENGTH_SHORT);
         t.show();
     }
@@ -105,19 +101,5 @@ public class MainActivity extends AppCompatActivity {
         ViewGroup r = (ViewGroup) findViewById(R.id.einsGegenEinsAuswaehlen);
         EditText  e = new EditText(this);
         r.addView(e);
-    }
-
-    public void speicherDaten(String speichername, String pDaten, SharedPreferences s) {
-        s
-                .edit()
-                .putString(
-                        speichername,
-                        pDaten
-                )
-                .apply();
-    }
-
-    public String getDaten(String speichername, SharedPreferences s) {
-        return s.getString(speichername, "");
     }
 }

@@ -97,6 +97,8 @@ public class MultiplayerView extends View {
 
         spielfeld.setze(1, x, y);
 
+        invalidate();
+
         return super.onTouchEvent(event);
     }
 
@@ -126,7 +128,7 @@ public class MultiplayerView extends View {
         bitmapBackground = Bitmap.createBitmap(
                 fieldWidth * spielfeld.getBreite(),
                 fieldWidth * spielfeld.getBreite(),
-                Bitmap.Config.RGB_565
+                Bitmap.Config.ARGB_4444
         );
         Canvas canvas = new Canvas(bitmapBackground);
 
