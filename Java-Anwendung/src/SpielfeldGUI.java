@@ -1,9 +1,8 @@
-import com.sun.istack.internal.Nullable;
-
-import javax.swing.*;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
 
 class SpielfeldGUI extends JFrame implements ActionListener {
     private static final int fieldSize = 60;
@@ -17,7 +16,7 @@ class SpielfeldGUI extends JFrame implements ActionListener {
     private final GameServer server;
     private final GameClient client;
 
-    SpielfeldGUI(int spieler, int myID, @Nullable GameServer server, @Nullable GameClient client) {
+    SpielfeldGUI(int spieler, int myID, GameServer server, GameClient client) {
         super("ZickZackZiege");
         this.server = server;
         this.client = client;

@@ -28,4 +28,8 @@ public class Spielfeld {
     int auswertung(int spielerID) {
         return Auswertung.auswertung(spielerID, feld);
     }
+
+    int getBreite() {
+        return feld.length;
+    }
 }
