@@ -12,15 +12,17 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:background="?attr/colorPrimary"
+        android:elevation="4dp"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"/>
 
     <view
-        class="com.example.user.zzzmitview.SpielfeldView"
+        class="com.example.user.zzzmitview.Drawer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/toolbar"/>
+        android:layout_below="@+id/toolbar"
+        android:layout_marginTop="10dp"/>
 
 </RelativeLayout>

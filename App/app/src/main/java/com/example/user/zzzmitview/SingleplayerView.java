@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.support.annotation.Nullable;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -13,7 +15,7 @@ import android.view.View;
  * Created by User on 02.01.2018.
  */
 
-public class Einzelspieler extends View {
+public class SingleplayerView extends View {
 
     Umrechner umrechner = new Umrechner();
     int[][]   feld      = new int[5][5];
@@ -29,8 +31,34 @@ public class Einzelspieler extends View {
     int         spielrunde  = 1;
     Einzelspiel einzelspiel = new Einzelspiel(2);
 
-    public Einzelspieler(Context context) {
+    public SingleplayerView(Context context) {
         super(context);
+        for (int i = 0; i < 5; i++) {
+            for (int t = 0; t < 5; t++) {
+                feld[i][t] = 0;
+            }
+        }
+
+        bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ziege);
+        x = 0;
+        y = 0;
+    }
+
+    public SingleplayerView(Context context, @Nullable AttributeSet attrs) {
+        super(context, attrs);
+        for (int i = 0; i < 5; i++) {
+            for (int t = 0; t < 5; t++) {
+                feld[i][t] = 0;
+            }
+        }
+
+        bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ziege);
+        x = 0;
+        y = 0;
+    }
+
+    public SingleplayerView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
         for (int i = 0; i < 5; i++) {
             for (int t = 0; t < 5; t++) {
                 feld[i][t] = 0;

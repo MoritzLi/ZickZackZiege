@@ -1,89 +1,97 @@
 package com.example.user.zzzmitview;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
-        SharedPreferences s = this.getSharedPreferences(
-                "Datenspeicher", Context.MODE_PRIVATE);
 
-        TextView ueberschrift = (TextView) findViewById(R.id.ueberschrift);
-        ueberschrift.setTextSize(30);
+        SharedPreferences s = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        final Drawer        view  = new Drawer(this);
-        final Einzelspieler viewE = new Einzelspieler(this);
+        initToolbar();
+        initButtons();
+    }
 
-        Button einzelSpieler = (Button) findViewById(R.id.einzelspieler);
-        einzelSpieler.setOnClickListener(new View.OnClickListener() {
+    private void initButtons() {
+        findViewById(R.id.einzelspieler).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                setContentView(viewE);
+                startActivity(
+                        new Intent(
+                                getApplicationContext(),
+                                SpielfeldActivity.class
+                        )
+                                .putExtra(
+                                        "contentView",
+                                        R.layout.activity_spielfeld_singleplayer
+                                )
+                );
             }
         });
 
-        Button einsGegenEins = (Button) findViewById(R.id.einsGegenEins);
-        einsGegenEins.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.einsGegenEins).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                setContentView(view);
-                //erstelleAuswaehler();
+                startActivity(
+                        new Intent(
+                                getApplicationContext(),
+                                SpielfeldActivity.class
+                        )
+                                .putExtra(
+                                        "contentView",
+                                        R.layout.activity_spielfeld_1v1
+                                )
+                );
             }
         });
 
-        Button mehrspieler = (Button) findViewById(R.id.mehrspieler);
-        mehrspieler.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.mehrspieler).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
-                toast("Nicht verfügbar.");
+                startActivity(
+                        new Intent(
+                                getApplicationContext(),
+                                SpielfeldActivity.class
+                        )
+                                .putExtra(
+                                        "contentView",
+                                        R.layout.activity_spielfeld_multiplayer
+                                )
+                );
             }
         });
 
-        Button online = (Button) findViewById(R.id.online);
-        online.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.online).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
-                toast("Nicht verfügbar.");
+                toast("Demnächst verfügbar.");
             }
         });
 
-        Button regeln = (Button) findViewById(R.id.regeln);
-        regeln.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.regeln).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
-                toast("Nicht verfügbar.");
+                toast("Demnächst verfügbar.");
             }
         });
     }
 
-    public void toast(String pText) {
+    private void initToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        setTitle("ZickZackZiege");
+    }
+
+    private void toast(String pText) {
         Toast t = Toast.makeText(getApplicationContext(), pText, Toast.LENGTH_SHORT);
         t.show();
-    }
-
-    private int getScreenHeight() {
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        return displayMetrics.heightPixels;
-    }
-
-    private int getScreenWidth() {
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        return displayMetrics.widthPixels;
     }
 
     @Override
@@ -100,10 +108,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void speicherDaten(String speichername, String pDaten, SharedPreferences s) {
-        s.edit().putString(speichername, pDaten).apply();
+        s
+                .edit()
+                .putString(
+                        speichername,
+                        pDaten
+                )
+                .apply();
     }
 
-    public String getDaten(String speichername, String pDaten, SharedPreferences s) {
+    public String getDaten(String speichername, SharedPreferences s) {
         return s.getString(speichername, "");
     }
 }
