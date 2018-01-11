@@ -1,8 +1,4 @@
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 @SuppressWarnings("FieldCanBeLocal")
 class MenuGUI extends JFrame {
@@ -141,6 +137,5 @@ class MenuGUI extends JFrame {
         panelSettings = new JPanel();
         panelSettings.setSize(getWidth(), getHeight());
         panelSettings.setLayout(null);
-
     }
 }
