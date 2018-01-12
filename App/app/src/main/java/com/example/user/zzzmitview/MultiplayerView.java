@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -23,7 +24,11 @@ public class MultiplayerView extends View {
             R.color.materialPink
     };
 
-    private final Spielfeld spielfeld;
+    private SpielfeldActivity activity;
+
+    private Spielfeld spielfeld;
+    private Spieler[] spieler;
+    private int current;
 
     private Paint paint;
 
@@ -32,48 +37,24 @@ public class MultiplayerView extends View {
 
     private boolean isInitialized;
 
-    private int height, width;
-    private int baselineY;
     private int fieldWidth;
     private int stroke;
 
     public MultiplayerView(Context context) {
         super(context);
 
-        this.spielfeld = new Spielfeld(2);
         this.isInitialized = false;
-
-        for (int i = 0; i < 10; i++) {
-            spielfeld.setze(((int) (1 + Math.random() * 7)), ((int) (Math.random() * spielfeld.getBreite())), ((int) (Math.random() * spielfeld.getBreite())));
-        }
     }
 
     public MultiplayerView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
 
-        this.spielfeld = new Spielfeld(2);
         this.isInitialized = false;
-
-        for (int i = 0; i < 10; i++) {
-            spielfeld.setze(((int) (1 + Math.random() * 7)), ((int) (Math.random() * spielfeld.getBreite())), ((int) (Math.random() * spielfeld.getBreite())));
-        }
     }
 
     public MultiplayerView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        this.spielfeld = new Spielfeld(2);
-        this.isInitialized = false;
-
-        for (int i = 0; i < 10; i++) {
-            spielfeld.setze(((int) (1 + Math.random() * 7)), ((int) (Math.random() * spielfeld.getBreite())), ((int) (Math.random() * spielfeld.getBreite())));
-        }
-    }
-
-    public MultiplayerView(Context context, Spielfeld spielfeld) {
-        super(context);
-
-        this.spielfeld = spielfeld;
         this.isInitialized = false;
     }
 
@@ -83,40 +64,59 @@ public class MultiplayerView extends View {
             initialize();
         }
 
-        canvas.drawBitmap(bitmapBackground, 0, baselineY, paint);
-        canvas.drawBitmap(bitmapFields, 0, baselineY, paint);
+        canvas.drawBitmap(bitmapBackground, 0, 0, paint);
+        canvas.drawBitmap(bitmapFields, 0, 0, paint);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        float eventX = event.getX();
-        float eventY = event.getY();
+        int x = (int) (event.getX() / fieldWidth);
+        if (x >= spielfeld.getBreite())
+            x = spielfeld.getBreite() - 1;
 
-        int x = (int) (eventX / fieldWidth);
-        int y = (int) (eventY / fieldWidth);
+        int y = (int) (event.getY() / fieldWidth);
+        if (y >= spielfeld.getBreite())
+            y = spielfeld.getBreite() - 1;
 
-        spielfeld.setze(1, x, y);
+        if (spielfeld.leer(x, y)) {
+            spielfeld.setze(spieler[current].getId(), x, y);
 
+            activity.resetPunkte(current);
+
+            current++;
+            if (current == spieler.length) {
+                current = 0;
+            }
+        }
+
+        drawFields();
         invalidate();
 
         return super.onTouchEvent(event);
     }
 
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        int width = getMeasuredWidth();
+        setMeasuredDimension(width, width);
+    }
+
     private void initialize() {
-        height = getHeight();
-        width = getWidth();
+        current = 0;
 
         stroke = 3;
 
-        baselineY = height / 128;
-
-        fieldWidth = width / spielfeld.getBreite();
+        fieldWidth = getWidth() / spielfeld.getBreite();
 
         paint = new Paint();
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
 
         drawBackground();
         drawFields();
+
+        isInitialized = true;
     }
 
     private void drawBackground() {
@@ -155,5 +155,19 @@ public class MultiplayerView extends View {
                 canvas.drawRect(fieldWidth * i + stroke, fieldWidth * j + stroke, fieldWidth * (i + 1) - stroke, fieldWidth * (j + 1) - stroke, paint);
             }
         }
+    }
+
+    public void setActivity(SpielfeldActivity activity) {
+        this.activity = activity;
+    }
+
+    public void setSpielfeld(Spielfeld spielfeld) {
+        this.spielfeld = spielfeld;
+        isInitialized = false;
+        invalidate();
+    }
+
+    public void setSpieler(Spieler[] spieler) {
+        this.spieler = spieler;
     }
 }

@@ -11,31 +11,13 @@ public class Umrechner {
     }
 
     public int toXarray(int pX, int kastenBreite) {
-        if (pX >= 0 && pX <= kastenBreite)
-            return 0;
-        else if (pX >= kastenBreite && pX <= kastenBreite * 2)
-            return 1;
-        else if (pX >= kastenBreite * 2 && pX <= kastenBreite * 3)
-            return 2;
-        else if (pX >= kastenBreite * 3 && pX <= kastenBreite * 4)
-            return 3;
-        else if (pX >= kastenBreite * 4 && pX <= kastenBreite * 5)
-            return 4;
-        else return -1;
+        return pX / kastenBreite;
     }
 
     public int toYarray(int pY, int kastenBreite) {
-        if (pY >= 0 && pY <= kastenBreite)
-            return 0;
-        else if (pY >= kastenBreite && pY <= kastenBreite * 2)
-            return 1;
-        else if (pY >= kastenBreite * 2 && pY <= kastenBreite * 3)
-            return 2;
-        else if (pY >= kastenBreite * 3 && pY <= kastenBreite * 4)
-            return 3;
-        else if (pY >= kastenBreite * 4 && pY <= kastenBreite * 5)
-            return 4;
-        else return -1;
+        if (pY / kastenBreite < 5)
+            return pY / kastenBreite;
+        return -1;
     }
 
     public int getEcken(int pX, int pY, int kastenbreite, String ort) {
@@ -66,5 +48,4 @@ public class Umrechner {
         }
         return 0;
     }
-
 }

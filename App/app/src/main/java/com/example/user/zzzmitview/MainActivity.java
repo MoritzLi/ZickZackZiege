@@ -30,33 +30,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.einsGegenEins).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                startActivity(
-                        new Intent(
-                                getApplicationContext(),
-                                SpielfeldActivity.class
-                        )
-                                .putExtra(
-                                        "contentView",
-                                        R.layout.activity_spielfeld_1v1
-                                )
-                );
-            }
-        });
-
         findViewById(R.id.mehrspieler).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(
-                        new Intent(
-                                getApplicationContext(),
-                                SpielfeldActivity.class
-                        )
-                                .putExtra(
-                                        "contentView",
-                                        R.layout.activity_spielfeld_multiplayer
-                                )
-                );
+                new SpielerzahlDialog(MainActivity.this, new Intent(
+                        getApplicationContext(),
+                        SpielfeldActivity.class
+                )
+                        .putExtra(
+                                "contentView",
+                                R.layout.activity_spielfeld_multiplayer
+                        )).show();
             }
         });
 

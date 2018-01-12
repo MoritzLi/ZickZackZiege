@@ -36,6 +36,10 @@ class Spieler {
         this.punkte = punkte;
     }
 
+    int getPunkte() {
+        return punkte;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Spieler) {

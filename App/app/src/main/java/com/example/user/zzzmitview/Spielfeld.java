@@ -25,8 +25,8 @@ public class Spielfeld {
         feld[x][y] = 0;
     }
 
-    int auswertung(int spielerID) {
-        return Auswertung.auswertung(spielerID, feld);
+    void auswertung(Spieler spieler) {
+        spieler.setPunkte(Auswertung.auswertung(spieler.getId(), feld));
     }
 
     int getBreite() {
