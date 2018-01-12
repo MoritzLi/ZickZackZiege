@@ -1,7 +1,7 @@
-package com.example.user.zzzmitview;
+package com.example.user.zzzmitview.utility;
 
-abstract class Auswertung {
-    static int auswertung(int pSpieler, int[][] feld) {
+public abstract class Auswertung {
+    public static int auswertung(int pSpieler, int[][] feld) {
 
         int punkte = auswertungZiegenP(pSpieler, feld);
         punkte = punkte + auswertungRammbock(pSpieler, feld);

@@ -1,4 +1,4 @@
-package com.example.user.zzzmitview;
+package com.example.user.zzzmitview.network;
 
 @SuppressWarnings("unused")
 abstract class Client {

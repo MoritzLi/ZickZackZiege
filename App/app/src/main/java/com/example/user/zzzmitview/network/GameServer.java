@@ -1,4 +1,7 @@
-package com.example.user.zzzmitview;
+package com.example.user.zzzmitview.network;
+
+import com.example.user.zzzmitview.utility.List;
+import com.example.user.zzzmitview.utility.Spieler;
 
 public class GameServer extends Server {
     public static final int port = 5453;

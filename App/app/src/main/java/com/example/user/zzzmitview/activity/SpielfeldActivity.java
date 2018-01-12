@@ -1,14 +1,19 @@
-package com.example.user.zzzmitview;
+package com.example.user.zzzmitview.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.ListView;
 
+import com.example.user.zzzmitview.R;
+import com.example.user.zzzmitview.utility.Spieler;
+import com.example.user.zzzmitview.utility.Spielfeld;
+import com.example.user.zzzmitview.view.MultiplayerView;
+import com.example.user.zzzmitview.view.SpielerAdapter;
+
 public class SpielfeldActivity extends AppCompatActivity {
-    private Spieler[] spieler;
-    private Spielfeld spielfeld;
+    private Spieler[]      spieler;
+    private Spielfeld      spielfeld;
     private SpielerAdapter adapter;
 
     @Override
@@ -45,10 +50,8 @@ public class SpielfeldActivity extends AppCompatActivity {
         }
     }
 
-    void resetPunkte(int current) {
+    public void resetPunkte(int current) {
         spielfeld.auswertung(spieler[current]);
-        Log.d("TAG", String.valueOf(spieler[current].getPunkte()));
-
         adapter.notifyDataSetChanged();
     }
 }

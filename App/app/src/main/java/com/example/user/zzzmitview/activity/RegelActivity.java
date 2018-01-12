@@ -1,8 +1,10 @@
-package com.example.user.zzzmitview;
+package com.example.user.zzzmitview.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+
+import com.example.user.zzzmitview.R;
 
 public class RegelActivity extends AppCompatActivity {
     @Override

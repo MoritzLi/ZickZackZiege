@@ -1,4 +1,4 @@
-package com.example.user.zzzmitview;
+package com.example.user.zzzmitview.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.example.user.zzzmitview.R;
+import com.example.user.zzzmitview.dialog.ChangeNameDialog;
+import com.example.user.zzzmitview.dialog.SpielerzahlDialog;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -68,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    void toast(String pText) {
+    public void toast(String pText) {
         Toast t = Toast.makeText(getApplicationContext(), pText, Toast.LENGTH_SHORT);
         t.show();
     }

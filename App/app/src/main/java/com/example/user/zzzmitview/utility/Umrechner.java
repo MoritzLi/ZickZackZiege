@@ -1,4 +1,4 @@
-package com.example.user.zzzmitview;
+package com.example.user.zzzmitview.utility;
 
 /**
  * Created by User on 30.12.2017.

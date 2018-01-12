@@ -1,4 +1,4 @@
-package com.example.user.zzzmitview;
+package com.example.user.zzzmitview.view;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -9,10 +9,13 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.example.user.zzzmitview.R;
+import com.example.user.zzzmitview.utility.Spieler;
+
 public class SpielerAdapter extends BaseAdapter {
     private Spieler[] spieler;
-    private View[] views;
-    private Context context;
+    private View[]    views;
+    private Context   context;
 
 
     public SpielerAdapter(@NonNull Context context, @NonNull Spieler[] objects) {

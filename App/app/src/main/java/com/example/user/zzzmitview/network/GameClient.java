@@ -1,4 +1,4 @@
-package com.example.user.zzzmitview;
+package com.example.user.zzzmitview.network;
 
 public class GameClient extends Client {
     private boolean      spielGestartet;

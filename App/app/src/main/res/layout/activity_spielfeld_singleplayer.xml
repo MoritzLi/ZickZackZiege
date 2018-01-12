@@ -17,7 +17,7 @@
 
     <view
         android:id="@+id/view"
-        class="com.example.user.zzzmitview.SingleplayerView"
+        class="com.example.user.zzzmitview.view.SingleplayerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"

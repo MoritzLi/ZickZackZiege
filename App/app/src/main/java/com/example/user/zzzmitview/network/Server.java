@@ -1,4 +1,6 @@
-package com.example.user.zzzmitview;
+package com.example.user.zzzmitview.network;
+
+import com.example.user.zzzmitview.utility.List;
 
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -6,9 +8,9 @@ import java.net.Socket;
 @SuppressWarnings({"WeakerAccess", "unused"})
 public abstract class Server {
     // Objekte
-    private ServerSocket serverSocket;
+    private ServerSocket           serverSocket;
     private List<ServerConnection> verbindungen;
-    private ServerSchleife schleife;
+    private ServerSchleife         schleife;
 
     private class ServerConnection extends Connection {
         // Objekte

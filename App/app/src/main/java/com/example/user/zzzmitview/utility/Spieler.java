@@ -1,6 +1,6 @@
-package com.example.user.zzzmitview;
+package com.example.user.zzzmitview.utility;
 
-class Spieler {
+public class Spieler {
     private final int id;
     private final String IP;
     private final int port;
@@ -20,23 +20,23 @@ class Spieler {
         this.punkte = 0;
     }
 
-    int getId() {
+    public int getId() {
         return id;
     }
 
-    String getIP() {
+    public String getIP() {
         return IP;
     }
 
-    int getPort() {
+    public int getPort() {
         return port;
     }
 
-    void setPunkte(int punkte) {
+    public void setPunkte(int punkte) {
         this.punkte = punkte;
     }
 
-    int getPunkte() {
+    public int getPunkte() {
         return punkte;
     }
 

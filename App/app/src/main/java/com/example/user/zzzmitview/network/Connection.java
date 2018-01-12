@@ -1,4 +1,4 @@
-package com.example.user.zzzmitview;
+package com.example.user.zzzmitview.network;
 
 import java.io.BufferedReader;
 import java.io.IOException;

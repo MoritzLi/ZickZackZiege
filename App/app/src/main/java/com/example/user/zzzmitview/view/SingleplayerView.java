@@ -1,4 +1,4 @@
-package com.example.user.zzzmitview;
+package com.example.user.zzzmitview.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -11,12 +11,17 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.example.user.zzzmitview.R;
+import com.example.user.zzzmitview.utility.Auswertung;
+import com.example.user.zzzmitview.utility.BinaryTree;
+import com.example.user.zzzmitview.utility.Position;
+import com.example.user.zzzmitview.utility.Umrechner;
+
 /**
- * @author Benedikt
- * Erstelldatum: 29.12.2017
+ * Created by User on 02.01.2018.
  */
 
-public class Drawer extends View {
+public class SingleplayerView extends View {
 
     Umrechner umrechner = new Umrechner();
     int[][]   feld      = new int[5][5];
@@ -29,9 +34,10 @@ public class Drawer extends View {
     int canvasHoehe;
     int begrenzung;
     int kastenBreite;
-    int spielrunde = 1;
+    int         spielrunde  = 1;
+    Einzelspiel einzelspiel = new Einzelspiel(2);
 
-    public Drawer(Context context) {
+    public SingleplayerView(Context context) {
         super(context);
         for (int i = 0; i < 5; i++) {
             for (int t = 0; t < 5; t++) {
@@ -44,7 +50,7 @@ public class Drawer extends View {
         y = 0;
     }
 
-    public Drawer(Context context, @Nullable AttributeSet attrs) {
+    public SingleplayerView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         for (int i = 0; i < 5; i++) {
             for (int t = 0; t < 5; t++) {
@@ -57,7 +63,7 @@ public class Drawer extends View {
         y = 0;
     }
 
-    public Drawer(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public SingleplayerView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         for (int i = 0; i < 5; i++) {
             for (int t = 0; t < 5; t++) {
@@ -73,8 +79,8 @@ public class Drawer extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvasBreite = getWidth();
-        canvasHoehe = getHeight();
+        canvasBreite = canvas.getWidth();
+        canvasHoehe = canvas.getHeight();
         kastenBreite = canvasBreite / 5;
 
         erstelleRaster(canvas); //Raster wird auf Canvas gezeichnet
@@ -83,7 +89,10 @@ public class Drawer extends View {
 
         ziege(canvas); //Wenn Spiel vorbei, dann Ziege
 
-        if (zug == true) {
+        if (spielrunde % 2 != 0) {
+            einzelspiel.einzelspieler(spielrunde);
+            setFeld(einzelspiel.getEinzelXKor(), einzelspiel.getEinzelYKor(), 1);
+        } else if (zug && spielrunde % 2 == 0) {
             Paint p = new Paint();
             p.setColor(Color.BLACK);
             p.setTextSize(40);
@@ -99,9 +108,7 @@ public class Drawer extends View {
                             , canvasBreite / 2, begrenzung + 120, p);
 
                     if (feld[xArray][yArray] == 0) {
-                        if (spielrunde % 2 != 0)
-                            setFeld(xArray, yArray, 1);
-                        else if (spielrunde % 2 == 0)
+                        if (spielrunde % 2 == 0)
                             setFeld(xArray, yArray, 2);
                         spielrunde++;
                     }
@@ -110,11 +117,10 @@ public class Drawer extends View {
             } else {
                 neuesSpiel();
             }
-
         }
+
         maleFeld(canvas);
         invalidate();
-
     }
 
     @Override
@@ -144,7 +150,6 @@ public class Drawer extends View {
                 umrechner.getEcken(pX, pY, kastenBreite, "yRechtsOben"),
                 umrechner.getEcken(pX, pY, kastenBreite, "xLinksUnten"),
                 umrechner.getEcken(pX, pY, kastenBreite, "yLinksUnten"), spieler1);
-
     }
 
     public void maleFeld(Canvas canvas) {
@@ -199,7 +204,6 @@ public class Drawer extends View {
             canvas.drawText("Spieler 2 (X): " + Integer.toString(Auswertung.auswertung(2, feld)), canvasBreite / 2, begrenzung + 200, p);
             canvas.drawText("Spiel beendet"
                     , canvasBreite / 2, begrenzung + 60, p);
-
         }
     }
 
@@ -219,7 +223,7 @@ public class Drawer extends View {
         canvas.drawLine(canvasBreite / 2, begrenzung + begrenzung / 3, canvasBreite / 2, canvasHoehe, p);
         canvas.drawLine(0, begrenzung + begrenzung / 3 + 40, canvasBreite, begrenzung + begrenzung / 3 + 40, p);
 
-        canvas.drawText("Spieler 1 (O): ", 0 + 50, begrenzung + begrenzung / 3, p);
+        canvas.drawText("Spieler 1 (O): ", 50, begrenzung + begrenzung / 3, p);
         canvas.drawText("Spieler 1 (X): ", canvasBreite / 2 + 50, begrenzung + begrenzung / 3, p);
 
         canvas.drawText(Integer.toString(Auswertung.auswertung(1, feld)), 0 + 50, begrenzung + begrenzung / 2, p);
@@ -245,13 +249,12 @@ public class Drawer extends View {
         black.setColor(Color.BLACK);
         black.setStrokeWidth(liniendicke);
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 1; i < 6; i++) {
             int k = i * kastenBreite;
             canvas.drawLine(0, k, canvasBreite, k, black);
             begrenzung = k;
         }
-
-        for (int i = 0; i < 6; i++) {
+        for (int i = 1; i < 6; i++) {
             int k = i * kastenBreite;
             canvas.drawLine(k, 0, k, begrenzung, black);
         }
@@ -260,6 +263,185 @@ public class Drawer extends View {
     public int[][] getFeld() {
         return feld;
     }
+
+    public boolean feldFrei(int pX, int pY) {
+        if (feld[pX][pY] == 0)
+            return true;
+        else
+            return false;
+    }
+    //Unterklasse KI
+
+    public class Einzelspiel {
+        int einzelXKor;
+        int einzelYKor;
+        BinaryTree<Position> kiBaum = new BinaryTree<>();
+
+        /**
+         * Constructor for objects of class Einzelspiel
+         */
+        Einzelspiel(int pSpieleranzahl) {
+
+        }
+
+        void einzelspieler(int pSpielzug) {
+            spielrunde++;
+            // switch case mit baum für die ersten 4 züge der Ki
+            switch (pSpielzug) {
+                case 1:
+                    baueSpielbaum();
+                    Position p = kiBaum.getContent();
+                    einzelXKor = p.getX();
+                    einzelYKor = p.getY();
+                    break;
+                case 3:
+                    p = kiBaum.getContent();
+                    boolean besetzt = true;
+                    for (int xKor = 0; xKor < 5; xKor++) {
+                        if (feld[xKor][2] == 2)
+                            besetzt = false;
+                    }
+                    if (!besetzt)
+                        kiBaum = kiBaum.getLeftTree();
+                    else
+                        kiBaum = kiBaum.getRightTree();
+                    p = kiBaum.getContent();
+                    einzelXKor = p.getX();
+                    einzelYKor = p.getY();
+                    break;
+                case 5:
+                    p = kiBaum.getContent();
+                    int xFrei = p.getXFrei();
+                    int yFrei = p.getYFrei();
+                    besetzt = feldFrei(xFrei, yFrei);
+                    if (!besetzt)
+                        kiBaum = kiBaum.getLeftTree();
+                    else
+                        kiBaum = kiBaum.getRightTree();
+                    p = kiBaum.getContent();
+                    einzelXKor = p.getX();
+                    einzelYKor = p.getY();
+                    break;
+
+                default:
+
+                    int max = 0;
+                    int[][] ki = new int[5][5];
+                    for (int xKor = 0; xKor < 5; xKor++) {
+                        for (int yKor = 0; yKor < 5; yKor++) {
+                            if (feldFrei(xKor, yKor)) {
+                                setFeld(xKor, yKor, 1);
+                                ki[xKor][yKor] = Auswertung.auswertung(1, getFeld());
+                                setFeld(xKor, yKor, 2);
+                                ki[xKor][yKor] = ki[xKor][yKor] + Auswertung.auswertung(2, getFeld());
+                                setFeld(xKor, yKor, 0);
+                            }
+                        }
+                    }
+
+                    for (int xKor = 0; xKor < 5; xKor++) {
+                        for (int yKor = 0; yKor < 5; yKor++) {
+                            if (ki[xKor][yKor] > max) {
+                                max = ki[xKor][yKor];
+                                einzelXKor = xKor;
+                                einzelYKor = yKor;
+                            } else if (ki[xKor][yKor] == max) {
+                                int zufall = (int) Math.random() * 2;
+                                if (zufall > 1) {
+                                    max = ki[xKor][yKor];
+                                    einzelXKor = xKor;
+                                    einzelYKor = yKor;
+                                }
+                            }
+                        }
+                    }
+                    break;
+            }
+
+            // im gui abwechselnd spielen mit vom spieler gewähltem x und y und danach mit von einzelspieler zugewiesenen x und y aufrufen
+        }
+
+        void baueSpielbaum() {
+            Position p0 = new Position(2, 2, 0, 0);
+            kiBaum.setContent(p0);
+
+            BinaryTree<Position> l  = new BinaryTree();
+            Position             p1 = new Position(2, 3, 2, 1);
+            l.setContent(p1);
+
+            BinaryTree<Position> r  = new BinaryTree();
+            Position             p2 = new Position(3, 2, 1, 2);
+            r.setContent(p2);
+
+            BinaryTree<Position> ll = new BinaryTree();
+            Position             p3 = new Position(2, 4, 1, 3);
+            ll.setContent(p3);
+
+            BinaryTree<Position> lr = new BinaryTree();
+            Position             p4 = new Position(2, 1, 2, 0);
+            lr.setContent(p4);
+
+            BinaryTree<Position> rl = new BinaryTree();
+            Position             p5 = new Position(4, 2, 3, 1);
+            rl.setContent(p5);
+
+            BinaryTree<Position> rr = new BinaryTree();
+            Position             p6 = new Position(1, 2, 0, 2);
+            rr.setContent(p6);
+
+            l.setLeftTree(ll);
+            l.setRightTree(lr);
+            r.setLeftTree(rl);
+            r.setRightTree(rr);
+
+            kiBaum.setLeftTree(l);
+            kiBaum.setRightTree(r);
+        }
+
+        int getEinzelXKor() {
+            return einzelXKor;
+        }
+
+        int getEinzelYKor() {
+            return einzelYKor;
+        }
+    }
+
+    public void computer(int pX, int pY) {
+        if (spielrunde == 1) {
+            einzelspiel.einzelspieler(1);
+            setFeld(einzelspiel.getEinzelXKor(), einzelspiel.getEinzelYKor(), 1);
+            spielrunde++;
+        }
+        if (feld[pX][pY] == 0) {
+            setFeld(pX, pY, 2);
+            einzelspiel.einzelspieler(spielrunde);
+            setFeld(einzelspiel.getEinzelXKor(), einzelspiel.getEinzelYKor(), 1);
+            for (int i = 0; i < 5; i++) {
+                for (int j = 0; j < 5; j++) {
+                    System.out.print(feld[j][i] + "  ");
+                }
+                System.out.println();
+            }
+            spielrunde++;
+        }
+    }
+
+    /*public void computerZug(){
+            for(int i = 0;i<5;i++){
+                for(int j = 0; j<5;j++){
+                    if(feld[i][j] == 0){
+                        set(i,j);
+                        b[i][j].setBackground(Color.red);
+                        int x = e.getEinzelXKor();
+                        int y = e.getEinzelYKor();
+                        b[x][y].setBackground(Color.blue);
+                        tIndexI.setText(""+e.feld.auswertung(1));
+                        tIndexJ.setText(""+e.feld.auswertung(2));
+                    }
+                }
+
+    } */
 }
 
 /**

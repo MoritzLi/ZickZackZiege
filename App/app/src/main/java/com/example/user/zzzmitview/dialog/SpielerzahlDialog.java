@@ -1,4 +1,4 @@
-package com.example.user.zzzmitview;
+package com.example.user.zzzmitview.dialog;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,11 +7,14 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 
+import com.example.user.zzzmitview.R;
+import com.example.user.zzzmitview.activity.MainActivity;
+
 public class SpielerzahlDialog extends AppCompatDialog {
     private final MainActivity activity;
-    private final Intent intent;
+    private final Intent       intent;
 
-    SpielerzahlDialog(MainActivity context, Intent intent) {
+    public SpielerzahlDialog(MainActivity context, Intent intent) {
         super(context);
         activity = context;
         this.intent = intent;

@@ -1,4 +1,4 @@
-package com.example.user.zzzmitview;
+package com.example.user.zzzmitview.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -7,9 +7,13 @@ import android.graphics.Paint;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.example.user.zzzmitview.R;
+import com.example.user.zzzmitview.activity.SpielfeldActivity;
+import com.example.user.zzzmitview.utility.Spieler;
+import com.example.user.zzzmitview.utility.Spielfeld;
 
 public class MultiplayerView extends View {
     private static final int[] colors = {
@@ -28,7 +32,7 @@ public class MultiplayerView extends View {
 
     private Spielfeld spielfeld;
     private Spieler[] spieler;
-    private int current;
+    private int       current;
 
     private Paint paint;
 
