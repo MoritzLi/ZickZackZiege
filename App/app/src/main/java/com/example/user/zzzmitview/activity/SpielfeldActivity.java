@@ -6,18 +6,27 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 
 import com.example.user.zzzmitview.R;
+import com.example.user.zzzmitview.network.ClientListener;
+import com.example.user.zzzmitview.network.GameClient;
+import com.example.user.zzzmitview.network.GameServer;
+import com.example.user.zzzmitview.network.ServerListener;
 import com.example.user.zzzmitview.utility.Schwierigkeit;
 import com.example.user.zzzmitview.utility.Spieler;
 import com.example.user.zzzmitview.utility.Spielfeld;
 import com.example.user.zzzmitview.utility.Spielmodus;
 import com.example.user.zzzmitview.view.MultiplayerView;
+import com.example.user.zzzmitview.view.NetzwerkView;
 import com.example.user.zzzmitview.view.SingleplayerView;
 import com.example.user.zzzmitview.view.SpielerAdapter;
+import com.example.user.zzzmitview.view.SpielfeldView;
 
 public class SpielfeldActivity extends AppCompatActivity {
     private Spieler[]      spieler;
     private Spielfeld      spielfeld;
     private SpielerAdapter adapter;
+
+    private GameServer server;
+    private GameClient client;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,24 +47,60 @@ public class SpielfeldActivity extends AppCompatActivity {
 
         spielfeld = new Spielfeld(spieler.length);
 
+        final SpielfeldView view = (SpielfeldView) findViewById(R.id.view);
+        view.setSpielfeld(spielfeld);
+        view.setSpieler(spieler);
+        view.setActivity(this);
+
         switch (spielmodus) {
             case EINZELSPIELER:
                 setContentView(R.layout.activity_spielfeld_singleplayer);
 
-                SingleplayerView singleplayerView = (SingleplayerView) findViewById(R.id.view);
-                singleplayerView.setSpielfeld(spielfeld);
-                singleplayerView.setSpieler(spieler);
-                singleplayerView.setActivity(this);
+                SingleplayerView singleplayerView = (SingleplayerView) view;
                 singleplayerView.setSchwierigkeit(Schwierigkeit.valueOf(getIntent().getStringExtra(MainActivity.INTENT_EXTRA_SCHWIERIGKEIT)));
                 break;
 
             case MEHRSPIELER:
                 setContentView(R.layout.activity_spielfeld_multiplayer);
+                break;
 
-                MultiplayerView multiplayerView = (MultiplayerView) findViewById(R.id.view);
-                multiplayerView.setSpielfeld(spielfeld);
-                multiplayerView.setSpieler(spieler);
-                multiplayerView.setActivity(this);
+            case NETZWERK_LOKAL:
+                setContentView(R.layout.activity_spielfeld_netzwerk);
+
+                final NetzwerkView netzwerkView = (NetzwerkView) view;
+                netzwerkView.setClient(client);
+                netzwerkView.setServer(server);
+
+                if (client != null) {
+                    client.setListener(new ClientListener() {
+                        @Override
+                        public void onGameStarted(int spielerCount, int myID) {
+                            netzwerkView.setMyID(myID);
+                        }
+
+                        @Override
+                        public void onFieldSet(int id, int x, int y) {
+                            spielfeld.setValue(id, x, y);
+                        }
+
+                        @Override
+                        public void onYourTurn() {
+                            netzwerkView.setGo(true);
+                        }
+                    });
+                } else {
+                    server.setListener(new ServerListener() {
+                        @Override
+                        public void onPlayerRegister(Spieler spieler) {
+
+                        }
+
+                        @Override
+                        public void onFieldSet(int id, int x, int y) {
+                            spielfeld.setValue(id, x, y);
+                        }
+                    });
+                }
                 break;
         }
 

@@ -74,6 +74,17 @@
                         android:textSize="18sp"/>
 
                     <Button
+                        android:id="@+id/netzwerk"
+                        style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Netzwerk"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Button"
+                        android:textColorLink="@android:color/holo_blue_dark"
+                        android:textSize="18sp"/>
+
+                    <Button
                         android:id="@+id/online"
                         style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
                         android:layout_width="match_parent"

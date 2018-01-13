@@ -56,6 +56,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.netzwerk).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(
+                        new Intent(
+                                getApplicationContext(),
+                                SpielfeldActivity.class
+                        )
+                                .putExtra(
+                                        INTENT_EXTRA_SPIELMODUS,
+                                        Spielmodus.NETZWERK_LOKAL.toString()
+                                )
+                );
+            }
+        });
+
         findViewById(R.id.online).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 toast("Demnächst verfügbar.");
@@ -66,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
 //                        )
 //                                .putExtra(
 //                                        INTENT_EXTRA_SPIELMODUS,
-//                                        Spielmodus.ONLINE
+//                                        Spielmodus.ONLINE.toString()
 //                                )
 //                );
             }

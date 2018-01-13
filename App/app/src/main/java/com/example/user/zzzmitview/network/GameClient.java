@@ -1,8 +1,9 @@
 package com.example.user.zzzmitview.network;
 
 public class GameClient extends Client {
-    private boolean      spielGestartet;
-    boolean go;
+    private ClientListener listener;
+    private boolean spielGestartet;
+    private boolean go;
 
     public GameClient(String pIPAdresse) {
         super(pIPAdresse, GameServer.port);
@@ -31,7 +32,9 @@ public class GameClient extends Client {
                             pMessage.substring(i3 + 1)
                     );
 
-                    // setzen
+                    if (listener != null) {
+                        listener.onFieldSet(id, x, y);
+                    }
                 }
                 break;
 
@@ -47,6 +50,10 @@ public class GameClient extends Client {
                 int myID = Integer.parseInt(
                         pMessage.substring(i2 + 1)
                 );
+
+                if (listener != null) {
+                    listener.onGameStarted(spielerCount, myID);
+                }
                 //GUI
 
                 break;
@@ -54,9 +61,17 @@ public class GameClient extends Client {
             case "GO":
                 go = true;
 
+                if (listener != null) {
+                    listener.onYourTurn();
+                }
+
             default:
                 send("-ERR nicht Teil des Protokolls");
                 break;
         }
+    }
+
+    public void setListener(ClientListener listener) {
+        this.listener = listener;
     }
 }
