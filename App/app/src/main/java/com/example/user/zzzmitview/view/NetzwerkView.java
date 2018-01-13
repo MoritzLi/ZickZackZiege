@@ -5,11 +5,8 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-import com.example.user.zzzmitview.network.ClientListener;
 import com.example.user.zzzmitview.network.GameClient;
 import com.example.user.zzzmitview.network.GameServer;
-import com.example.user.zzzmitview.network.ServerListener;
-import com.example.user.zzzmitview.utility.Spieler;
 
 public class NetzwerkView extends SpielfeldView {
     private boolean go;
@@ -42,7 +39,7 @@ public class NetzwerkView extends SpielfeldView {
                 y = spielfeld.getFieldCount() - 1;
 
             if (spielfeld.isEmpty(x, y)) {
-                spielfeld.setValue(myID, x, y);
+                setze(x, y);
             }
         }
 
@@ -51,9 +48,20 @@ public class NetzwerkView extends SpielfeldView {
 
     @Override
     void initialize() {
-        go = server == null;
+        go = false;
 
         super.initialize();
+    }
+
+    private void setze(int x, int y) {
+        spielfeld.setValue(myID, x, y);
+        if (server == null) {
+            client.send("SET " + x + ',' + y);
+        } else {
+            server.processMessage("localhost", GameServer.port, "SET " + x + ',' + y);
+        }
+
+        go = false;
     }
 
     public void setClient(GameClient client) {

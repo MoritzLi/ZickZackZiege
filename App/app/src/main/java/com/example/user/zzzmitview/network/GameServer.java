@@ -4,17 +4,13 @@ import com.example.user.zzzmitview.utility.List;
 import com.example.user.zzzmitview.utility.NetzwerkSpieler;
 
 public class GameServer extends Server {
-    static final int port = 5453;
+    public static final int port = 5453;
 
     private       boolean               spielGestartet;
     private final List<NetzwerkSpieler> spielerList;
     private       NetzwerkSpieler[]     spielerArray;
 
-    private ServerListener listener;
-
-    private boolean go;
-
-    private int spielzuege;
+    private NetzwerkListener listener;
 
     public GameServer() {
         super(port);
@@ -34,11 +30,14 @@ public class GameServer extends Server {
             case "REGISTER":
                 if (!spielGestartet) {
                     if (!spielerList.find(new NetzwerkSpieler(pClientIP))) {
-                        NetzwerkSpieler s = new NetzwerkSpieler(-1, pClientIP, pClientPort);
+                        NetzwerkSpieler s = new NetzwerkSpieler(spielerList.size() + 1, pClientIP, pClientPort);
                         s.setName(pMessage.substring(pMessage.indexOf(' ') + 1));
+
                         spielerList.append(s);
-                        if (listener != null)
+
+                        if (listener != null) {
                             listener.onPlayerRegister(s);
+                        }
                     } else {
                         send(pClientIP, pClientPort, "-ERR es existiert bereits eine Registrierung für diese IP-Adresse");
                     }
@@ -47,8 +46,6 @@ public class GameServer extends Server {
 
             case "SET":
                 if (spielGestartet) {
-                    spielzuege++;
-
                     if (pClientIP.equals("localhost")) {
                         int id = 1;
                         int i1 = pMessage.indexOf(' ');
@@ -99,7 +96,6 @@ public class GameServer extends Server {
                                             "GO"
                                     );
                                 } else {
-                                    go = true;
                                 }
 
                                 if (listener != null) {
@@ -108,10 +104,6 @@ public class GameServer extends Server {
                                 break;
                             }
                         }
-                    }
-
-                    if (spielzuege == (3 + spielerArray.length) * (3 + spielerArray.length)) {
-                        //Spielende
                     }
                 }
                 break;
@@ -145,16 +137,17 @@ public class GameServer extends Server {
 
         spielerArray[0] = new NetzwerkSpieler(1, "localhost", port);
 
-        spielzuege = 0;
-
-        go = true;
+        if (listener != null) {
+            listener.onGameStarted(spielerArray.length, 1);
+            listener.onYourTurn();
+        }
     }
 
     public NetzwerkSpieler[] getSpieler() {
         return spielerList.fill(new NetzwerkSpieler[spielerList.size()]);
     }
 
-    public void setListener(ServerListener listener) {
+    public void setListener(NetzwerkListener listener) {
         this.listener = listener;
     }
 }

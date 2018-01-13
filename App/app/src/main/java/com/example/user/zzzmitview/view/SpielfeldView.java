@@ -78,23 +78,16 @@ public class SpielfeldView extends View {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public void invalidate() {
         drawFields();
+        super.invalidate();
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
         invalidate();
 
         return super.onTouchEvent(event);
-    }
-
-    public void setActivity(SpielfeldActivity activity) {
-        this.activity = activity;
-    }
-
-    public void setSpielfeld(Spielfeld spielfeld) {
-        this.spielfeld = spielfeld;
-    }
-
-    public void setSpieler(Spieler[] spieler) {
-        this.spieler = spieler;
     }
 
     @CallSuper
@@ -147,5 +140,17 @@ public class SpielfeldView extends View {
                 canvas.drawRect(fieldWidth * i + stroke, fieldWidth * j + stroke, fieldWidth * (i + 1) - stroke, fieldWidth * (j + 1) - stroke, paint);
             }
         }
+    }
+
+    public void setActivity(SpielfeldActivity activity) {
+        this.activity = activity;
+    }
+
+    public void setSpielfeld(Spielfeld spielfeld) {
+        this.spielfeld = spielfeld;
+    }
+
+    public void setSpieler(Spieler[] spieler) {
+        this.spieler = spieler;
     }
 }

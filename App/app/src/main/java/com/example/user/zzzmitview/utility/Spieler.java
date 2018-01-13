@@ -34,6 +34,8 @@ public class Spieler {
     }
 
     public void setName(String name) {
+        if (name != null && name.length() == 0)
+            name = null;
         this.name = name;
     }
 }

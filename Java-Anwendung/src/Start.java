@@ -3,7 +3,7 @@ class Start {
         MenuGUI gui = new MenuGUI();
         gui.setVisible(true);
 
-        MenuGUI gui2 = new MenuGUI();
-        gui2.setVisible(true);
+//        MenuGUI gui2 = new MenuGUI();
+//        gui2.setVisible(true);
     }
 }

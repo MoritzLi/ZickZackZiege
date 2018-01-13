@@ -1,15 +1,19 @@
 package com.example.user.zzzmitview.network;
 
 public class GameClient extends Client {
-    private ClientListener listener;
-    private boolean spielGestartet;
-    private boolean go;
+    private NetzwerkListener listener;
+    private boolean          spielGestartet;
 
-    public GameClient(String pIPAdresse) {
+    public GameClient(String pIPAdresse, String nickname) {
         super(pIPAdresse, GameServer.port);
         spielGestartet = false;
 
-        send("REGISTER");
+        String register = "REGISTER";
+        if (nickname != null) {
+            register += ' ' + nickname;
+        }
+
+        send(register);
     }
 
     @Override
@@ -54,13 +58,10 @@ public class GameClient extends Client {
                 if (listener != null) {
                     listener.onGameStarted(spielerCount, myID);
                 }
-                //GUI
 
                 break;
 
             case "GO":
-                go = true;
-
                 if (listener != null) {
                     listener.onYourTurn();
                 }
@@ -71,7 +72,7 @@ public class GameClient extends Client {
         }
     }
 
-    public void setListener(ClientListener listener) {
+    public void setListener(NetzwerkListener listener) {
         this.listener = listener;
     }
 }

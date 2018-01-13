@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/betreten"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Netzwerkspiel betreten"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button"
+        android:textColorLink="@android:color/holo_blue_dark"
+        android:textSize="18sp"/>
+
+    <Button
+        android:id="@+id/erstellen"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Netzwerkspiel erstellen"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button"
+        android:textColorLink="@android:color/holo_blue_dark"
+        android:textSize="18sp"/>
+
+</LinearLayout>

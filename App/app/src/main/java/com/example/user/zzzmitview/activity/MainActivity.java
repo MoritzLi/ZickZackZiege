@@ -75,16 +75,14 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.online).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 toast("Demnächst verfügbar.");
-//                startActivity(
-//                        new Intent(
-//                                getApplicationContext(),
-//                                SpielfeldActivity.class
-//                        )
-//                                .putExtra(
-//                                        INTENT_EXTRA_SPIELMODUS,
-//                                        Spielmodus.ONLINE.toString()
-//                                )
-//                );
+                new Intent(
+                        getApplicationContext(),
+                        SpielfeldActivity.class
+                )
+                        .putExtra(
+                                INTENT_EXTRA_SPIELMODUS,
+                                Spielmodus.ONLINE.toString()
+                        );
             }
         });
 
@@ -102,7 +100,9 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.name).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new NicknameDialog(MainActivity.this).show();
+                new NicknameDialog(
+                        MainActivity.this
+                ).show();
             }
         });
     }

@@ -37,4 +37,8 @@ public class NetzwerkSpieler extends Spieler {
     public String toString() {
         return getIP() + ':' + getPort();
     }
+
+    public String getIPString() {
+        return IP + ':' + port;
+    }
 }
