@@ -22,16 +22,16 @@ public class SpielfeldActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Spielmodus spielmodus = getIntent().hasExtra("spielmodus") ?
+        Spielmodus spielmodus = getIntent().hasExtra(MainActivity.INTENT_EXTRA_SPIELMODUS) ?
                 Spielmodus.valueOf(
                         getIntent()
                                 .getStringExtra(
-                                        "spielmodus"
+                                        MainActivity.INTENT_EXTRA_SPIELMODUS
                                 )
                 ) :
                 Spielmodus.EINZELSPIELER;
 
-        spieler = new Spieler[getIntent().getIntExtra("spielerzahl", 2)];
+        spieler = new Spieler[getIntent().getIntExtra(MainActivity.INTENT_EXTRA_SPIELERZAHL, 2)];
         for (int i = 0; i < spieler.length; i++) {
             spieler[i] = new Spieler(i + 1);
         }
@@ -46,7 +46,7 @@ public class SpielfeldActivity extends AppCompatActivity {
                 singleplayerView.setSpielfeld(spielfeld);
                 singleplayerView.setSpieler(spieler);
                 singleplayerView.setActivity(this);
-                singleplayerView.setSchwierigkeit(Schwierigkeit.SCHWIERIG);
+                singleplayerView.setSchwierigkeit(Schwierigkeit.valueOf(getIntent().getStringExtra(MainActivity.INTENT_EXTRA_SCHWIERIGKEIT)));
                 break;
 
             case MEHRSPIELER:
@@ -64,8 +64,11 @@ public class SpielfeldActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
     }
 
-    public void refreshPunkte(int current) {
-        spielfeld.getPoints(spieler[current]);
+    public void refreshPunkte(int... indices) {
+        for (int index : indices) {
+            spielfeld.getPoints(spieler[index]);
+        }
+
         adapter.notifyDataSetChanged();
     }
 }

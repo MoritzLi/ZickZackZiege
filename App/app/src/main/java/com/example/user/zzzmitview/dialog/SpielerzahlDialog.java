@@ -36,7 +36,7 @@ public class SpielerzahlDialog extends AppCompatDialog {
                             text
                     );
                     if (n >= 2 && n <= 8) {
-                        intent.putExtra("spielerzahl", n);
+                        intent.putExtra(MainActivity.INTENT_EXTRA_SPIELERZAHL, n);
                         dismiss();
                         activity.startActivity(intent);
                     } else {

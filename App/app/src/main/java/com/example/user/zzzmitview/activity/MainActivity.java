@@ -9,11 +9,15 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.user.zzzmitview.R;
-import com.example.user.zzzmitview.dialog.ChangeNameDialog;
+import com.example.user.zzzmitview.dialog.NicknameDialog;
+import com.example.user.zzzmitview.dialog.SchwierigkeitDialog;
 import com.example.user.zzzmitview.dialog.SpielerzahlDialog;
 import com.example.user.zzzmitview.utility.Spielmodus;
 
 public class MainActivity extends AppCompatActivity {
+    static final        String INTENT_EXTRA_SPIELMODUS    = "spielmodus";
+    public static final String INTENT_EXTRA_SPIELERZAHL   = "spielerzahl";
+    public static final String INTENT_EXTRA_SCHWIERIGKEIT = "schwierigkeit";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,16 +26,17 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.einzelspieler).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(
+                new SchwierigkeitDialog(
+                        MainActivity.this,
                         new Intent(
                                 getApplicationContext(),
                                 SpielfeldActivity.class
                         )
                                 .putExtra(
-                                        "spielmodus",
+                                        INTENT_EXTRA_SPIELMODUS,
                                         Spielmodus.EINZELSPIELER.toString()
                                 )
-                );
+                ).show();
             }
         });
 
@@ -44,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                                 SpielfeldActivity.class
                         )
                                 .putExtra(
-                                        "spielmodus",
+                                        INTENT_EXTRA_SPIELMODUS,
                                         Spielmodus.MEHRSPIELER.toString()
                                 )
                 ).show();
@@ -60,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
 //                                SpielfeldActivity.class
 //                        )
 //                                .putExtra(
-//                                        "spielmodus",
+//                                        INTENT_EXTRA_SPIELMODUS,
 //                                        Spielmodus.ONLINE
 //                                )
 //                );
@@ -81,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.name).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ChangeNameDialog(MainActivity.this).show();
+                new NicknameDialog(MainActivity.this).show();
             }
         });
     }

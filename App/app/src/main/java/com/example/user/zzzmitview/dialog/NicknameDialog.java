@@ -11,10 +11,10 @@ import android.widget.EditText;
 import com.example.user.zzzmitview.R;
 import com.example.user.zzzmitview.activity.MainActivity;
 
-public class ChangeNameDialog extends AppCompatDialog {
+public class NicknameDialog extends AppCompatDialog {
     private final MainActivity activity;
 
-    public ChangeNameDialog(MainActivity context) {
+    public NicknameDialog(MainActivity context) {
         super(context);
         activity = context;
     }
@@ -22,7 +22,7 @@ public class ChangeNameDialog extends AppCompatDialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_change_name);
+        setContentView(R.layout.dialog_nickname);
 
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
 

@@ -39,13 +39,13 @@ public class SingleplayerView extends SpielfeldView {
             if (spielfeld.isEmpty(x, y)) {
                 spielfeld.setValue(ArtificialIntelligence.playerID, x, y);
                 spielfeld.nextRound();
-                activity.refreshPunkte(1);
 
                 ki.spielzug();
-                activity.refreshPunkte(0);
+                activity.refreshPunkte(0, 1);
             }
         } else {
             spielfeld.clear();
+            activity.refreshPunkte(0, 1);
             if (schwierigkeit == Schwierigkeit.SCHWIERIG) {
                 ki.spielzug();
             }
