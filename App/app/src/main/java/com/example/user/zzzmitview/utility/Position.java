@@ -6,26 +6,26 @@ public class Position {
     private       int xFrei;
     private       int yFrei;
 
-    public Position(int pX, int pY, int pXf, int pYf) {
+    Position(int pX, int pY, int pXf, int pYf) {
         x = pX;
         y = pY;
         xFrei = pXf;
         yFrei = pYf;
     }
 
-    public int getX() {
+    int getX() {
         return x;
     }
 
-    public int getY() {
+    int getY() {
         return y;
     }
 
-    public int getXFrei() {
+    int getXFrei() {
         return xFrei;
     }
 
-    public int getYFrei() {
+    int getYFrei() {
         return yFrei;
     }
 }

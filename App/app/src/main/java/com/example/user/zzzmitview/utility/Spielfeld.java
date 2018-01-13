@@ -21,7 +21,7 @@ public class Spielfeld {
 
     public void getPoints(Spieler... spieler) {
         for (Spieler s : spieler) {
-            s.setPunkte(Auswertung.auswertung(s.getId(), feld));
+            s.setPunkte(getPoints(s.getId()));
         }
     }
 
@@ -33,7 +33,7 @@ public class Spielfeld {
         return feld.length;
     }
 
-    public void clear(int x, int y) {
+    void clear(int x, int y) {
         feld[x][y] = 0;
     }
 
