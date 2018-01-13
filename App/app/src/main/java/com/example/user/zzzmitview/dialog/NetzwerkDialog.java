@@ -1,16 +1,21 @@
 package com.example.user.zzzmitview.dialog;
 
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatDialog;
+import android.text.format.Formatter;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.user.zzzmitview.R;
 import com.example.user.zzzmitview.activity.SpielfeldActivity;
 import com.example.user.zzzmitview.network.ClientTask;
 import com.example.user.zzzmitview.network.GameClient;
 import com.example.user.zzzmitview.network.GameServer;
+
+import static android.content.Context.WIFI_SERVICE;
 
 public class NetzwerkDialog extends AppCompatDialog {
     private final SpielfeldActivity activity;
@@ -47,7 +52,7 @@ public class NetzwerkDialog extends AppCompatDialog {
                             try {
                                 client = task.get();
                                 activity.notifyNetzwerk(client, server);
-                                setContentView(R.layout.dialog_server);
+                                setContentView(R.layout.dialog_warten);
                                 findViewById(R.id.start).setVisibility(View.GONE);
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -65,6 +70,12 @@ public class NetzwerkDialog extends AppCompatDialog {
                 server = new GameServer();
                 activity.notifyNetzwerk(client, server);
                 setContentView(R.layout.dialog_server);
+
+                WifiManager wm       = (WifiManager) activity.getApplicationContext().getSystemService(WIFI_SERVICE);
+                String      ip       = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
+                TextView    textView = ((TextView) findViewById(R.id.ipAdresse));
+                textView.setText(ip);
+
                 findViewById(R.id.start).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

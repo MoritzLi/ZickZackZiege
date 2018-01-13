@@ -10,6 +10,7 @@ import com.example.user.zzzmitview.dialog.NetzwerkDialog;
 import com.example.user.zzzmitview.network.GameClient;
 import com.example.user.zzzmitview.network.GameServer;
 import com.example.user.zzzmitview.network.NetzwerkListener;
+import com.example.user.zzzmitview.utility.NetzwerkSpieler;
 import com.example.user.zzzmitview.utility.Schwierigkeit;
 import com.example.user.zzzmitview.utility.Spieler;
 import com.example.user.zzzmitview.utility.Spielfeld;
@@ -79,6 +80,16 @@ public class SpielfeldActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+        if (server != null) {
+            server.close();
+        } else if (client != null) {
+            client.close();
+        }
+    }
+
     public void refreshPunkte(int... indices) {
         for (int index : indices) {
             spielfeld.getPoints(spieler[index]);
@@ -97,7 +108,12 @@ public class SpielfeldActivity extends AppCompatActivity {
 
         NetzwerkListener listener = new NetzwerkListener() {
             @Override
-            public void onPlayerRegister(Spieler spieler) {
+            public void onPlayerRegister(NetzwerkSpieler spieler) {
+
+            }
+
+            @Override
+            public void onPlayerUnregister() {
 
             }
 

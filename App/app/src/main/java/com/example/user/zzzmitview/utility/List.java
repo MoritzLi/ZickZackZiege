@@ -32,7 +32,7 @@ public class List<ContentType> implements Iterable<ContentType> {
      *
      * @param array Neuer Listeninhalt
      */
-    public List(ContentType[] array) {
+    public List(ContentType... array) {
         first = null;
         last = null;
         current = null;

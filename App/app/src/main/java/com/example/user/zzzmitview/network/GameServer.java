@@ -10,12 +10,18 @@ public class GameServer extends Server {
     private final List<NetzwerkSpieler> spielerList;
     private       NetzwerkSpieler[]     spielerArray;
 
+    private int aktuellerSpieler;
+
     private NetzwerkListener listener;
 
     public GameServer() {
         super(port);
+
         spielGestartet = false;
-        spielerList = new List<>();
+
+        NetzwerkSpieler ich = new NetzwerkSpieler(1, "localhost", port);
+        ich.setName("Du");
+        spielerList = new List<>(ich);
     }
 
     @Override
@@ -25,10 +31,14 @@ public class GameServer extends Server {
 
     @Override
     public void processMessage(String pClientIP, int pClientPort, String pMessage) {
-        String befehl = pMessage.contains(" ") ? pMessage.substring(0, pMessage.indexOf(' ')) : pMessage;
+        int i1 = pMessage.indexOf(' ');
+        int i2 = pMessage.indexOf(',');
+
+        String befehl = (i1 > 0 ? pMessage.substring(0, i1) : pMessage).toUpperCase();
+
         switch (befehl) {
             case "REGISTER":
-                if (!spielGestartet) {
+                if (!spielGestartet && spielerList.size() < 8) {
                     if (!spielerList.find(new NetzwerkSpieler(pClientIP))) {
                         NetzwerkSpieler s = new NetzwerkSpieler(spielerList.size() + 1, pClientIP, pClientPort);
                         s.setName(pMessage.substring(pMessage.indexOf(' ') + 1));
@@ -46,65 +56,44 @@ public class GameServer extends Server {
 
             case "SET":
                 if (spielGestartet) {
-                    if (pClientIP.equals("localhost")) {
-                        int id = 1;
-                        int i1 = pMessage.indexOf(' ');
-                        int i2 = pMessage.indexOf(',');
-                        int x = Integer.parseInt(
-                                pMessage.substring(i1 + 1, i2)
-                        ), y = Integer.parseInt(
-                                pMessage.substring(i2 + 1)
-                        );
-                        sendToAll("SET " + id + ',' + x + ',' + y);
+                    int id = 1;
+                    int x = Integer.parseInt(
+                            pMessage.substring(i1 + 1, i2)
+                    ), y = Integer.parseInt(
+                            pMessage.substring(i2 + 1)
+                    );
 
-                        spielerList.toFirst();
-                        NetzwerkSpieler next = spielerList.getContent();
+                    if (spielerArray[aktuellerSpieler].equals(pClientIP)) {
+                        for (int j = 1; j < spielerArray.length; j++) {
+                            if (j != aktuellerSpieler) {
+                                send(
+                                        spielerArray[j].getIP(),
+                                        spielerArray[j].getPort(),
+                                        "SET " + id + ',' + x + ',' + y
+                                );
+                            }
+                        }
+
+                        if (listener != null && aktuellerSpieler != 0) {
+                            listener.onFieldSet(id, x, y);
+                        }
+                    }
+
+                    aktuellerSpieler++;
+                    if (aktuellerSpieler >= spielerArray.length) {
+                        aktuellerSpieler = 0;
+                        if (listener != null) {
+                            listener.onYourTurn();
+                        }
+                    } else {
+                        NetzwerkSpieler next = spielerArray[aktuellerSpieler];
                         send(
                                 next.getIP(),
                                 next.getPort(),
                                 "GO"
                         );
-                    } else {
-                        for (int i = 1; i < spielerArray.length; i++) {
-                            if (spielerArray[i].getIP().equals(pClientIP)) {
-                                int i1 = pMessage.indexOf(' ');
-                                int i2 = pMessage.indexOf(',');
-
-                                int id = spielerArray[i].getId();
-                                int x = Integer.parseInt(
-                                        pMessage.substring(i1 + 1, i2)
-                                );
-                                int y = Integer.parseInt(
-                                        pMessage.substring(i2 + 1)
-                                );
-
-                                for (int j = 1; j < spielerArray.length; j++) {
-                                    if (j != i) {
-                                        send(
-                                                spielerArray[j].getIP(),
-                                                spielerArray[j].getPort(),
-                                                "SET " + id + ',' + x + ',' + y
-                                        );
-                                    }
-                                }
-
-                                if (i < spielerArray.length - 1) {
-                                    NetzwerkSpieler next = spielerArray[i + 1];
-                                    send(
-                                            next.getIP(),
-                                            next.getPort(),
-                                            "GO"
-                                    );
-                                } else {
-                                }
-
-                                if (listener != null) {
-                                    listener.onFieldSet(id, x, y);
-                                }
-                                break;
-                            }
-                        }
                     }
+
                 }
                 break;
 
@@ -116,26 +105,64 @@ public class GameServer extends Server {
 
     @Override
     public void processClosedConnection(String pClientIP, int pClientPort) {
-        if (!spielGestartet) {
-            if (spielerList.find(new NetzwerkSpieler(-1, pClientIP, pClientPort))) {
-                spielerList.remove();
+        if (spielerList.find(new NetzwerkSpieler(pClientIP))) {
+            if (spielGestartet) {
+                NetzwerkSpieler[] old = spielerArray;
+                spielerArray = new NetzwerkSpieler[old.length - 1];
+                int place = spielerArray.length;
+                int i     = 0;
+                for (NetzwerkSpieler spieler : old) {
+                    if (!spieler.equals(pClientIP)) {
+                        spielerArray[i] = spieler;
+                        i++;
+                    } else {
+                        place = i;
+                    }
+                }
+
+                if (place == aktuellerSpieler) {
+                    NetzwerkSpieler next = spielerArray[aktuellerSpieler];
+                    send(
+                            next.getIP(),
+                            next.getPort(),
+                            "GO"
+                    );
+                }
+            } else {
+                spielerList.toFirst();
+                boolean removed = false;
+                for (int id = 1; id <= spielerList.size(); spielerList.next()) {
+                    if (removed) {
+                        NetzwerkSpieler spieler = spielerList.getContent();
+                        spielerList.remove();
+                        spielerList.insertBefore(new NetzwerkSpieler(id, spieler.getIP(), spieler.getPort()));
+                    } else if (spielerList.getContent().equals(pClientIP)) {
+                        spielerList.remove();
+                        removed = true;
+                    }
+                }
+            }
+
+            if (listener != null) {
+                listener.onPlayerUnregister();
             }
         }
     }
 
     public void starteSpiel() {
         this.spielGestartet = true;
-        spielerArray = new NetzwerkSpieler[spielerList.size() + 1];
+
+        spielerArray = new NetzwerkSpieler[spielerList.size()];
         spielerList.toFirst();
 
-        for (int i = 1; i < spielerArray.length; i++, spielerList.next()) {
-            NetzwerkSpieler old = spielerList.getContent();
-            spielerArray[i] = new NetzwerkSpieler(i + 1, old.getIP(), old.getPort());
-            spielerArray[i].setName(old.getName());
-            send(old.getIP(), old.getPort(), "START " + spielerArray.length + ',' + (i + 1));
-        }
+        for (int i = 0; i < spielerArray.length; i++, spielerList.next()) {
+            NetzwerkSpieler spieler = spielerList.getContent();
+            spielerArray[i] = spieler;
 
-        spielerArray[0] = new NetzwerkSpieler(1, "localhost", port);
+            if (!spieler.getIP().equals("localhost")) {
+                send(spieler.getIP(), spieler.getPort(), "START " + spielerArray.length + ',' + spieler.getId());
+            }
+        }
 
         if (listener != null) {
             listener.onGameStarted(spielerArray.length, 1);
@@ -144,7 +171,11 @@ public class GameServer extends Server {
     }
 
     public NetzwerkSpieler[] getSpieler() {
-        return spielerList.fill(new NetzwerkSpieler[spielerList.size()]);
+        if (spielGestartet) {
+            return spielerArray;
+        } else {
+            return spielerList.fill(new NetzwerkSpieler[spielerList.size()]);
+        }
     }
 
     public void setListener(NetzwerkListener listener) {

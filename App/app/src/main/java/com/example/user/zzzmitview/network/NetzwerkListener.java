@@ -1,11 +1,13 @@
 package com.example.user.zzzmitview.network;
 
-import com.example.user.zzzmitview.utility.Spieler;
+import com.example.user.zzzmitview.utility.NetzwerkSpieler;
 
 public interface NetzwerkListener {
-    void onGameStarted(int spielerCount, int myID);
+    void onPlayerRegister(NetzwerkSpieler spieler);
 
-    void onPlayerRegister(Spieler spieler);
+    void onPlayerUnregister();
+
+    void onGameStarted(int spielerCount, int myID);
 
     void onFieldSet(int id, int x, int y);
 

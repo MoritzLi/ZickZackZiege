@@ -27,8 +27,9 @@ public class NetzwerkSpieler extends Spieler {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof NetzwerkSpieler) {
-            NetzwerkSpieler other = (NetzwerkSpieler) obj;
-            return other.getIP().equals(this.getIP());
+            return equals(((NetzwerkSpieler) obj).getIP());
+        } else if (obj instanceof String) {
+            return getIP().equals(obj);
         }
         return false;
     }
