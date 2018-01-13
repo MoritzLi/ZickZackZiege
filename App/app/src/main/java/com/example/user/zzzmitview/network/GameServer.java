@@ -1,14 +1,14 @@
 package com.example.user.zzzmitview.network;
 
 import com.example.user.zzzmitview.utility.List;
-import com.example.user.zzzmitview.utility.Spieler;
+import com.example.user.zzzmitview.utility.NetzwerkSpieler;
 
 public class GameServer extends Server {
-    public static final int port = 5453;
+    static final int port = 5453;
 
-    private       boolean       spielGestartet;
-    private final List<Spieler> spielerList;
-    private       Spieler[]     spielerArray;
+    private       boolean               spielGestartet;
+    private final List<NetzwerkSpieler> spielerList;
+    private       NetzwerkSpieler[]     spielerArray;
 
     private ServerListener listener;
 
@@ -33,8 +33,8 @@ public class GameServer extends Server {
         switch (befehl) {
             case "REGISTER":
                 if (!spielGestartet) {
-                    if (!spielerList.find(new Spieler(pClientIP))) {
-                        Spieler s = new Spieler(-1, pClientIP, pClientPort);
+                    if (!spielerList.find(new NetzwerkSpieler(pClientIP))) {
+                        NetzwerkSpieler s = new NetzwerkSpieler(-1, pClientIP, pClientPort);
                         spielerList.append(s);
                         if (listener != null)
                             listener.onPlayerRegister(s);
@@ -60,8 +60,12 @@ public class GameServer extends Server {
                         sendToAll("SET " + id + ',' + x + ',' + y);
 
                         spielerList.toFirst();
-                        Spieler next = spielerList.getContent();
-                        send(next.getIP(), next.getPort(), "GO");
+                        NetzwerkSpieler next = spielerList.getContent();
+                        send(
+                                next.getIP(),
+                                next.getPort(),
+                                "GO"
+                        );
                     } else {
                         for (int i = 1; i < spielerArray.length; i++) {
                             if (spielerArray[i].getIP().equals(pClientIP)) {
@@ -88,7 +92,7 @@ public class GameServer extends Server {
                                 }
 
                                 if (i < spielerArray.length - 1) {
-                                    Spieler next = spielerArray[i + 1];
+                                    NetzwerkSpieler next = spielerArray[i + 1];
                                     send(
                                             next.getIP(),
                                             next.getPort(),
@@ -117,7 +121,7 @@ public class GameServer extends Server {
     @Override
     public void processClosedConnection(String pClientIP, int pClientPort) {
         if (!spielGestartet) {
-            if (spielerList.find(new Spieler(-1, pClientIP, pClientPort))) {
+            if (spielerList.find(new NetzwerkSpieler(-1, pClientIP, pClientPort))) {
                 spielerList.remove();
             }
         }
@@ -125,16 +129,16 @@ public class GameServer extends Server {
 
     void starteSpiel() {
         this.spielGestartet = true;
-        spielerArray = new Spieler[spielerList.size() + 1];
+        spielerArray = new NetzwerkSpieler[spielerList.size() + 1];
         spielerList.toFirst();
 
         for (int i = 1; i < spielerArray.length; i++, spielerList.next()) {
-            Spieler old = spielerList.getContent();
-            spielerArray[i] = new Spieler(i + 1, old.getIP(), old.getPort());
+            NetzwerkSpieler old = spielerList.getContent();
+            spielerArray[i] = new NetzwerkSpieler(i + 1, old.getIP(), old.getPort());
             send(old.getIP(), old.getPort(), "START " + spielerArray.length + ',' + (i + 1));
         }
 
-        spielerArray[0] = new Spieler(1, "localhost", port);
+        spielerArray[0] = new NetzwerkSpieler(1, "localhost", port);
 
         //GUI
 
@@ -143,8 +147,8 @@ public class GameServer extends Server {
         go = true;
     }
 
-    Spieler[] getSpieler() {
-        return spielerList.fill(new Spieler[spielerList.size()]);
+    NetzwerkSpieler[] getSpieler() {
+        return spielerList.fill(new NetzwerkSpieler[spielerList.size()]);
     }
 
     void setListener(ServerListener listener) {

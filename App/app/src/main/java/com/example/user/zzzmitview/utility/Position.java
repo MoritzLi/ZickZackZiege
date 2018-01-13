@@ -1,36 +1,31 @@
 package com.example.user.zzzmitview.utility;
 
-/**
- * Created by User on 02.01.2018.
- */
-
-public class Position
-{
+public class Position {
     private final int x;
     private final int y;
-    private int xFrei;
-    private int yFrei;
+    private       int xFrei;
+    private       int yFrei;
 
-    public Position(int pX,int pY, int pXf, int pYf){
+    public Position(int pX, int pY, int pXf, int pYf) {
         x = pX;
         y = pY;
         xFrei = pXf;
         yFrei = pYf;
     }
 
-    public int getX(){
+    public int getX() {
         return x;
     }
 
-    public int getY(){
+    public int getY() {
         return y;
     }
 
-    public int getXFrei(){
+    public int getXFrei() {
         return xFrei;
     }
 
-    public int getYFrei(){
+    public int getYFrei() {
         return yFrei;
     }
 }

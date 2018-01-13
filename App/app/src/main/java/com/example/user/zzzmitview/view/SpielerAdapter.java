@@ -14,15 +14,12 @@ import com.example.user.zzzmitview.utility.Spieler;
 
 public class SpielerAdapter extends BaseAdapter {
     private Spieler[] spieler;
-    private View[]    views;
     private Context   context;
-
 
     public SpielerAdapter(@NonNull Context context, @NonNull Spieler[] objects) {
         super();
         this.context = context;
         spieler = objects;
-        views = new View[getCount()];
     }
 
     @NonNull
@@ -31,13 +28,12 @@ public class SpielerAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = getLayoutInflater().inflate(R.layout.list_item_spieler, parent, false);
         }
-        final TextView name   = (TextView) convertView.findViewById(R.id.spieler);
+
+        final TextView name = (TextView) convertView.findViewById(R.id.spieler);
+        name.setText(getItem(position).getName());
+
         final TextView punkte = (TextView) convertView.findViewById(R.id.punkte);
-
-        name.setText("Spieler " + getItem(position).getId());
-        punkte.setText(String.valueOf(getItem(position).getPunkte()));
-
-        views[position] = convertView;
+        punkte.setText(getItem(position).getPunkteString());
 
         return convertView;
     }

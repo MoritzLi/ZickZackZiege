@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.example.user.zzzmitview.R;
 import com.example.user.zzzmitview.dialog.ChangeNameDialog;
 import com.example.user.zzzmitview.dialog.SpielerzahlDialog;
+import com.example.user.zzzmitview.utility.Spielmodus;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,8 +28,8 @@ public class MainActivity extends AppCompatActivity {
                                 SpielfeldActivity.class
                         )
                                 .putExtra(
-                                        "contentView",
-                                        R.layout.activity_spielfeld_singleplayer
+                                        "spielmodus",
+                                        Spielmodus.EINZELSPIELER.toString()
                                 )
                 );
             }
@@ -36,20 +37,33 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.mehrspieler).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                new SpielerzahlDialog(MainActivity.this, new Intent(
-                        getApplicationContext(),
-                        SpielfeldActivity.class
-                )
-                        .putExtra(
-                                "contentView",
-                                R.layout.activity_spielfeld_multiplayer
-                        )).show();
+                new SpielerzahlDialog(
+                        MainActivity.this,
+                        new Intent(
+                                getApplicationContext(),
+                                SpielfeldActivity.class
+                        )
+                                .putExtra(
+                                        "spielmodus",
+                                        Spielmodus.MEHRSPIELER.toString()
+                                )
+                ).show();
             }
         });
 
         findViewById(R.id.online).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 toast("Demnächst verfügbar.");
+//                startActivity(
+//                        new Intent(
+//                                getApplicationContext(),
+//                                SpielfeldActivity.class
+//                        )
+//                                .putExtra(
+//                                        "spielmodus",
+//                                        Spielmodus.ONLINE
+//                                )
+//                );
             }
         });
 
