@@ -56,14 +56,14 @@ public class GameServer extends Server {
 
             case "SET":
                 if (spielGestartet) {
-                    int id = 1;
-                    int x = Integer.parseInt(
-                            pMessage.substring(i1 + 1, i2)
-                    ), y = Integer.parseInt(
-                            pMessage.substring(i2 + 1)
-                    );
-
                     if (spielerArray[aktuellerSpieler].equals(pClientIP)) {
+                        int id = spielerArray[aktuellerSpieler].getId();
+                        int x = Integer.parseInt(
+                                pMessage.substring(i1 + 1, i2)
+                        ), y = Integer.parseInt(
+                                pMessage.substring(i2 + 1)
+                        );
+
                         for (int j = 1; j < spielerArray.length; j++) {
                             if (j != aktuellerSpieler) {
                                 send(
@@ -77,22 +77,24 @@ public class GameServer extends Server {
                         if (listener != null && aktuellerSpieler != 0) {
                             listener.onFieldSet(id, x, y);
                         }
+
+                        aktuellerSpieler++;
+                        if (aktuellerSpieler >= spielerArray.length) {
+                            aktuellerSpieler = 0;
+                            if (listener != null) {
+                                listener.onYourTurn();
+                            }
+                        } else {
+                            NetzwerkSpieler next = spielerArray[aktuellerSpieler];
+                            send(
+                                    next.getIP(),
+                                    next.getPort(),
+                                    "GO"
+                            );
+                        }
                     }
 
-                    aktuellerSpieler++;
-                    if (aktuellerSpieler >= spielerArray.length) {
-                        aktuellerSpieler = 0;
-                        if (listener != null) {
-                            listener.onYourTurn();
-                        }
-                    } else {
-                        NetzwerkSpieler next = spielerArray[aktuellerSpieler];
-                        send(
-                                next.getIP(),
-                                next.getPort(),
-                                "GO"
-                        );
-                    }
+
 
                 }
                 break;
