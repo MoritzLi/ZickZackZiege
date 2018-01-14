@@ -1,5 +1,7 @@
 package com.example.user.zzzmitview.utility;
 
+import android.support.annotation.NonNull;
+
 import java.util.Iterator;
 
 /**
@@ -409,6 +411,7 @@ public class List<ContentType> implements Iterable<ContentType> {
      *
      * @return Iterator
      */
+    @NonNull
     @Override
     public Iterator<ContentType> iterator() {
         current = null;

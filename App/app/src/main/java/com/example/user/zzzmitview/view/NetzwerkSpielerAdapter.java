@@ -13,8 +13,8 @@ import com.example.user.zzzmitview.R;
 import com.example.user.zzzmitview.utility.NetzwerkSpieler;
 
 public class NetzwerkSpielerAdapter extends BaseAdapter {
-    private NetzwerkSpieler[] spieler;
-    private Context           context;
+    private final NetzwerkSpieler[] spieler;
+    private final Context           context;
 
     public NetzwerkSpielerAdapter(@NonNull Context context, @NonNull NetzwerkSpieler[] objects) {
         super();

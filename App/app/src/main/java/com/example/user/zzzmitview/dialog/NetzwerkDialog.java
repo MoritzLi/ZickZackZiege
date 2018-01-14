@@ -19,7 +19,7 @@ import static android.content.Context.WIFI_SERVICE;
 
 public class NetzwerkDialog extends AppCompatDialog {
     private final SpielfeldActivity activity;
-    private       String            nickname;
+    private final String            nickname;
     private       GameServer        server;
     private       GameClient        client;
 

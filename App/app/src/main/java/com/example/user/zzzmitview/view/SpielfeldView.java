@@ -17,7 +17,7 @@ import com.example.user.zzzmitview.utility.Spieler;
 import com.example.user.zzzmitview.utility.Spielfeld;
 
 public class SpielfeldView extends View {
-    static final int[] colors = {
+    private static final int[] colors = {
             android.R.color.transparent,
             R.color.materialYellow,
             R.color.materialGreen,

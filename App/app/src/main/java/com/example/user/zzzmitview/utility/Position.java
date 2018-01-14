@@ -1,10 +1,10 @@
 package com.example.user.zzzmitview.utility;
 
-public class Position {
+class Position {
     private final int x;
     private final int y;
-    private       int xFrei;
-    private       int yFrei;
+    private final int xFrei;
+    private final int yFrei;
 
     Position(int pX, int pY, int pXf, int pYf) {
         x = pX;

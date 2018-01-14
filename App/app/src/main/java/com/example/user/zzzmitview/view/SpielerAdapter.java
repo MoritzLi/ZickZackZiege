@@ -13,8 +13,8 @@ import com.example.user.zzzmitview.R;
 import com.example.user.zzzmitview.utility.Spieler;
 
 public class SpielerAdapter extends BaseAdapter {
-    private Spieler[] spieler;
-    private Context   context;
+    private final Spieler[] spieler;
+    private final Context   context;
 
     public SpielerAdapter(@NonNull Context context, @NonNull Spieler[] objects) {
         super();
