@@ -26,7 +26,7 @@ public class NicknameDialog extends AppCompatDialog {
 
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
 
-        final EditText editText = (EditText) findViewById(R.id.editText);
+        final EditText editText = findViewById(R.id.editText);
         editText.setText(preferences.getString("nickname", ""));
 
         findViewById(R.id.speichern).setOnClickListener(new View.OnClickListener() {

@@ -51,7 +51,7 @@ public class SpielfeldActivity extends AppCompatActivity {
 
         spielfeld = new Spielfeld(spieler.length);
 
-        view = (SpielfeldView) findViewById(R.id.view);
+        view = findViewById(R.id.view);
         view.setSpielfeld(spielfeld);
         view.setSpieler(spieler);
         view.setActivity(this);
@@ -76,7 +76,7 @@ public class SpielfeldActivity extends AppCompatActivity {
         }
 
         adapter = new SpielerAdapter(getApplicationContext(), spieler);
-        ListView listView = (ListView) findViewById(R.id.listView);
+        ListView listView = findViewById(R.id.listView);
         listView.setAdapter(adapter);
     }
 

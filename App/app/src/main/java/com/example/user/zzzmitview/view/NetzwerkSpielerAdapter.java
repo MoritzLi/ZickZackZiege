@@ -29,10 +29,10 @@ public class NetzwerkSpielerAdapter extends BaseAdapter {
             convertView = getLayoutInflater().inflate(R.layout.list_item_spieler, parent, false);
         }
 
-        final TextView name = (TextView) convertView.findViewById(R.id.spieler);
+        final TextView name = convertView.findViewById(R.id.spieler);
         name.setText(getItem(position).getName());
 
-        final TextView punkte = (TextView) convertView.findViewById(R.id.punkte);
+        final TextView punkte = convertView.findViewById(R.id.punkte);
         punkte.setText(getItem(position).getIPString());
 
         return convertView;

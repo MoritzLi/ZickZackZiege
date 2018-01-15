@@ -1,5 +1,7 @@
 package com.example.user.zzzmitview.utility;
 
+import android.util.Log;
+
 public class Spielfeld {
     private final int[][] feld;
     private       int     spielrunde;

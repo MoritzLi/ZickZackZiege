@@ -25,7 +25,7 @@ public class SpielerzahlDialog extends AppCompatDialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_spieleranzahl);
 
-        final EditText editText = (EditText) findViewById(R.id.editText);
+        final EditText editText = findViewById(R.id.editText);
 
         findViewById(R.id.ok).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -36,7 +36,10 @@ public class SpielerzahlDialog extends AppCompatDialog {
                             text
                     );
                     if (n >= 2 && n <= 8) {
-                        intent.putExtra(MainActivity.INTENT_EXTRA_SPIELERZAHL, n);
+                        intent.putExtra(
+                                MainActivity.INTENT_EXTRA_SPIELERZAHL,
+                                n
+                        );
                         dismiss();
                         activity.startActivity(intent);
                     } else {

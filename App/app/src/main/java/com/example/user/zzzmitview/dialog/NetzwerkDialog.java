@@ -44,7 +44,7 @@ public class NetzwerkDialog extends AppCompatDialog {
                 findViewById(R.id.ok).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        EditText editText = (EditText) findViewById(R.id.editText);
+                        EditText editText = findViewById(R.id.editText);
                         String   text     = editText.getText().toString();
                         if (text.length() > 0) {
                             ClientTask task = new ClientTask();
@@ -73,7 +73,7 @@ public class NetzwerkDialog extends AppCompatDialog {
 
                 WifiManager wm       = (WifiManager) activity.getApplicationContext().getSystemService(WIFI_SERVICE);
                 String      ip       = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
-                TextView    textView = ((TextView) findViewById(R.id.ipAdresse));
+                TextView    textView = findViewById(R.id.ipAdresse);
                 textView.setText(ip);
 
                 findViewById(R.id.start).setOnClickListener(new View.OnClickListener() {

@@ -2,12 +2,17 @@ package com.example.user.zzzmitview.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.ColorFilter;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -29,6 +34,18 @@ public class SpielfeldView extends View {
             R.color.materialPink
     };
 
+    private static final int[] drawables = {
+            R.drawable.leer,
+            R.drawable.x,
+            R.drawable.o,
+            R.drawable.raute,
+            R.drawable.dreieck,
+            R.drawable.hexagon,
+            R.drawable.stern,
+            R.drawable.herz,
+            R.drawable.blitz
+    };
+
     SpielfeldActivity activity;
 
     Spielfeld spielfeld;
@@ -39,24 +56,33 @@ public class SpielfeldView extends View {
     private Bitmap bitmapBackground;
     private Bitmap bitmapFields;
 
+    private final Bitmap[] icons;
+    private final ColorFilter[] filters;
+
     private boolean isInitialized;
 
-    int fieldWidth;
+    int fieldSize;
     private int stroke;
 
     public SpielfeldView(Context context) {
         super(context);
         isInitialized = false;
+        icons = new Bitmap[drawables.length];
+        filters = new ColorFilter[drawables.length];
     }
 
     public SpielfeldView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         isInitialized = false;
+        icons = new Bitmap[drawables.length];
+        filters = new ColorFilter[drawables.length];
     }
 
     public SpielfeldView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         isInitialized = false;
+        icons = new Bitmap[drawables.length];
+        filters = new ColorFilter[drawables.length];
     }
 
     @Override
@@ -92,11 +118,30 @@ public class SpielfeldView extends View {
 
     @CallSuper
     void initialize() {
-        fieldWidth = getWidth() / 5;
+        fieldSize = getWidth() / spielfeld.getFieldCount();
         stroke = 3;
 
         paint = new Paint();
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
+
+        for (int i = 0; i < drawables.length; i++) {
+            icons[i] = Bitmap.createScaledBitmap(
+                    BitmapFactory.decodeResource(
+                            getResources(),
+                            drawables[i]
+                    ),
+                    fieldSize,
+                    fieldSize,
+                    false
+            );
+            filters[i] = new PorterDuffColorFilter(
+                    ContextCompat.getColor(
+                            getContext(),
+                            colors[i]
+                    ),
+                    PorterDuff.Mode.SRC_ATOP
+            );
+        }
 
         drawBackground();
         drawFields();
@@ -111,15 +156,15 @@ public class SpielfeldView extends View {
         paint.setStyle(Paint.Style.STROKE);
 
         bitmapBackground = Bitmap.createBitmap(
-                fieldWidth * spielfeld.getFieldCount(),
-                fieldWidth * spielfeld.getFieldCount(),
+                getWidth(),
+                getHeight(),
                 Bitmap.Config.ARGB_4444
         );
         Canvas canvas = new Canvas(bitmapBackground);
 
         for (int i = 0; i <= spielfeld.getFieldCount(); i++) {
-            canvas.drawLine(fieldWidth * i, 0, fieldWidth * i, fieldWidth * spielfeld.getFieldCount(), paint);
-            canvas.drawLine(0, fieldWidth * i, fieldWidth * spielfeld.getFieldCount(), fieldWidth * i, paint);
+            canvas.drawLine(fieldSize * i, 0, fieldSize * i, fieldSize * spielfeld.getFieldCount(), paint);
+            canvas.drawLine(0, fieldSize * i, fieldSize * spielfeld.getFieldCount(), fieldSize * i, paint);
         }
     }
 
@@ -128,16 +173,17 @@ public class SpielfeldView extends View {
         paint.setStyle(Paint.Style.FILL);
 
         bitmapFields = Bitmap.createBitmap(
-                fieldWidth * spielfeld.getFieldCount(),
-                fieldWidth * spielfeld.getFieldCount(),
+                fieldSize * spielfeld.getFieldCount(),
+                fieldSize * spielfeld.getFieldCount(),
                 Bitmap.Config.ARGB_4444
         );
         Canvas canvas = new Canvas(bitmapFields);
 
-        for (int i = 0; i < spielfeld.getFieldCount(); i++) {
-            for (int j = 0; j < spielfeld.getFieldCount(); j++) {
-                paint.setColor(ContextCompat.getColor(getContext(), SpielfeldView.colors[spielfeld.getValue(i, j)]));
-                canvas.drawRect(fieldWidth * i + stroke, fieldWidth * j + stroke, fieldWidth * (i + 1) - stroke, fieldWidth * (j + 1) - stroke, paint);
+        for (int x = 0; x < spielfeld.getFieldCount(); x++) {
+            for (int y = 0; y < spielfeld.getFieldCount(); y++) {
+                int value = spielfeld.getValue(x, y);
+                paint.setColorFilter(filters[value]);
+                canvas.drawBitmap(icons[value], fieldSize * x + stroke, fieldSize * y + stroke, paint);
             }
         }
     }

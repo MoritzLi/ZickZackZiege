@@ -30,11 +30,11 @@ public class NetzwerkView extends SpielfeldView {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (go) {
-            int x = (int) (event.getX() / fieldWidth);
+            int x = (int) (event.getX() / fieldSize);
             if (x >= spielfeld.getFieldCount())
                 x = spielfeld.getFieldCount() - 1;
 
-            int y = (int) (event.getY() / fieldWidth);
+            int y = (int) (event.getY() / fieldSize);
             if (y >= spielfeld.getFieldCount())
                 y = spielfeld.getFieldCount() - 1;
 
