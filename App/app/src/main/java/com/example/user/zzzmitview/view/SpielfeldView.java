@@ -12,7 +12,6 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -24,10 +23,10 @@ import com.example.user.zzzmitview.utility.Spielfeld;
 public class SpielfeldView extends View {
     private static final int[] colors = {
             android.R.color.transparent,
-            R.color.materialYellow,
-            R.color.materialGreen,
             R.color.materialRed,
             R.color.materialBlue,
+            R.color.materialYellow,
+            R.color.materialGreen,
             R.color.materialOrange,
             R.color.materialPurple,
             R.color.materialCyan,
@@ -99,8 +98,8 @@ public class SpielfeldView extends View {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
-        int width = getMeasuredWidth();
-        setMeasuredDimension(width, width);
+        int size = getMeasuredWidth();
+        setMeasuredDimension(size, size);
     }
 
     @Override

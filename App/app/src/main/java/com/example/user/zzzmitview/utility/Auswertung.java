@@ -161,7 +161,7 @@ abstract class Auswertung {
 
             for (int yKor = 1; yKor < feld.length - 1; yKor++) {
 
-                if (feld[xKor][yKor] == pSpieler && feld[xKor + 1][yKor - 1] == pSpieler && feld[xKor + 2][yKor] == pSpieler && feld[xKor + 1][yKor + 1] == pSpieler && feld[xKor + 1][yKor] != pSpieler) {
+                if (feld[xKor][yKor] == pSpieler && feld[xKor + 1][yKor - 1] == pSpieler && feld[xKor + 2][yKor] == pSpieler && feld[xKor + 1][yKor + 1] == pSpieler && feld[xKor + 1][yKor] != pSpieler && feld[xKor + 1][yKor] != 0) {
 
                     punkte = punkte + 7;
 

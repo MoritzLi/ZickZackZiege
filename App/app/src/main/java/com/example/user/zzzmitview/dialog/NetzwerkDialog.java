@@ -14,6 +14,7 @@ import com.example.user.zzzmitview.activity.SpielfeldActivity;
 import com.example.user.zzzmitview.network.ClientTask;
 import com.example.user.zzzmitview.network.GameClient;
 import com.example.user.zzzmitview.network.GameServer;
+import com.example.user.zzzmitview.utility.NetzwerkSpieler;
 
 import static android.content.Context.WIFI_SERVICE;
 
@@ -84,5 +85,9 @@ public class NetzwerkDialog extends AppCompatDialog {
                 });
             }
         });
+    }
+
+    public void setListData(NetzwerkSpieler[] spieler) {
+
     }
 }
