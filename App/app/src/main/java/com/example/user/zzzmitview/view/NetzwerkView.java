@@ -5,15 +5,16 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-import com.example.user.zzzmitview.network.GameClient;
+import com.example.user.zzzmitview.network.AndroidGameClient;
+import com.example.user.zzzmitview.network.AndroidGameServer;
 import com.example.user.zzzmitview.network.GameServer;
 
 public class NetzwerkView extends SpielfeldView {
     private boolean go;
     private int     myID;
 
-    private GameServer server;
-    private GameClient client;
+    private AndroidGameServer server;
+    private AndroidGameClient client;
 
     public NetzwerkView(Context context) {
         super(context);
@@ -40,6 +41,9 @@ public class NetzwerkView extends SpielfeldView {
 
             if (spielfeld.isEmpty(x, y)) {
                 setze(x, y);
+                spielfeld.nextRound();
+
+                listener.round();
             }
         }
 
@@ -64,11 +68,11 @@ public class NetzwerkView extends SpielfeldView {
         go = false;
     }
 
-    public void setClient(GameClient client) {
+    public void setClient(AndroidGameClient client) {
         this.client = client;
     }
 
-    public void setServer(GameServer server) {
+    public void setServer(AndroidGameServer server) {
         this.server = server;
     }
 

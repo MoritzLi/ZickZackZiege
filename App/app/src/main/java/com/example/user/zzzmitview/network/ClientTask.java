@@ -2,9 +2,9 @@ package com.example.user.zzzmitview.network;
 
 import android.os.AsyncTask;
 
-public class ClientTask extends AsyncTask<String, Void, GameClient> {
+public class ClientTask extends AsyncTask<String, Void, AndroidGameClient> {
     @Override
-    protected GameClient doInBackground(String... params) {
-        return new GameClient(params[0], params[1]);
+    protected AndroidGameClient doInBackground(String... params) {
+        return new AndroidGameClient(params[0], params[1]);
     }
 }

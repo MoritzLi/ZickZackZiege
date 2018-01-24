@@ -45,10 +45,10 @@ public class SpielfeldView extends View {
             R.drawable.blitz
     };
 
-    SpielfeldActivity activity;
-
     Spielfeld spielfeld;
     Spieler[] spieler;
+
+    SpielListener listener;
 
     private Paint paint;
 
@@ -187,15 +187,15 @@ public class SpielfeldView extends View {
         }
     }
 
-    public void setActivity(SpielfeldActivity activity) {
-        this.activity = activity;
-    }
-
     public void setSpielfeld(Spielfeld spielfeld) {
         this.spielfeld = spielfeld;
     }
 
     public void setSpieler(Spieler[] spieler) {
         this.spieler = spieler;
+    }
+
+    public void setListener(SpielListener listener) {
+        this.listener = listener;
     }
 }

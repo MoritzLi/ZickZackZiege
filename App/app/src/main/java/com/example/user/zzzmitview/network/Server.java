@@ -38,7 +38,6 @@ public abstract class Server {
                     server.processMessage(this.getRemoteIP(), this.getRemotePort(), lNachricht);
             }
         }
-
     }
 
     private class ServerSchleife extends Thread {
@@ -51,7 +50,7 @@ public abstract class Server {
         public void run() {
             while (isAlive()) {
                 try {
-                    Socket lClientSocket = server.serverSocket.accept();
+                    Socket           lClientSocket         = server.serverSocket.accept();
                     ServerConnection lNeueSerververbindung = new ServerConnection(lClientSocket, server);
                     server.ergaenzeVerbindung(lNeueSerververbindung);
                     lNeueSerververbindung.start();
@@ -125,7 +124,6 @@ public abstract class Server {
             this.loescheVerbindung(lSerververbindung);
         } else
             System.err.println("Fehler beim Schließen der Verbindung: IP " + pClientIP + " mit Port " + pClientPort + " nicht vorhanden.");
-
     }
 
     private void loescheVerbindung(ServerConnection pVerbindung) {
@@ -134,7 +132,8 @@ public abstract class Server {
             ServerConnection lClient = verbindungen.getContent();
             if (lClient == pVerbindung)
                 verbindungen.remove();
-            verbindungen.next();
+            else
+                verbindungen.next();
         }
     }
 

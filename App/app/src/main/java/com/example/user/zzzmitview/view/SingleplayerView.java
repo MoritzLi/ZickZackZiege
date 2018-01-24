@@ -41,11 +41,15 @@ public class SingleplayerView extends SpielfeldView {
                 spielfeld.nextRound();
 
                 ki.spielzug();
-                activity.refreshPunkte(0, 1);
+                listener.round();
+            }
+
+            if (!spielfeld.isPlaying()) {
+                listener.end();
             }
         } else {
             spielfeld.clear();
-            activity.refreshPunkte(0, 1);
+            listener.round();
             if (schwierigkeit == Schwierigkeit.SCHWIERIG) {
                 ki.spielzug();
             }

@@ -32,12 +32,17 @@ public class MultiplayerView extends SpielfeldView {
 
         if (spielfeld.isEmpty(x, y)) {
             spielfeld.setValue(spieler[current].getId(), x, y);
+            spielfeld.nextRound();
 
-            activity.refreshPunkte(current);
+            listener.round();
 
             current++;
             if (current == spieler.length) {
                 current = 0;
+            }
+
+            if (!spielfeld.isPlaying()) {
+                listener.end();
             }
         }
 

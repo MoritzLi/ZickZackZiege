@@ -14,7 +14,7 @@ public class GameServer extends Server {
 
     private NetzwerkListener listener;
 
-    public GameServer() {
+    GameServer() {
         super(port);
 
         spielGestartet = false;
@@ -79,7 +79,7 @@ public class GameServer extends Server {
                         }
 
                         aktuellerSpieler++;
-                        if (aktuellerSpieler >= spielerArray.length) {
+                        if (aktuellerSpieler == spielerArray.length) {
                             aktuellerSpieler = 0;
                             if (listener != null) {
                                 listener.onYourTurn();
@@ -93,9 +93,6 @@ public class GameServer extends Server {
                             );
                         }
                     }
-
-
-
                 }
                 break;
 
@@ -123,24 +120,35 @@ public class GameServer extends Server {
                 }
 
                 if (place == aktuellerSpieler) {
-                    NetzwerkSpieler next = spielerArray[aktuellerSpieler];
-                    send(
-                            next.getIP(),
-                            next.getPort(),
-                            "GO"
-                    );
+                    if (aktuellerSpieler == spielerArray.length) {
+                        aktuellerSpieler = 0;
+                        if (listener != null) {
+                            listener.onYourTurn();
+                        }
+                    } else {
+                        NetzwerkSpieler next = spielerArray[aktuellerSpieler];
+                        send(
+                                next.getIP(),
+                                next.getPort(),
+                                "GO"
+                        );
+                    }
                 }
             } else {
                 spielerList.toFirst();
                 boolean removed = false;
-                for (int id = 1; id <= spielerList.size(); spielerList.next()) {
+                for (int id = 1; id <= spielerList.size(); ) {
                     if (removed) {
                         NetzwerkSpieler spieler = spielerList.getContent();
                         spielerList.remove();
                         spielerList.insertBefore(new NetzwerkSpieler(id, spieler.getIP(), spieler.getPort()));
+                        id++;
                     } else if (spielerList.getContent().equals(pClientIP)) {
                         spielerList.remove();
                         removed = true;
+                    } else {
+                        spielerList.next();
+                        id++;
                     }
                 }
             }

@@ -54,6 +54,7 @@ abstract class Client {
 
     Client(String pIPAdresse, int pPortNr) {
         hatVerbindung = new Connection(pIPAdresse, pPortNr);
+        hatVerbindung.start();
 
         try {
             hatEmpfaenger = new Clientempfaenger(this, hatVerbindung);

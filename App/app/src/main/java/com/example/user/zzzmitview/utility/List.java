@@ -39,7 +39,7 @@ public class List<ContentType> implements Iterable<ContentType> {
         last = null;
         current = null;
         length = 0;
-        adapt(array);
+        concat(array);
     }
 
     /**
@@ -112,33 +112,41 @@ public class List<ContentType> implements Iterable<ContentType> {
     /**
      * Verschiebt den Listenpointer um eine Stelle Richtung Ende der Liste.
      */
-    public void next() {
+    public List<ContentType> next() {
         current = current.next;
+
+        return this;
     }
 
     /**
      * Verschiebt den Listenpointer um eine Stelle Richtung Anfang der Liste.
      */
-    public void previous() {
+    public List<ContentType> previous() {
         current = current.previous;
+
+        return this;
     }
 
     /**
      * Verschiebt den Listenpointer zum Anfang der Liste.
      */
-    public void toFirst() {
+    public List<ContentType> toFirst() {
         if (!isEmpty()) {
             current = first;
         }
+
+        return this;
     }
 
     /**
      * Verschiebt den Listenpointer zum Ende der Liste.
      */
-    public void toLast() {
+    public List<ContentType> toLast() {
         if (!isEmpty()) {
             current = last;
         }
+
+        return this;
     }
 
     /**
@@ -146,12 +154,14 @@ public class List<ContentType> implements Iterable<ContentType> {
      *
      * @param index Zielindex
      */
-    public void toIndex(int index) {
+    public List<ContentType> toIndex(int index) {
         if (index >= length - 1)
             toLast();
         else
             for (toFirst(); hasAccess() && index > 0; next(), index--)
                 ;
+
+        return this;
     }
 
     /**
@@ -160,7 +170,7 @@ public class List<ContentType> implements Iterable<ContentType> {
      * @param firstIndex  Index des ersten zu vertauschenden Elements
      * @param secondIndex Index des zweiten zu vertauschenden Elements
      */
-    public void swap(int firstIndex, int secondIndex) {
+    public List<ContentType> swap(int firstIndex, int secondIndex) {
         toIndex(firstIndex);
         ContentType t1 = getContent();
 
@@ -173,6 +183,8 @@ public class List<ContentType> implements Iterable<ContentType> {
         toIndex(firstIndex);
         remove();
         insertBefore(t2);
+
+        return this;
     }
 
     /**
@@ -191,9 +203,11 @@ public class List<ContentType> implements Iterable<ContentType> {
      *
      * @param pContent Neues Listenobjekt
      */
-    public void setContent(ContentType pContent) {
+    public List<ContentType> setContent(ContentType pContent) {
         if (pContent != null && this.hasAccess())
             current.content = pContent;
+
+        return this;
     }
 
     /**
@@ -224,7 +238,7 @@ public class List<ContentType> implements Iterable<ContentType> {
      *
      * @param pContent Neues Listenobjekt
      */
-    public void insertBefore(ContentType pContent) {
+    public List<ContentType> insertBefore(ContentType pContent) {
         if (pContent != null) {
             if (hasAccess()) {
                 Node newNode = new Node(pContent);
@@ -243,6 +257,8 @@ public class List<ContentType> implements Iterable<ContentType> {
                 }
             }
         }
+
+        return this;
     }
 
     /**
@@ -251,7 +267,7 @@ public class List<ContentType> implements Iterable<ContentType> {
      *
      * @param pContent Neues Listenobjekt
      */
-    public void insertBehind(ContentType pContent) {
+    public List<ContentType> insertBehind(ContentType pContent) {
         if (pContent != null) {
             if (hasAccess()) {
                 Node newNode = new Node(pContent);
@@ -268,6 +284,8 @@ public class List<ContentType> implements Iterable<ContentType> {
                 }
             }
         }
+
+        return this;
     }
 
     /**
@@ -287,6 +305,7 @@ public class List<ContentType> implements Iterable<ContentType> {
                 length++;
             }
         }
+
         return this;
     }
 
@@ -300,6 +319,7 @@ public class List<ContentType> implements Iterable<ContentType> {
         for (ContentType t : pList) {
             append(t);
         }
+
         return this;
     }
 
@@ -324,13 +344,14 @@ public class List<ContentType> implements Iterable<ContentType> {
             pList.current = null;
             length += pList.size();
         }
+
         return this;
     }
 
     /**
      * Entfernt das Objekt, auf das der Pointer zeigt. Der Pointer steht danach auf dem Nachfolgeelement.
      */
-    public void remove() {
+    public List<ContentType> remove() {
         if (this.hasAccess() && !this.isEmpty()) {
             if (current == first)
                 first = first.next;
@@ -347,6 +368,8 @@ public class List<ContentType> implements Iterable<ContentType> {
             temp.previous = null;
             length--;
         }
+
+        return this;
     }
 
     /**
@@ -354,9 +377,11 @@ public class List<ContentType> implements Iterable<ContentType> {
      *
      * @param array Array, das angehängt werden soll.
      */
-    public void adapt(ContentType[] array) {
+    public List<ContentType> concat(ContentType[] array) {
         for (ContentType c : array)
             append(c);
+
+        return this;
     }
 
     /**
@@ -369,6 +394,7 @@ public class List<ContentType> implements Iterable<ContentType> {
         toFirst();
         for (int i = 0; i < array.length; i++, next())
             array[i] = getContent();
+
         return array;
     }
 

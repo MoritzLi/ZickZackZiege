@@ -7,8 +7,9 @@ import android.widget.ListView;
 
 import com.example.user.zzzmitview.R;
 import com.example.user.zzzmitview.dialog.NetzwerkDialog;
-import com.example.user.zzzmitview.network.GameClient;
-import com.example.user.zzzmitview.network.GameServer;
+import com.example.user.zzzmitview.dialog.NetzwerkDialogListener;
+import com.example.user.zzzmitview.network.AndroidGameClient;
+import com.example.user.zzzmitview.network.AndroidGameServer;
 import com.example.user.zzzmitview.network.NetzwerkListener;
 import com.example.user.zzzmitview.utility.NetzwerkSpieler;
 import com.example.user.zzzmitview.utility.Schwierigkeit;
@@ -17,18 +18,19 @@ import com.example.user.zzzmitview.utility.Spielfeld;
 import com.example.user.zzzmitview.utility.Spielmodus;
 import com.example.user.zzzmitview.view.NetzwerkView;
 import com.example.user.zzzmitview.view.SingleplayerView;
+import com.example.user.zzzmitview.view.SpielListener;
 import com.example.user.zzzmitview.view.SpielerAdapter;
 import com.example.user.zzzmitview.view.SpielfeldView;
 
-public class SpielfeldActivity extends AppCompatActivity {
+public class SpielfeldActivity extends AppCompatActivity implements SpielListener, NetzwerkDialogListener {
     private Spieler[]      spieler;
     private Spielfeld      spielfeld;
     private SpielerAdapter adapter;
     private SpielfeldView  view;
     private NetzwerkDialog dialog;
 
-    private GameServer server;
-    private GameClient client;
+    private AndroidGameServer server;
+    private AndroidGameClient client;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,7 +56,7 @@ public class SpielfeldActivity extends AppCompatActivity {
         view = findViewById(R.id.view);
         view.setSpielfeld(spielfeld);
         view.setSpieler(spieler);
-        view.setActivity(this);
+        view.setListener(this);
 
         switch (spielmodus) {
             case EINZELSPIELER:
@@ -66,7 +68,7 @@ public class SpielfeldActivity extends AppCompatActivity {
                 break;
 
             case NETZWERK_LOKAL:
-                dialog = new NetzwerkDialog(this);
+                dialog = new NetzwerkDialog(this, this);
                 dialog.setCancelable(false);
                 dialog.show();
                 break;
@@ -83,22 +85,36 @@ public class SpielfeldActivity extends AppCompatActivity {
     @Override
     public void finish() {
         super.finish();
+
         if (server != null) {
             server.close();
-        } else if (client != null) {
+        }
+        if (client != null) {
             client.close();
         }
     }
 
-    public void refreshPunkte(int... indices) {
-        for (int index : indices) {
-            spielfeld.getPoints(spieler[index]);
-        }
+    private void setContentView(Spielmodus spielmodus) {
+        switch (spielmodus) {
+            case EINZELSPIELER:
+                setContentView(R.layout.activity_spielfeld_singleplayer);
+                break;
 
-        adapter.notifyDataSetChanged();
+            case MEHRSPIELER:
+                setContentView(R.layout.activity_spielfeld_multiplayer);
+                break;
+
+            case NETZWERK_LOKAL:
+                setContentView(R.layout.activity_spielfeld_netzwerk);
+                break;
+
+            case ONLINE:
+                break;
+        }
     }
 
-    public void notifyNetzwerk(GameClient client, GameServer server) {
+    @Override
+    public void notify(AndroidGameClient client, final AndroidGameServer server) {
         this.client = client;
         this.server = server;
 
@@ -109,12 +125,12 @@ public class SpielfeldActivity extends AppCompatActivity {
         NetzwerkListener listener = new NetzwerkListener() {
             @Override
             public void onPlayerRegister(NetzwerkSpieler spieler) {
-
+                dialog.setListData(server.getSpieler());
             }
 
             @Override
             public void onPlayerUnregister() {
-
+                dialog.setListData(server.getSpieler());
             }
 
             @Override
@@ -151,22 +167,15 @@ public class SpielfeldActivity extends AppCompatActivity {
         }
     }
 
-    private void setContentView(Spielmodus spielmodus) {
-        switch (spielmodus) {
-            case EINZELSPIELER:
-                setContentView(R.layout.activity_spielfeld_singleplayer);
-                break;
+    @Override
+    public void round() {
+        spielfeld.getPoints(spieler);
 
-            case MEHRSPIELER:
-                setContentView(R.layout.activity_spielfeld_multiplayer);
-                break;
+        adapter.notifyDataSetChanged();
+    }
 
-            case NETZWERK_LOKAL:
-                setContentView(R.layout.activity_spielfeld_netzwerk);
-                break;
+    @Override
+    public void end() {
 
-            case ONLINE:
-                break;
-        }
     }
 }
