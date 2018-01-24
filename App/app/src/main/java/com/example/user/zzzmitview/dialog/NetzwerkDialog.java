@@ -48,15 +48,16 @@ public class NetzwerkDialog extends AppCompatDialog {
     public void onBackPressed() {
         if (server != null) {
             server.close();
+            server = null;
             setContentView(R.layout.dialog_netzwerk);
             initButtons();
+            setCanceledOnTouchOutside(true);
         } else if (client != null) {
             client.close();
+            client = null;
             setContentView(R.layout.dialog_netzwerk);
             initButtons();
-        } else {
-            cancel();
-            getOwnerActivity().finish();
+            setCanceledOnTouchOutside(true);
         }
     }
 
@@ -65,6 +66,7 @@ public class NetzwerkDialog extends AppCompatDialog {
             @Override
             public void onClick(View v) {
                 setContentView(R.layout.dialog_client);
+                setCanceledOnTouchOutside(false);
                 findViewById(R.id.ok).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -92,6 +94,7 @@ public class NetzwerkDialog extends AppCompatDialog {
         findViewById(R.id.erstellen).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setCanceledOnTouchOutside(false);
                 try {
                     server = new GameServer();
                     listener.notify(client, server);

@@ -38,7 +38,9 @@ public class GameServer extends Server {
                 if (!spielGestartet && spielerList.size() < 8) {
                     if (!spielerList.find(new NetzwerkSpieler(ip))) {
                         NetzwerkSpieler s = new NetzwerkSpieler(spielerList.size() + 1, ip, port);
-                        s.setName(message.substring(message.indexOf(' ') + 1));
+                        if (i1 > 0) {
+                            s.setName(message.substring(i1 + 1));
+                        }
 
                         spielerList.append(s);
 

@@ -1,11 +1,13 @@
 package com.example.user.zzzmitview.activity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 
 import com.example.user.zzzmitview.R;
+import com.example.user.zzzmitview.dialog.ErgebnisDialog;
 import com.example.user.zzzmitview.dialog.NetzwerkDialog;
 import com.example.user.zzzmitview.dialog.NetzwerkDialogListener;
 import com.example.user.zzzmitview.network.GameClient;
@@ -69,7 +71,12 @@ public class SpielfeldActivity extends AppCompatActivity implements SpielListene
 
             case NETZWERK_LOKAL:
                 dialog = new NetzwerkDialog(this, this);
-                dialog.setCancelable(false);
+                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        finish();
+                    }
+                });
                 dialog.show();
                 break;
 
@@ -91,25 +98,6 @@ public class SpielfeldActivity extends AppCompatActivity implements SpielListene
         }
         if (client != null) {
             client.close();
-        }
-    }
-
-    private void setContentView(Spielmodus spielmodus) {
-        switch (spielmodus) {
-            case EINZELSPIELER:
-                setContentView(R.layout.activity_spielfeld_singleplayer);
-                break;
-
-            case MEHRSPIELER:
-                setContentView(R.layout.activity_spielfeld_multiplayer);
-                break;
-
-            case NETZWERK_LOKAL:
-                setContentView(R.layout.activity_spielfeld_netzwerk);
-                break;
-
-            case ONLINE:
-                break;
         }
     }
 
@@ -135,6 +123,12 @@ public class SpielfeldActivity extends AppCompatActivity implements SpielListene
 
             @Override
             public void onGameStarted(int spielerCount, int myID) {
+                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+
+                    }
+                });
                 dialog.dismiss();
 
                 spielfeld = new Spielfeld(spielerCount);
@@ -152,6 +146,7 @@ public class SpielfeldActivity extends AppCompatActivity implements SpielListene
                         netzwerkView.invalidate();
                     }
                 });
+                round();
             }
 
             @Override
@@ -170,12 +165,39 @@ public class SpielfeldActivity extends AppCompatActivity implements SpielListene
     @Override
     public void round() {
         spielfeld.getPoints(spieler);
+        spielfeld.nextRound();
 
-        adapter.notifyDataSetChanged();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        if (!spielfeld.isPlaying())
+            end();
     }
 
-    @Override
     public void end() {
+        new ErgebnisDialog(this, spieler).show();
+    }
 
+    private void setContentView(Spielmodus spielmodus) {
+        switch (spielmodus) {
+            case EINZELSPIELER:
+                setContentView(R.layout.activity_spielfeld_singleplayer);
+                break;
+
+            case MEHRSPIELER:
+                setContentView(R.layout.activity_spielfeld_multiplayer);
+                break;
+
+            case NETZWERK_LOKAL:
+                setContentView(R.layout.activity_spielfeld_netzwerk);
+                break;
+
+            case ONLINE:
+                break;
+        }
     }
 }

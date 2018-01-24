@@ -40,7 +40,6 @@ public class NetzwerkView extends SpielfeldView {
 
             if (spielfeld.isEmpty(x, y)) {
                 setze(x, y);
-                spielfeld.nextRound();
 
                 listener.round();
             }

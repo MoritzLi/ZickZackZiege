@@ -38,14 +38,10 @@ public class SingleplayerView extends SpielfeldView {
 
             if (spielfeld.isEmpty(x, y)) {
                 spielfeld.setValue(ArtificialIntelligence.playerID, x, y);
-                spielfeld.nextRound();
+                listener.round();
 
                 ki.spielzug();
                 listener.round();
-            }
-
-            if (!spielfeld.isPlaying()) {
-                listener.end();
             }
         } else {
             spielfeld.clear();
@@ -65,6 +61,7 @@ public class SingleplayerView extends SpielfeldView {
         ki = new ArtificialIntelligence(spielfeld, schwierigkeit);
         if (schwierigkeit == Schwierigkeit.SCHWIERIG) {
             ki.spielzug();
+            listener.round();
         }
 
         super.initialize();

@@ -40,10 +40,6 @@ public class MultiplayerView extends SpielfeldView {
             if (current == spieler.length) {
                 current = 0;
             }
-
-            if (!spielfeld.isPlaying()) {
-                listener.end();
-            }
         }
 
         return super.onTouchEvent(event);
