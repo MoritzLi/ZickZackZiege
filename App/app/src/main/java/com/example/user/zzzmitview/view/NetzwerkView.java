@@ -55,6 +55,12 @@ public class NetzwerkView extends SpielfeldView {
         super.initialize();
     }
 
+    @Override
+    public void reset() {
+        go = false;
+        myID = 0;
+    }
+
     private void setze(int x, int y) {
         spielfeld.setValue(myID, x, y);
         if (server == null) {

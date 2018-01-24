@@ -29,7 +29,10 @@ public class SpielfeldActivity extends AppCompatActivity implements SpielListene
     private Spielfeld      spielfeld;
     private SpielerAdapter adapter;
     private SpielfeldView  view;
-    private NetzwerkDialog dialog;
+    private NetzwerkDialog netzwerkDialog;
+    private ErgebnisDialog ergebnisDialog;
+
+    private Spielmodus spielmodus;
 
     private GameServer server;
     private GameClient client;
@@ -37,7 +40,7 @@ public class SpielfeldActivity extends AppCompatActivity implements SpielListene
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Spielmodus spielmodus = getIntent().hasExtra(MainActivity.INTENT_EXTRA_SPIELMODUS) ?
+        spielmodus = getIntent().hasExtra(MainActivity.INTENT_EXTRA_SPIELMODUS) ?
                 Spielmodus.valueOf(
                         getIntent()
                                 .getStringExtra(
@@ -46,7 +49,7 @@ public class SpielfeldActivity extends AppCompatActivity implements SpielListene
                 ) :
                 Spielmodus.EINZELSPIELER;
 
-        setContentView(spielmodus);
+        setContentView();
 
         spieler = new Spieler[getIntent().getIntExtra(MainActivity.INTENT_EXTRA_SPIELERZAHL, 2)];
         for (int i = 0; i < spieler.length; i++) {
@@ -70,14 +73,14 @@ public class SpielfeldActivity extends AppCompatActivity implements SpielListene
                 break;
 
             case NETZWERK_LOKAL:
-                dialog = new NetzwerkDialog(this, this);
-                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                netzwerkDialog = new NetzwerkDialog(this, this);
+                netzwerkDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
                         finish();
                     }
                 });
-                dialog.show();
+                netzwerkDialog.show();
                 break;
 
             case ONLINE:
@@ -113,23 +116,23 @@ public class SpielfeldActivity extends AppCompatActivity implements SpielListene
         NetzwerkListener listener = new NetzwerkListener() {
             @Override
             public void onPlayerRegister(NetzwerkSpieler spieler) {
-                dialog.setListData(server.getSpieler());
+                netzwerkDialog.setListData(server.getSpieler());
             }
 
             @Override
             public void onPlayerUnregister() {
-                dialog.setListData(server.getSpieler());
+                netzwerkDialog.setListData(server.getSpieler());
             }
 
             @Override
             public void onGameStarted(int spielerCount, int myID) {
-                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                netzwerkDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
 
                     }
                 });
-                dialog.dismiss();
+                netzwerkDialog.dismiss();
 
                 spielfeld = new Spielfeld(spielerCount);
                 netzwerkView.setSpielfeld(spielfeld);
@@ -178,11 +181,59 @@ public class SpielfeldActivity extends AppCompatActivity implements SpielListene
             end();
     }
 
-    public void end() {
-        new ErgebnisDialog(this, spieler).show();
+    @Override
+    public void newGame() {
+        ergebnisDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+
+            }
+        });
+        ergebnisDialog.dismiss();
+
+        spielfeld.clear();
+
+        spielfeld.getPoints(spieler);
+        adapter.notifyDataSetChanged();
+
+        view.reset();
+        view.invalidate();
+
+        if (spielmodus == Spielmodus.NETZWERK_LOKAL) {
+            if (client != null) {
+                netzwerkDialog = new NetzwerkDialog(this, this, client);
+            } else {
+                netzwerkDialog = new NetzwerkDialog(this, this, server);
+            }
+            netzwerkDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    finish();
+                }
+            });
+            netzwerkDialog.show();
+        }
     }
 
-    private void setContentView(Spielmodus spielmodus) {
+    public void end() {
+        runOnUiThread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        ergebnisDialog = new ErgebnisDialog(SpielfeldActivity.this, spieler, SpielfeldActivity.this);
+                        ergebnisDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+                                finish();
+                            }
+                        });
+                        ergebnisDialog.show();
+                    }
+                }
+        );
+    }
+
+    private void setContentView() {
         switch (spielmodus) {
             case EINZELSPIELER:
                 setContentView(R.layout.activity_spielfeld_singleplayer);

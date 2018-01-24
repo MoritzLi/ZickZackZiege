@@ -9,13 +9,16 @@ import android.widget.TextView;
 
 import com.example.user.zzzmitview.R;
 import com.example.user.zzzmitview.utility.Spieler;
+import com.example.user.zzzmitview.view.SpielListener;
 
 public class ErgebnisDialog extends AppCompatDialog {
-    private final Spieler[] spieler;
+    private final Spieler[]     spieler;
+    private final SpielListener listener;
 
-    public ErgebnisDialog(Activity context, Spieler[] spieler) {
+    public ErgebnisDialog(Activity context, Spieler[] spieler, SpielListener listener) {
         super(context);
         this.spieler = spieler;
+        this.listener = listener;
     }
 
     @Override
@@ -42,14 +45,13 @@ public class ErgebnisDialog extends AppCompatDialog {
             @Override
             public void onClick(View v) {
                 dismiss();
-                getOwnerActivity().finish();
             }
         });
 
         findViewById(R.id.retry).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                listener.newGame();
             }
         });
     }

@@ -32,7 +32,6 @@ public class MultiplayerView extends SpielfeldView {
 
         if (spielfeld.isEmpty(x, y)) {
             spielfeld.setValue(spieler[current].getId(), x, y);
-            spielfeld.nextRound();
 
             listener.round();
 
@@ -50,5 +49,10 @@ public class MultiplayerView extends SpielfeldView {
         current = 0;
 
         super.initialize();
+    }
+
+    @Override
+    public void reset() {
+        current = 0;
     }
 }

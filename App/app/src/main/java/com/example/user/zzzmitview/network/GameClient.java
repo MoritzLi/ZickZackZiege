@@ -20,14 +20,14 @@ public class GameClient extends Client {
 
     @Override
     public void received(String message) {
-        String befehl = message.contains(" ") ? message.substring(0, message.indexOf(' ')) : message;
-        switch (befehl) {
+        int i1 = message.indexOf(' ');
+        int i2 = message.indexOf(',');
+        int i3 = message.indexOf(',', i2 + 1);
+
+        String befehl = i1 > 0 ? message.substring(0, i1) : message;
+        switch (befehl.toUpperCase()) {
             case "SET":
                 if (spielGestartet) {
-                    int i1 = message.indexOf(' ');
-                    int i2 = message.indexOf(',');
-                    int i3 = message.indexOf(',', i2 + 1);
-
                     int id = Integer.parseInt(
                             message.substring(i1 + 1, i2)
                     );
@@ -46,9 +46,6 @@ public class GameClient extends Client {
 
             case "START":
                 spielGestartet = true;
-
-                int i1 = message.indexOf(' ');
-                int i2 = message.indexOf(',');
 
                 int spielerCount = Integer.parseInt(
                         message.substring(i1 + 1, i2)

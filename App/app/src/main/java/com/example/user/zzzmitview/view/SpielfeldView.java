@@ -16,7 +16,6 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.example.user.zzzmitview.R;
-import com.example.user.zzzmitview.activity.SpielfeldActivity;
 import com.example.user.zzzmitview.utility.Spieler;
 import com.example.user.zzzmitview.utility.Spielfeld;
 
@@ -146,6 +145,10 @@ public class SpielfeldView extends View {
         drawFields();
 
         isInitialized = true;
+    }
+
+    public void reset() {
+
     }
 
     private void drawBackground() {

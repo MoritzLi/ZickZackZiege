@@ -34,14 +34,62 @@ public class NetzwerkDialog extends AppCompatDialog {
                 .getString("nickname", null);
 
         this.listener = listener;
+
+        this.server = null;
+        this.client = null;
+    }
+
+    public NetzwerkDialog(Activity context, NetzwerkDialogListener listener, GameServer server) {
+        super(context);
+
+        nickname = PreferenceManager.getDefaultSharedPreferences(context)
+                .getString("nickname", null);
+
+        this.listener = listener;
+
+        this.server = server;
+        this.client = null;
+    }
+
+    public NetzwerkDialog(Activity context, NetzwerkDialogListener listener, GameClient client) {
+        super(context);
+
+        nickname = PreferenceManager.getDefaultSharedPreferences(context)
+                .getString("nickname", null);
+
+        this.listener = listener;
+
+        this.server = null;
+        this.client = client;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_netzwerk);
 
-        initButtons();
+        if (client == null && server == null) {
+            setContentView(R.layout.dialog_netzwerk);
+
+            initButtons();
+        } else if (client != null) {
+            setContentView(R.layout.dialog_warten);
+        } else {
+            setContentView(R.layout.dialog_server);
+
+            setListData(server.getSpieler());
+
+            WifiManager wm       = (WifiManager) getContext().getApplicationContext().getSystemService(WIFI_SERVICE);
+            String      ip       = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
+            TextView    textView = findViewById(R.id.ipAdresse);
+            textView.setText(ip);
+
+            findViewById(R.id.start).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    server.starteSpiel();
+                }
+            });
+        }
     }
 
     @Override
@@ -71,7 +119,7 @@ public class NetzwerkDialog extends AppCompatDialog {
                     @Override
                     public void onClick(View v) {
                         EditText     editText = findViewById(R.id.editText);
-                        final String text     = editText.getText().toString();
+                        final String text     = editText.getText().toString().replace(" ", "");
                         if (text.length() > 0) {
                             setContentView(R.layout.dialog_warten);
                             new Thread(new Runnable() {
