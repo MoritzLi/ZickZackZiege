@@ -1,88 +1,31 @@
 package com.example.user.zzzmitview.network;
 
-@SuppressWarnings("unused")
-abstract class Client {
-    //Objektbeziehungen
-    private final Connection       hatVerbindung;
-    private       Clientempfaenger hatEmpfaenger;
+import java.io.IOException;
+import java.net.Socket;
 
-    class Clientempfaenger extends Thread {
-        // Objekte
-        private final Client     kenntClient;
-        private final Connection kenntVerbindung;
+abstract class Client implements ClientReceiveListener {
+    private final Socket           socket;
+    private final ClientConnection connection;
 
-        // Attribute
-        private boolean zVerbindungAktiv;
+    public Client(String ip, int port) throws IOException {
+        socket = new Socket(
+                ip,
+                port
+        );
 
-        /**
-         * Der ClientEmpfaenger hat den zugeh&ouml;rigen Client und die zugeh&ouml;rige Connection kennen gelernt.<br>
-         *
-         * @param pClient     zugeh&ouml;riger Client, der die einkommenden Nachrichten bearbeitet
-         * @param pConnection zugeh&ouml;rige Connection, die die einkommenden Nachrichten empf�ngt
-         */
-        Clientempfaenger(Client pClient, Connection pConnection) {
-            kenntClient = pClient;
-            kenntVerbindung = pConnection;
-            zVerbindungAktiv = true;
-        }
-
-        /**
-         * Solange der Server Nachrichten sendete, wurden diese empfangen und an die ClientVerbinedung weitergereicht.
-         */
-        public void run() {
-            String lNachricht;
-            boolean lNachrichtEmpfangen = true;
-
-            do
-                if (zVerbindungAktiv) {
-                    lNachricht = kenntVerbindung.receive();
-                    lNachrichtEmpfangen = (lNachricht != null);
-                    if (lNachrichtEmpfangen)
-                        kenntClient.processMessage(lNachricht);
-                }
-            while (zVerbindungAktiv && lNachrichtEmpfangen);
-        }
-
-        /**
-         * Der ClientEmpfaenger arbeitet nicht mehr
-         */
-        void gibFrei() {
-            zVerbindungAktiv = false;
-        }
-
+        connection = new ClientConnection(socket, this);
     }
 
-    Client(String pIPAdresse, int pPortNr) {
-        hatVerbindung = new Connection(pIPAdresse, pPortNr);
-        hatVerbindung.start();
-
-        try {
-            hatEmpfaenger = new Clientempfaenger(this, hatVerbindung);
-            hatEmpfaenger.start();
-        } catch (Exception pFehler) {
-            System.err.println("Fehler beim \u00D6ffnen des Clients: " + pFehler);
-        }
-
+    public void send(String message) {
+        connection.send(message);
     }
-
-    public void send(String pMessage) {
-        hatVerbindung.send(pMessage);
-    }
-
-    public boolean istVerbunden() {
-        return hatEmpfaenger != null && hatEmpfaenger.zVerbindungAktiv;
-    }
-
-    public String toString() {
-        return "Verbindung mit Socket: " + hatVerbindung.verbindungsSocket();
-    }
-
-    protected abstract void processMessage(String pMessage);
 
     public void close() {
-        if (hatEmpfaenger != null)
-            hatEmpfaenger.gibFrei();
-        hatEmpfaenger = null;
-        hatVerbindung.close();
+        connection.close();
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -8,8 +8,8 @@ import android.widget.ListView;
 import com.example.user.zzzmitview.R;
 import com.example.user.zzzmitview.dialog.NetzwerkDialog;
 import com.example.user.zzzmitview.dialog.NetzwerkDialogListener;
-import com.example.user.zzzmitview.network.AndroidGameClient;
-import com.example.user.zzzmitview.network.AndroidGameServer;
+import com.example.user.zzzmitview.network.GameClient;
+import com.example.user.zzzmitview.network.GameServer;
 import com.example.user.zzzmitview.network.NetzwerkListener;
 import com.example.user.zzzmitview.utility.NetzwerkSpieler;
 import com.example.user.zzzmitview.utility.Schwierigkeit;
@@ -29,8 +29,8 @@ public class SpielfeldActivity extends AppCompatActivity implements SpielListene
     private SpielfeldView  view;
     private NetzwerkDialog dialog;
 
-    private AndroidGameServer server;
-    private AndroidGameClient client;
+    private GameServer server;
+    private GameClient client;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -114,7 +114,7 @@ public class SpielfeldActivity extends AppCompatActivity implements SpielListene
     }
 
     @Override
-    public void notify(AndroidGameClient client, final AndroidGameServer server) {
+    public void notify(GameClient client, final GameServer server) {
         this.client = client;
         this.server = server;
 

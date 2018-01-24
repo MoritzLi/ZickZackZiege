@@ -1,10 +1,12 @@
 package com.example.user.zzzmitview.network;
 
+import java.io.IOException;
+
 public class GameClient extends Client {
     private NetzwerkListener listener;
     private boolean          spielGestartet;
 
-    public GameClient(String pIPAdresse, String nickname) {
+    public GameClient(String pIPAdresse, String nickname) throws IOException {
         super(pIPAdresse, GameServer.port);
         spielGestartet = false;
 
@@ -17,23 +19,23 @@ public class GameClient extends Client {
     }
 
     @Override
-    public void processMessage(String pMessage) {
-        String befehl = pMessage.contains(" ") ? pMessage.substring(0, pMessage.indexOf(' ')) : pMessage;
+    public void received(String message) {
+        String befehl = message.contains(" ") ? message.substring(0, message.indexOf(' ')) : message;
         switch (befehl) {
             case "SET":
                 if (spielGestartet) {
-                    int i1 = pMessage.indexOf(' ');
-                    int i2 = pMessage.indexOf(',');
-                    int i3 = pMessage.indexOf(',', i2 + 1);
+                    int i1 = message.indexOf(' ');
+                    int i2 = message.indexOf(',');
+                    int i3 = message.indexOf(',', i2 + 1);
 
                     int id = Integer.parseInt(
-                            pMessage.substring(i1 + 1, i2)
+                            message.substring(i1 + 1, i2)
                     );
                     int x = Integer.parseInt(
-                            pMessage.substring(i2 + 1, i3)
+                            message.substring(i2 + 1, i3)
                     );
                     int y = Integer.parseInt(
-                            pMessage.substring(i3 + 1)
+                            message.substring(i3 + 1)
                     );
 
                     if (listener != null) {
@@ -45,14 +47,14 @@ public class GameClient extends Client {
             case "START":
                 spielGestartet = true;
 
-                int i1 = pMessage.indexOf(' ');
-                int i2 = pMessage.indexOf(',');
+                int i1 = message.indexOf(' ');
+                int i2 = message.indexOf(',');
 
                 int spielerCount = Integer.parseInt(
-                        pMessage.substring(i1 + 1, i2)
+                        message.substring(i1 + 1, i2)
                 );
                 int myID = Integer.parseInt(
-                        pMessage.substring(i2 + 1)
+                        message.substring(i2 + 1)
                 );
 
                 if (listener != null) {

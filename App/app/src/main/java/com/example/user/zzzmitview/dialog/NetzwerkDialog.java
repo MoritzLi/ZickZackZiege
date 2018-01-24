@@ -12,19 +12,20 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.user.zzzmitview.R;
-import com.example.user.zzzmitview.network.AndroidGameClient;
-import com.example.user.zzzmitview.network.AndroidGameServer;
-import com.example.user.zzzmitview.network.ClientTask;
+import com.example.user.zzzmitview.network.GameClient;
+import com.example.user.zzzmitview.network.GameServer;
 import com.example.user.zzzmitview.utility.NetzwerkSpieler;
 import com.example.user.zzzmitview.view.NetzwerkSpielerAdapter;
+
+import java.io.IOException;
 
 import static android.content.Context.WIFI_SERVICE;
 
 public class NetzwerkDialog extends AppCompatDialog {
     private final String                 nickname;
     private final NetzwerkDialogListener listener;
-    private       AndroidGameServer      server;
-    private       AndroidGameClient      client;
+    private       GameServer             server;
+    private       GameClient             client;
 
     public NetzwerkDialog(Activity context, NetzwerkDialogListener listener) {
         super(context);
@@ -67,18 +68,21 @@ public class NetzwerkDialog extends AppCompatDialog {
                 findViewById(R.id.ok).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        EditText editText = findViewById(R.id.editText);
-                        String   text     = editText.getText().toString();
+                        EditText     editText = findViewById(R.id.editText);
+                        final String text     = editText.getText().toString();
                         if (text.length() > 0) {
                             setContentView(R.layout.dialog_warten);
-                            ClientTask task = new ClientTask();
-                            task.execute(text, nickname);
-                            try {
-                                client = task.get();
-                                listener.notify(client, server);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        client = new GameClient(text, nickname);
+                                        listener.notify(client, server);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }).start();
                         }
                     }
                 });
@@ -88,23 +92,27 @@ public class NetzwerkDialog extends AppCompatDialog {
         findViewById(R.id.erstellen).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                server = new AndroidGameServer();
-                listener.notify(client, server);
-                setContentView(R.layout.dialog_server);
+                try {
+                    server = new GameServer();
+                    listener.notify(client, server);
+                    setContentView(R.layout.dialog_server);
 
-                setListData(server.getSpieler());
+                    setListData(server.getSpieler());
 
-                WifiManager wm       = (WifiManager) getContext().getApplicationContext().getSystemService(WIFI_SERVICE);
-                String      ip       = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
-                TextView    textView = findViewById(R.id.ipAdresse);
-                textView.setText(ip);
+                    WifiManager wm       = (WifiManager) getContext().getApplicationContext().getSystemService(WIFI_SERVICE);
+                    String      ip       = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
+                    TextView    textView = findViewById(R.id.ipAdresse);
+                    textView.setText(ip);
 
-                findViewById(R.id.start).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        server.starteSpiel();
-                    }
-                });
+                    findViewById(R.id.start).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            server.starteSpiel();
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

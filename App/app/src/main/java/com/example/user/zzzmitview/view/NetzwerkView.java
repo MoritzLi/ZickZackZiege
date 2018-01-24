@@ -5,16 +5,15 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-import com.example.user.zzzmitview.network.AndroidGameClient;
-import com.example.user.zzzmitview.network.AndroidGameServer;
+import com.example.user.zzzmitview.network.GameClient;
 import com.example.user.zzzmitview.network.GameServer;
 
 public class NetzwerkView extends SpielfeldView {
     private boolean go;
     private int     myID;
 
-    private AndroidGameServer server;
-    private AndroidGameClient client;
+    private GameServer server;
+    private GameClient client;
 
     public NetzwerkView(Context context) {
         super(context);
@@ -62,17 +61,17 @@ public class NetzwerkView extends SpielfeldView {
         if (server == null) {
             client.send("SET " + x + ',' + y);
         } else {
-            server.processMessage("localhost", GameServer.port, "SET " + x + ',' + y);
+            server.received("SET " + x + ',' + y, "localhost", GameServer.port);
         }
 
         go = false;
     }
 
-    public void setClient(AndroidGameClient client) {
+    public void setClient(GameClient client) {
         this.client = client;
     }
 
-    public void setServer(AndroidGameServer server) {
+    public void setServer(GameServer server) {
         this.server = server;
     }
 
