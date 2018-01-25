@@ -1,32 +1,22 @@
-import javax.swing.*;
+import java.io.IOException;
 
-@SuppressWarnings("FieldCanBeLocal")
+import javax.swing.JFrame;
+
+import network.GameClient;
+import network.GameServer;
+import network.NetzwerkListener;
+import utility.NetzwerkSpieler;
+import utility.Schwierigkeit;
+
 class MenuGUI extends JFrame {
-    private static final int buttonHeight = 75;
-    private static final int buttonWidth  = 200;
-
-    private static final int paddingLeft   = 40;
-    private static final int paddingTop    = 80;
-    private static final int paddingCenter = 45;
-
-    private JPanel panelMenu;
-    private JPanel panelSettings;
-    private JPanel panelStart;
-    private JPanel panelServer;
-
-    private JButton buttonNeuesSpiel;
-    private JButton buttonEinstellungen;
-
-    private JButton buttonSingleplayer;
-    private JButton buttonServerErstellen;
-    private JButton buttonServerBeitreten;
-
-    private JList<Spieler> listSpieler;
-    private JButton        buttonSpielStarten;
-
-    private JFrame     ipInput;
-    private JTextField textFieldIp;
-    private JButton    buttonIpInput;
+    private SelectPanel                panelMenu;
+    private SelectPanel                panelSettings;
+    private SelectPanel                panelNewGame;
+    private SelectPanel                panelSingleplayer;
+    private SelectPanel                panelNetwork;
+    private TextInputPanel             panelCount;
+    private TextInputPanel             panelJoin;
+    private ListPanel<NetzwerkSpieler> panelServer;
 
     private String ipAdresse;
 
@@ -41,6 +31,10 @@ class MenuGUI extends JFrame {
 
         initMenuPanel();
         initStartPanel();
+        initSingleplayerPanel();
+        initCountPanel();
+        initNetworkPanel();
+        initJoinPanel();
         initServerPanel();
         initSettingsPanel();
 
@@ -48,94 +42,137 @@ class MenuGUI extends JFrame {
     }
 
     private void initMenuPanel() {
-        panelMenu = new JPanel();
-        panelMenu.setSize(getWidth(), getHeight());
-        panelMenu.setLayout(null);
+        panelMenu = new SelectPanel(2, getWidth(), getHeight());
 
-        buttonNeuesSpiel = new JButton();
-        buttonNeuesSpiel.setBounds(40, 80, buttonWidth, buttonHeight);
-        buttonNeuesSpiel.setText("Neues Spiel");
-        buttonNeuesSpiel.addActionListener(e -> setContentPane(panelStart));
-        buttonEinstellungen = new JButton();
-        buttonEinstellungen.setBounds(40, 200, buttonWidth, buttonHeight);
-        buttonEinstellungen.setText("Einstellungen");
-        buttonEinstellungen.addActionListener(e -> setContentPane(panelSettings));
+        panelMenu.getButton1().setText("Neues Spiel");
+        panelMenu.getButton1().addActionListener(e -> setContentPane(panelNewGame));
 
-        panelMenu.add(buttonNeuesSpiel);
-        panelMenu.add(buttonEinstellungen);
+        panelMenu.getButton2().setText("Einstellungen");
+        panelMenu.getButton2().addActionListener(e -> setContentPane(panelSettings));
     }
 
     private void initStartPanel() {
-        panelStart = new JPanel();
-        panelStart.setSize(getWidth(), getHeight());
-        panelStart.setLayout(null);
+        panelNewGame = new SelectPanel(3, getWidth(), getHeight());
 
-        ipInput = new JFrame("Server beitreten");
-        ipInput.setSize(buttonWidth, 150);
-        ipInput.setLayout(null);
+        panelNewGame.getButton1().setText("Singleplayer");
+        panelNewGame.getButton1().addActionListener(e -> setContentPane(panelSingleplayer));
 
-        textFieldIp = new JTextField();
-        textFieldIp.setBounds(20, 20, 150, 35);
+        panelNewGame.getButton2().setText("Multiplayer");
+        panelNewGame.getButton2().addActionListener(e -> setContentPane(panelCount));
 
-        buttonIpInput = new JButton();
-        buttonIpInput.setBounds(65, 70, 60, 25);
-        buttonIpInput.setText("OK");
-        buttonIpInput.addActionListener(e1 -> {
-            ipAdresse = textFieldIp.getText();
-            ipInput.setVisible(false);
-            client = new GameClient(ipAdresse);
+        panelNewGame.getButton3().setText("Netzwerk");
+        panelNewGame.getButton3().addActionListener(e -> setContentPane(panelNetwork));
+    }
+
+    private void initSingleplayerPanel() {
+        panelSingleplayer = new SelectPanel(2, getWidth(), getHeight());
+
+        panelSingleplayer.getButton1().setText("Einfach");
+        panelSingleplayer.getButton1().addActionListener(e -> new SingleSpielfeldGUI(Schwierigkeit.EINFACH));
+
+        panelSingleplayer.getButton2().setText("Schwierig");
+        panelSingleplayer.getButton2().addActionListener(e -> new SingleSpielfeldGUI(Schwierigkeit.SCHWIERIG));
+    }
+
+    private void initCountPanel() {
+        panelCount = new TextInputPanel(getWidth(), getHeight());
+
+        panelCount.getButton().addActionListener(e -> {
+            try {
+                int spielerCount = Integer.parseInt(
+                        panelCount.getTextInput()
+                );
+                new MultiSpielfeldGUI(spielerCount);
+            } catch (NumberFormatException exception) {
+                exception.printStackTrace();
+            }
         });
+    }
 
-        ipInput.add(textFieldIp);
-        ipInput.add(buttonIpInput);
+    private void initNetworkPanel() {
+        panelNetwork = new SelectPanel(2, getWidth(), getHeight());
 
-        buttonSingleplayer = new JButton();
-        buttonSingleplayer.setBounds(paddingLeft, paddingTop, buttonWidth, buttonHeight);
-        buttonSingleplayer.setText("Singleplayer");
-        buttonSingleplayer.addActionListener(e -> System.out.println("TODO"));
-        buttonServerBeitreten = new JButton();
-        buttonServerBeitreten.setBounds(paddingLeft, paddingTop + buttonHeight + paddingCenter, buttonWidth, buttonHeight);
-        buttonServerBeitreten.setText("Netzwerkspiel beitreten");
-        buttonServerBeitreten.addActionListener(e -> {
-            ipInput.setVisible(true);
+        panelNetwork.getButton1().setText("Netzwerkspiel betreten");
+        panelNetwork.getButton1().addActionListener(e -> setContentPane(panelJoin));
+
+        panelNetwork.getButton2().setText("Netzwerkspiel erstellen");
+        panelNetwork.getButton2().addActionListener(e -> {
+            try {
+                server = new GameServer();
+                server.setListener(new NetzwerkListener() {
+                    @Override
+                    public void onPlayersChanged() {
+                        panelServer.setListData(server.getSpieler());
+                    }
+
+                    @Override
+                    public void onGameStarted(int spielerCount, int myID) {
+                        new NetzwerkSpielfeldGUI(spielerCount, myID, server, client);
+                    }
+
+                    @Override
+                    public void onFieldSet(int id, int x, int y) {
+
+                    }
+
+                    @Override
+                    public void onYourTurn() {
+
+                    }
+                });
+                panelServer.setListData(server.getSpieler());
+                setContentPane(panelServer);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         });
-        buttonServerErstellen = new JButton();
-        buttonServerErstellen.setBounds(paddingLeft, paddingTop + (buttonHeight + paddingCenter) * 2, buttonWidth, buttonHeight);
-        buttonServerErstellen.setText("Neues Spiel erstellen");
-        buttonServerErstellen.addActionListener(e -> {
-            server = new GameServer();
-            server.setListener(spieler -> listSpieler.setListData(server.getSpieler()));
-            setContentPane(panelServer);
-        });
+    }
 
-        panelStart.add(buttonSingleplayer);
-        panelStart.add(buttonServerBeitreten);
-        panelStart.add(buttonServerErstellen);
+    private void initJoinPanel() {
+        panelJoin = new TextInputPanel(getWidth(), getHeight());
+
+        panelJoin.getButton().addActionListener(e -> {
+            try {
+                ipAdresse = panelJoin.getTextInput();
+                client = new GameClient(ipAdresse, null);
+                client.setListener(new NetzwerkListener() {
+                    @Override
+                    public void onPlayersChanged() {
+
+                    }
+
+                    @Override
+                    public void onGameStarted(int spielerCount, int myID) {
+                        new NetzwerkSpielfeldGUI(spielerCount, myID, server, client);
+                    }
+
+                    @Override
+                    public void onFieldSet(int id, int x, int y) {
+
+                    }
+
+                    @Override
+                    public void onYourTurn() {
+
+                    }
+                });
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+        });
     }
 
     private void initServerPanel() {
-        panelServer = new JPanel();
-        panelServer.setSize(getWidth(), getHeight());
-        panelServer.setLayout(null);
+        panelServer = new ListPanel<>(getWidth(), getHeight());
 
-        listSpieler = new JList<>();
-        listSpieler.setListData(new Spieler[0]);
-        listSpieler.setBounds(paddingLeft, paddingTop / 4, buttonWidth, (int) (buttonWidth * 1.5));
+        panelServer.setListData(new NetzwerkSpieler[0]);
 
-        buttonSpielStarten = new JButton();
-        buttonSpielStarten.setBounds(paddingLeft, paddingTop / 4 + paddingCenter + listSpieler.getHeight(), buttonWidth, buttonHeight);
-        buttonSpielStarten.setText("Spiel starten");
-        buttonSpielStarten.addActionListener(e -> {
-            server.starteSpiel();
-        });
-
-        panelServer.add(listSpieler);
-        panelServer.add(buttonSpielStarten);
+        panelServer.getButton().addActionListener(e -> server.starteSpiel());
     }
 
     private void initSettingsPanel() {
-        panelSettings = new JPanel();
-        panelSettings.setSize(getWidth(), getHeight());
-        panelSettings.setLayout(null);
+//        panelSettings = new JPanel();
+//        panelSettings.setSize(getWidth(), getHeight());
+//        panelSettings.setLayout(null);
     }
 }
