@@ -4,16 +4,31 @@ import java.io.IOException;
 import java.net.Socket;
 
 abstract class Client implements ClientReceiveListener {
-    private final Socket           socket;
-    private final ClientConnection connection;
+    private Socket           socket;
+    private ClientConnection connection;
 
-    public Client(String ip, int port) throws IOException {
-        socket = new Socket(
-                ip,
-                port
-        );
+    public Client(final String ip, final int port) throws IOException {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    socket = new Socket(
+                            ip,
+                            port
+                    );
 
-        connection = new ClientConnection(socket, this);
+                    connection = new ClientConnection(socket, Client.this);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+        while (connection == null)
+            ;
+
+        if (!socket.isConnected())
+            throw new IOException("Socket is not connected");
     }
 
     public void send(String message) {

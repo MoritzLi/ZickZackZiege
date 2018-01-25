@@ -45,7 +45,7 @@ public class GameServer extends Server {
                         spielerList.append(s);
 
                         if (listener != null) {
-                            listener.onPlayerRegister(s);
+                            listener.onPlayersChanged();
                         }
                     } else {
                         send(ip, port, "-ERR es existiert bereits eine Registrierung für diese IP-Adresse");
@@ -154,7 +154,7 @@ public class GameServer extends Server {
             }
 
             if (listener != null) {
-                listener.onPlayerUnregister();
+                listener.onPlayersChanged();
             }
         }
     }

@@ -1,179 +1,104 @@
 package com.example.user.zzzmitview.dialog;
 
 import android.app.Activity;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatDialog;
-import android.text.format.Formatter;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.example.user.zzzmitview.R;
 import com.example.user.zzzmitview.network.GameClient;
 import com.example.user.zzzmitview.network.GameServer;
-import com.example.user.zzzmitview.utility.NetzwerkSpieler;
-import com.example.user.zzzmitview.view.NetzwerkSpielerAdapter;
+import com.example.user.zzzmitview.utility.CallbackListener;
 
 import java.io.IOException;
 
-import static android.content.Context.WIFI_SERVICE;
+public class NetzwerkDialog extends CallbackDialog {
+    private View select;
+    private View enterIP;
+    private View contentView;
 
-public class NetzwerkDialog extends AppCompatDialog {
-    private final String                 nickname;
-    private final NetzwerkDialogListener listener;
-    private       GameServer             server;
-    private       GameClient             client;
+    private final String     nickname;
+    private       GameServer server;
+    private       GameClient client;
 
-    public NetzwerkDialog(Activity context, NetzwerkDialogListener listener) {
-        super(context);
+    public NetzwerkDialog(Activity context, CallbackListener listener) {
+        super(context, listener);
 
         nickname = PreferenceManager.getDefaultSharedPreferences(context)
                 .getString("nickname", null);
-
-        this.listener = listener;
 
         this.server = null;
         this.client = null;
-    }
-
-    public NetzwerkDialog(Activity context, NetzwerkDialogListener listener, GameServer server) {
-        super(context);
-
-        nickname = PreferenceManager.getDefaultSharedPreferences(context)
-                .getString("nickname", null);
-
-        this.listener = listener;
-
-        this.server = server;
-        this.client = null;
-    }
-
-    public NetzwerkDialog(Activity context, NetzwerkDialogListener listener, GameClient client) {
-        super(context);
-
-        nickname = PreferenceManager.getDefaultSharedPreferences(context)
-                .getString("nickname", null);
-
-        this.listener = listener;
-
-        this.server = null;
-        this.client = client;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (client == null && server == null) {
-            setContentView(R.layout.dialog_netzwerk);
+        select = getLayoutInflater().inflate(R.layout.dialog_netzwerk, null);
+        enterIP = getLayoutInflater().inflate(R.layout.dialog_client, null);
 
-            initButtons();
-        } else if (client != null) {
-            setContentView(R.layout.dialog_warten);
-        } else {
-            setContentView(R.layout.dialog_server);
+        initButtons();
 
-            setListData(server.getSpieler());
-
-            WifiManager wm       = (WifiManager) getContext().getApplicationContext().getSystemService(WIFI_SERVICE);
-            String      ip       = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
-            TextView    textView = findViewById(R.id.ipAdresse);
-            textView.setText(ip);
-
-            findViewById(R.id.start).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    server.starteSpiel();
-                }
-            });
-        }
+        setContentView(select);
     }
 
     @Override
     public void onBackPressed() {
-        if (server != null) {
-            server.close();
-            server = null;
-            setContentView(R.layout.dialog_netzwerk);
-            initButtons();
-            setCanceledOnTouchOutside(true);
-        } else if (client != null) {
-            client.close();
-            client = null;
-            setContentView(R.layout.dialog_netzwerk);
-            initButtons();
-            setCanceledOnTouchOutside(true);
+        if (contentView == enterIP) {
+            setContentView(select);
+        } else {
+            dismiss();
         }
     }
 
+    @Override
+    public void setContentView(View view) {
+        super.setContentView(view);
+        contentView = view;
+    }
+
     private void initButtons() {
-        findViewById(R.id.betreten).setOnClickListener(new View.OnClickListener() {
+        select.findViewById(R.id.betreten).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setContentView(R.layout.dialog_client);
-                setCanceledOnTouchOutside(false);
-                findViewById(R.id.ok).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        EditText     editText = findViewById(R.id.editText);
-                        final String text     = editText.getText().toString().replace(" ", "");
-                        if (text.length() > 0) {
-                            setContentView(R.layout.dialog_warten);
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        client = new GameClient(text, nickname);
-                                        listener.notify(client, server);
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            }).start();
-                        }
-                    }
-                });
+                setContentView(enterIP);
             }
         });
 
-        findViewById(R.id.erstellen).setOnClickListener(new View.OnClickListener() {
+        final View progressBar = enterIP.findViewById(R.id.progressBar);
+        enterIP.findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setCanceledOnTouchOutside(false);
-                try {
-                    server = new GameServer();
-                    listener.notify(client, server);
-                    setContentView(R.layout.dialog_server);
-
-                    setListData(server.getSpieler());
-
-                    WifiManager wm       = (WifiManager) getContext().getApplicationContext().getSystemService(WIFI_SERVICE);
-                    String      ip       = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
-                    TextView    textView = findViewById(R.id.ipAdresse);
-                    textView.setText(ip);
-
-                    findViewById(R.id.start).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            server.starteSpiel();
+                if (progressBar.getVisibility() != View.VISIBLE) {
+                    progressBar.setVisibility(View.VISIBLE);
+                    EditText     editText = enterIP.findViewById(R.id.editText);
+                    final String text     = editText.getText().toString().replace(" ", "");
+                    if (text.length() > 0) {
+                        try {
+                            client = new GameClient(text, nickname);
+                            setResult(true, client);
+                            dismiss();
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    }
+                    progressBar.setVisibility(View.GONE);
                 }
             }
         });
-    }
 
-    public void setListData(final NetzwerkSpieler[] spieler) {
-        ((Activity) listener).runOnUiThread(new Runnable() {
+        select.findViewById(R.id.erstellen).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void run() {
-                ListView listView = findViewById(R.id.listView);
-                listView.setAdapter(new NetzwerkSpielerAdapter(getContext(), spieler));
+            public void onClick(View v) {
+                try {
+                    server = new GameServer();
+                    setResult(true, server);
+                    dismiss();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

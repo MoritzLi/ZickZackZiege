@@ -27,7 +27,7 @@
         android:orientation="vertical"/>
 
     <Button
-        android:id="@+id/ok"
+        android:id="@+id/confirm"
         android:layout_below="@id/linearLayout"
         style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="wrap_content"

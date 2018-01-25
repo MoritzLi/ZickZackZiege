@@ -27,7 +27,7 @@ public class SpielerzahlDialog extends AppCompatDialog {
 
         final EditText editText = findViewById(R.id.editText);
 
-        findViewById(R.id.ok).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String text = editText.getText().toString();

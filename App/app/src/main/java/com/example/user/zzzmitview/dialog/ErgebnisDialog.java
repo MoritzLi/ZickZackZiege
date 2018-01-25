@@ -2,23 +2,20 @@ package com.example.user.zzzmitview.dialog;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatDialog;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.user.zzzmitview.R;
+import com.example.user.zzzmitview.utility.CallbackListener;
 import com.example.user.zzzmitview.utility.Spieler;
-import com.example.user.zzzmitview.view.SpielListener;
 
-public class ErgebnisDialog extends AppCompatDialog {
-    private final Spieler[]     spieler;
-    private final SpielListener listener;
+public class ErgebnisDialog extends CallbackDialog {
+    private final Spieler[] spieler;
 
-    public ErgebnisDialog(Activity context, Spieler[] spieler, SpielListener listener) {
-        super(context);
+    public ErgebnisDialog(Activity context, Spieler[] spieler, CallbackListener listener) {
+        super(context, listener);
         this.spieler = spieler;
-        this.listener = listener;
     }
 
     @Override
@@ -41,9 +38,10 @@ public class ErgebnisDialog extends AppCompatDialog {
             viewGroup.addView(v);
         }
 
-        findViewById(R.id.ok).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setResult(false);
                 dismiss();
             }
         });
@@ -51,20 +49,21 @@ public class ErgebnisDialog extends AppCompatDialog {
         findViewById(R.id.retry).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.newGame();
+                setResult(true);
+                dismiss();
             }
         });
     }
 
     private void sort() {
         for (int i = 0; i < spieler.length - 1; i++) {
-            int min = i;
+            int max = i;
             for (int a = i + 1; a < spieler.length; a++) {
-                if (spieler[a].getPunkte() < spieler[min].getPunkte()) {
-                    min = a;
+                if (spieler[a].getPunkte() > spieler[max].getPunkte()) {
+                    max = a;
                 }
             }
-            swap(i, min);
+            swap(i, max);
         }
     }
 

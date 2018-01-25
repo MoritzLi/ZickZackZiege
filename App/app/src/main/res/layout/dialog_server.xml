@@ -31,13 +31,13 @@
         android:id="@+id/ipAdresse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/start"
+        android:layout_above="@+id/confirm"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:text="255.255.255.0"/>
 
     <Button
-        android:id="@+id/start"
+        android:id="@+id/confirm"
         style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

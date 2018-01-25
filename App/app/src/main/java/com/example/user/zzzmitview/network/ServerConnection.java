@@ -17,6 +17,9 @@ class ServerConnection {
 
     private final ServerReceiveListener listener;
 
+    private final String ip;
+    private final int    port;
+
     ServerConnection(Socket socket, ServerReceiveListener listener) throws IOException {
         this.socket = socket;
 
@@ -36,6 +39,9 @@ class ServerConnection {
         receiver.start();
 
         this.listener = listener;
+
+        this.ip = socket.getInetAddress().toString();
+        this.port = socket.getPort();
     }
 
     void send(final String message) {
@@ -62,11 +68,11 @@ class ServerConnection {
     }
 
     String getIP() {
-        return socket.getInetAddress().toString();
+        return ip;
     }
 
     int getPort() {
-        return socket.getPort();
+        return port;
     }
 
     private class Receiver extends Thread {
@@ -81,7 +87,7 @@ class ServerConnection {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                listener.closed(socket.getInetAddress().toString(), socket.getPort());
+                listener.closed(ip, port);
             }
         }
     }
