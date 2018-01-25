@@ -1,3 +1,5 @@
+package gui;
+
 import java.io.IOException;
 
 import javax.swing.JFrame;
@@ -8,7 +10,7 @@ import network.NetzwerkListener;
 import utility.NetzwerkSpieler;
 import utility.Schwierigkeit;
 
-class MenuGUI extends JFrame {
+public class MenuGUI extends JFrame {
     private SelectPanel                panelMenu;
     private SelectPanel                panelSettings;
     private SelectPanel                panelNewGame;
@@ -23,7 +25,7 @@ class MenuGUI extends JFrame {
     private GameServer server;
     private GameClient client;
 
-    MenuGUI() {
+    public MenuGUI() {
         super("ZickZackZiege");
 
         setSize(290, 500);
