@@ -9,7 +9,7 @@ import javax.swing.JFrame;
 import utility.Spieler;
 import utility.Spielfeld;
 
-public class MultiSpielfeldGUI extends JFrame implements ActionListener {
+class MultiSpielfeldGUI extends JFrame implements ActionListener {
     private static final int fieldSize = 60;
     private static final int padding   = 30;
 

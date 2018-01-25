@@ -10,7 +10,7 @@ import utility.ArtificialIntelligence;
 import utility.Schwierigkeit;
 import utility.Spielfeld;
 
-public class SingleSpielfeldGUI extends JFrame implements ActionListener {
+class SingleSpielfeldGUI extends JFrame implements ActionListener {
     private static final int fieldSize = 60;
     private static final int padding   = 30;
 

@@ -3,7 +3,7 @@ package gui;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public class SelectPanel extends JPanel {
+class SelectPanel extends JPanel {
     private static final int buttonHeight = 75;
     private static final int buttonWidth  = 200;
 
@@ -15,7 +15,7 @@ public class SelectPanel extends JPanel {
     private final JButton button2;
     private final JButton button3;
 
-    public SelectPanel(int buttonCount, int width, int height) {
+    SelectPanel(int buttonCount, int width, int height) {
         setLayout(null);
         setSize(width, height);
 
@@ -33,15 +33,15 @@ public class SelectPanel extends JPanel {
             add(button3);
     }
 
-    public JButton getButton1() {
+    JButton getButton1() {
         return button1;
     }
 
-    public JButton getButton2() {
+    JButton getButton2() {
         return button2;
     }
 
-    public JButton getButton3() {
+    JButton getButton3() {
         return button3;
     }
 }

@@ -4,7 +4,7 @@ import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
 
-public class ListPanel<Type> extends JPanel {
+class ListPanel<Type> extends JPanel {
     private static final int buttonHeight = 75;
     private static final int buttonWidth  = 200;
 
@@ -16,7 +16,7 @@ public class ListPanel<Type> extends JPanel {
 
     private final JButton button;
 
-    public ListPanel(int width, int height) {
+    ListPanel(int width, int height) {
         setLayout(null);
         setSize(width, height);
 
@@ -30,11 +30,11 @@ public class ListPanel<Type> extends JPanel {
         add(button);
     }
 
-    public JButton getButton() {
+    JButton getButton() {
         return button;
     }
 
-    public void setListData(Type[] data) {
+    void setListData(Type[] data) {
         list.setListData(data);
     }
 }

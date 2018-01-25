@@ -4,7 +4,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class TextInputPanel extends JPanel {
+class TextInputPanel extends JPanel {
     private static final int buttonHeight = 75;
     private static final int buttonWidth  = 200;
 
@@ -16,7 +16,7 @@ public class TextInputPanel extends JPanel {
 
     private final JButton button;
 
-    public TextInputPanel(int width, int height) {
+    TextInputPanel(int width, int height) {
         setLayout(null);
         setSize(width, height);
 
@@ -30,11 +30,11 @@ public class TextInputPanel extends JPanel {
         add(button);
     }
 
-    public JButton getButton() {
+    JButton getButton() {
         return button;
     }
 
-    public String getTextInput() {
+    String getTextInput() {
         return textField.getText();
     }
 }
