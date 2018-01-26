@@ -58,8 +58,7 @@ public class Strings
         b[1] = "junger Padawan";
         b[2] = "du Maschine";
         b[3] = "du Biest";
-        b[4] = "du Tier";
-        b[5] = "Retter des Reiches";
+        b[4] = "du Tier";        b[5] = "Retter des Reiches";
         b[6] = "Jungspund";
         b[7] = "du Krieger";
         b[8] = "Held";
@@ -101,7 +100,7 @@ public class Strings
         s[25] = "Du hast ihn besiegt. Du geisteskranker Lümmel. Das gesamte Ziegenreich ist am frohlocken. Hier nimm diese Geschenke";
         s[26] ="Aber, Aber, das sind ja nur leere Umzugskartons";
         s[27] = "Richtig du Dummkopf, da kannst du deine Sachen reinpacken und dich verpissen.";
-        s[28] = "Beeil dich, zieh in die Welt hinaus und Messe dich mit anderen Kriegern des Reiches";
+        s[28] = "Beeil dich, zieh in die Welt hinaus und messe dich mit anderen Kriegern des Reiches";
         
         
 
