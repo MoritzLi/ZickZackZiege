@@ -15,7 +15,7 @@
         android:layout_toStartOf="@+id/punkte"
         android:text="Spieler"
         android:textSize="24sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/punkte"
@@ -27,6 +27,6 @@
         android:gravity="end"
         android:text="Punkte"
         android:textAlignment="viewEnd"
-        android:textSize="24sp"/>
+        android:textSize="24sp" />
 
 </RelativeLayout>

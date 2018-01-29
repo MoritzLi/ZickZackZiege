@@ -10,6 +10,7 @@ import com.example.user.zzzmitview.dialog.ErgebnisDialog;
 import com.example.user.zzzmitview.dialog.IdleDialog;
 import com.example.user.zzzmitview.dialog.NetzwerkDialog;
 import com.example.user.zzzmitview.dialog.ServerDialog;
+import com.example.user.zzzmitview.dialog.VerlassenDialog;
 import com.example.user.zzzmitview.network.GameClient;
 import com.example.user.zzzmitview.network.GameServer;
 import com.example.user.zzzmitview.network.NetzwerkListener;
@@ -18,6 +19,7 @@ import com.example.user.zzzmitview.utility.Schwierigkeit;
 import com.example.user.zzzmitview.utility.Spieler;
 import com.example.user.zzzmitview.utility.Spielfeld;
 import com.example.user.zzzmitview.utility.Spielmodus;
+import com.example.user.zzzmitview.view.MultiplayerView;
 import com.example.user.zzzmitview.view.NetzwerkView;
 import com.example.user.zzzmitview.view.SingleplayerView;
 import com.example.user.zzzmitview.view.SpielListener;
@@ -64,6 +66,8 @@ public class SpielfeldActivity extends AppCompatActivity implements SpielListene
         view.setSpieler(spieler);
         view.setListener(this);
 
+        adapter = new SpielerAdapter(getApplicationContext(), spieler);
+
         switch (spielmodus) {
             case EINZELSPIELER:
                 SingleplayerView singleplayerView = (SingleplayerView) view;
@@ -71,6 +75,9 @@ public class SpielfeldActivity extends AppCompatActivity implements SpielListene
                 break;
 
             case MEHRSPIELER:
+                MultiplayerView multiplayerView = (MultiplayerView) view;
+                multiplayerView.setAdapter(adapter);
+                adapter.setCurrent(0);
                 break;
 
             case NETZWERK_LOKAL:
@@ -82,9 +89,17 @@ public class SpielfeldActivity extends AppCompatActivity implements SpielListene
                 break;
         }
 
-        adapter = new SpielerAdapter(getApplicationContext(), spieler);
         ListView listView = findViewById(R.id.listView);
         listView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (spielmodus == Spielmodus.MEHRSPIELER || spielmodus == Spielmodus.NETZWERK_LOKAL) {
+            new VerlassenDialog(this, this).show();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -119,37 +134,6 @@ public class SpielfeldActivity extends AppCompatActivity implements SpielListene
 
         if (!spielfeld.isPlaying())
             end();
-    }
-
-    public void end() {
-        runOnUiThread(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        ErgebnisDialog ergebnisDialog = new ErgebnisDialog(SpielfeldActivity.this, spieler, SpielfeldActivity.this);
-                        ergebnisDialog.show();
-                    }
-                }
-        );
-    }
-
-    private void setContentView() {
-        switch (spielmodus) {
-            case EINZELSPIELER:
-                setContentView(R.layout.activity_spielfeld_singleplayer);
-                break;
-
-            case MEHRSPIELER:
-                setContentView(R.layout.activity_spielfeld_multiplayer);
-                break;
-
-            case NETZWERK_LOKAL:
-                setContentView(R.layout.activity_spielfeld_netzwerk);
-                break;
-
-            case ONLINE:
-                break;
-        }
     }
 
     @Override
@@ -236,6 +220,37 @@ public class SpielfeldActivity extends AppCompatActivity implements SpielListene
             }
         } else {
             finish();
+        }
+    }
+
+    public void end() {
+        runOnUiThread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        ErgebnisDialog ergebnisDialog = new ErgebnisDialog(SpielfeldActivity.this, spieler, SpielfeldActivity.this);
+                        ergebnisDialog.show();
+                    }
+                }
+        );
+    }
+
+    private void setContentView() {
+        switch (spielmodus) {
+            case EINZELSPIELER:
+                setContentView(R.layout.activity_spielfeld_singleplayer);
+                break;
+
+            case MEHRSPIELER:
+                setContentView(R.layout.activity_spielfeld_multiplayer);
+                break;
+
+            case NETZWERK_LOKAL:
+                setContentView(R.layout.activity_spielfeld_netzwerk);
+                break;
+
+            case ONLINE:
+                break;
         }
     }
 }
