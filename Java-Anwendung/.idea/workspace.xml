@@ -1,37 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1025db7a-df4f-49f1-af9c-4c71dc50817e" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../App/app/src/main/java/com/example/user/zzzmitview/dialog/CallbackDialog.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../App/app/src/main/java/com/example/user/zzzmitview/dialog/IdleDialog.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../App/app/src/main/java/com/example/user/zzzmitview/dialog/ServerDialog.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../App/app/src/main/java/com/example/user/zzzmitview/utility/CallbackListener.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Java-Anwendung/ListPanel.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Java-Anwendung/MenuGUI$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Java-Anwendung/MenuGUI$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Java-Anwendung/MenuGUI.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Java-Anwendung/MultiSpielfeldGUI.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Java-Anwendung/NetzwerkSpielfeldGUI$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Java-Anwendung/NetzwerkSpielfeldGUI.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Java-Anwendung/SelectPanel.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Java-Anwendung/SingleSpielfeldGUI.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Java-Anwendung/TextInputPanel.class" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/../App/app/src/main/res/layout/dialog_warten.xml" afterPath="$PROJECT_DIR$/../App/app/src/main/res/layout/dialog_idle.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Java-Anwendung/Start.class" afterPath="$PROJECT_DIR$/out/production/Java-Anwendung/Start.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../App/app/src/main/java/com/example/user/zzzmitview/activity/SpielfeldActivity.java" afterPath="$PROJECT_DIR$/../App/app/src/main/java/com/example/user/zzzmitview/activity/SpielfeldActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../App/app/src/main/java/com/example/user/zzzmitview/dialog/ErgebnisDialog.java" afterPath="$PROJECT_DIR$/../App/app/src/main/java/com/example/user/zzzmitview/dialog/ErgebnisDialog.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../App/app/src/main/java/com/example/user/zzzmitview/dialog/NetzwerkDialog.java" afterPath="$PROJECT_DIR$/../App/app/src/main/java/com/example/user/zzzmitview/dialog/NetzwerkDialog.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../App/app/src/main/java/com/example/user/zzzmitview/dialog/SpielerzahlDialog.java" afterPath="$PROJECT_DIR$/../App/app/src/main/java/com/example/user/zzzmitview/dialog/SpielerzahlDialog.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../App/app/src/main/java/com/example/user/zzzmitview/network/Client.java" afterPath="$PROJECT_DIR$/../App/app/src/main/java/com/example/user/zzzmitview/network/Client.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../App/app/src/main/java/com/example/user/zzzmitview/network/GameServer.java" afterPath="$PROJECT_DIR$/../App/app/src/main/java/com/example/user/zzzmitview/network/GameServer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../App/app/src/main/java/com/example/user/zzzmitview/network/NetzwerkListener.java" afterPath="$PROJECT_DIR$/../App/app/src/main/java/com/example/user/zzzmitview/network/NetzwerkListener.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../App/app/src/main/java/com/example/user/zzzmitview/view/SpielListener.java" afterPath="$PROJECT_DIR$/../App/app/src/main/java/com/example/user/zzzmitview/view/SpielListener.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../App/app/src/main/res/layout/dialog_client.xml" afterPath="$PROJECT_DIR$/../App/app/src/main/res/layout/dialog_client.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../App/app/src/main/res/layout/dialog_ergebnis.xml" afterPath="$PROJECT_DIR$/../App/app/src/main/res/layout/dialog_ergebnis.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../App/app/src/main/res/layout/dialog_server.xml" afterPath="$PROJECT_DIR$/../App/app/src/main/res/layout/dialog_server.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../App/app/src/main/res/layout/dialog_spieleranzahl.xml" afterPath="$PROJECT_DIR$/../App/app/src/main/res/layout/dialog_spieleranzahl.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="1025db7a-df4f-49f1-af9c-4c71dc50817e" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

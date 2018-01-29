@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatDialog;
 import android.text.format.Formatter;
 import android.view.View;
 import android.widget.ListView;
@@ -12,16 +11,21 @@ import android.widget.TextView;
 
 import com.example.user.zzzmitview.R;
 import com.example.user.zzzmitview.network.GameServer;
+import com.example.user.zzzmitview.utility.CallbackListener;
 import com.example.user.zzzmitview.utility.NetzwerkSpieler;
 import com.example.user.zzzmitview.view.NetzwerkSpielerAdapter;
 
-public class ServerDialog extends AppCompatDialog {
-    private ListView   listView;
+public class ServerDialog extends CallbackDialog {
+    private ListView listView;
+    private View     confirm;
+
     private GameServer server;
 
-    public ServerDialog(Activity context, GameServer server) {
-        super(context);
+    public ServerDialog(Activity context, CallbackListener listener, GameServer server) {
+        super(context, listener);
         this.server = server;
+
+        setCanceledOnTouchOutside(false);
     }
 
     @Override
@@ -31,9 +35,11 @@ public class ServerDialog extends AppCompatDialog {
 
         listView = findViewById(R.id.listView);
 
-        findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
+        confirm = findViewById(R.id.confirm);
+        confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setResult(true);
                 server.starteSpiel();
             }
         });
@@ -49,7 +55,14 @@ public class ServerDialog extends AppCompatDialog {
             @Override
             public void run() {
                 listView.setAdapter(new NetzwerkSpielerAdapter(getContext(), data));
+                confirm.setEnabled(data.length > 1);
             }
         });
+    }
+
+    @Override
+    public void cancel() {
+        setResult(false);
+        super.cancel();
     }
 }

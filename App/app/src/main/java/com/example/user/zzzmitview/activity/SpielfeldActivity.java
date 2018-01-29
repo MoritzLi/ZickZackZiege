@@ -39,6 +39,7 @@ public class SpielfeldActivity extends AppCompatActivity implements SpielListene
 
     private IdleDialog   idleDialog;
     private ServerDialog serverDialog;
+    private ListView     listView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,7 +90,7 @@ public class SpielfeldActivity extends AppCompatActivity implements SpielListene
                 break;
         }
 
-        ListView listView = findViewById(R.id.listView);
+        listView = findViewById(R.id.listView);
         listView.setAdapter(adapter);
     }
 
@@ -112,10 +113,10 @@ public class SpielfeldActivity extends AppCompatActivity implements SpielListene
         if (client != null) {
             client.close();
         }
-        if (idleDialog != null) {
+        if (idleDialog != null && idleDialog.isShowing()) {
             idleDialog.dismiss();
         }
-        if (serverDialog != null) {
+        if (serverDialog != null && serverDialog.isShowing()) {
             serverDialog.dismiss();
         }
     }
@@ -150,7 +151,7 @@ public class SpielfeldActivity extends AppCompatActivity implements SpielListene
 
                 if (spielmodus == Spielmodus.NETZWERK_LOKAL) {
                     if (client != null) {
-                        idleDialog = new IdleDialog(this);
+                        idleDialog = new IdleDialog(this, this);
                         idleDialog.show();
                     }
                 }
@@ -162,7 +163,18 @@ public class SpielfeldActivity extends AppCompatActivity implements SpielListene
                 NetzwerkListener listener = new NetzwerkListener() {
                     @Override
                     public void onPlayersChanged() {
-                        serverDialog.setListData(server.getSpieler(), SpielfeldActivity.this);
+                        if (serverDialog.isShowing()) {
+                            serverDialog.setListData(server.getSpieler(), SpielfeldActivity.this);
+                        } else {
+                            spieler = server.getSpieler();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    adapter = new SpielerAdapter(getApplicationContext(), spieler);
+                                    listView.setAdapter(adapter);
+                                }
+                            });
+                        }
                     }
 
                     @Override
@@ -204,7 +216,7 @@ public class SpielfeldActivity extends AppCompatActivity implements SpielListene
 
                     netzwerkView.setClient(client);
 
-                    idleDialog = new IdleDialog(this);
+                    idleDialog = new IdleDialog(this, this);
                     idleDialog.show();
                 } else {
                     server = (GameServer) networkComponent;
@@ -213,7 +225,7 @@ public class SpielfeldActivity extends AppCompatActivity implements SpielListene
 
                     netzwerkView.setServer(server);
 
-                    serverDialog = new ServerDialog(this, server);
+                    serverDialog = new ServerDialog(this, this, server);
                     serverDialog.show();
                     serverDialog.setListData(server.getSpieler(), this);
                 }

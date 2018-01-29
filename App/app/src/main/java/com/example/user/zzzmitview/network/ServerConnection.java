@@ -81,14 +81,15 @@ class ServerConnection {
             try {
                 while (true) {
                     String message = reader.readLine();
-                    if (message != null) {
-                        listener.received(message, socket.getInetAddress().toString(), socket.getPort());
+                    if (message == null) {
+                        break;
                     }
+                    listener.received(message, socket.getInetAddress().toString(), socket.getPort());
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                listener.closed(ip, port);
             }
+            listener.closed(ip, port);
         }
     }
 }
