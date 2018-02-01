@@ -9,6 +9,8 @@ import javax.swing.JFrame;
 import utility.Spieler;
 import utility.Spielfeld;
 
+import static gui.SingleSpielfeldGUI.colors;
+
 class MultiSpielfeldGUI extends JFrame implements ActionListener {
     private static final int fieldSize = 60;
     private static final int padding   = 30;
@@ -82,10 +84,10 @@ class MultiSpielfeldGUI extends JFrame implements ActionListener {
         for (int x = 0; x < buttons.length; x++) {
             for (int y = 0; y < buttons[x].length; y++) {
                 int value = spielfeld.getValue(x, y);
-                if (value != 0) {
-                    buttons[x][y].setText(String.valueOf(value));
-                    buttons[x][y].setEnabled(false);
-                }
+
+                buttons[x][y].setBackground(colors[value]);
+                buttons[x][y].setContentAreaFilled(value != 0);
+                buttons[x][y].setEnabled(value == 0);
             }
         }
     }

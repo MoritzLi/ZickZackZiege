@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -11,6 +12,18 @@ import utility.Schwierigkeit;
 import utility.Spielfeld;
 
 class SingleSpielfeldGUI extends JFrame implements ActionListener {
+    static Color[] colors = {
+            new Color(0, 0, 0, 0),
+            new Color(183, 28, 28),
+            new Color(13, 71, 161),
+            new Color(255, 214, 0),
+            new Color(93, 182, 30),
+            new Color(255, 87, 34),
+            new Color(156, 39, 176),
+            new Color(0, 191, 165),
+            new Color(255, 64, 129)
+    };
+
     private static final int fieldSize = 60;
     private static final int padding   = 30;
 
@@ -81,10 +94,10 @@ class SingleSpielfeldGUI extends JFrame implements ActionListener {
         for (int x = 0; x < buttons.length; x++) {
             for (int y = 0; y < buttons[x].length; y++) {
                 int value = spielfeld.getValue(x, y);
-                if (value != 0) {
-                    buttons[x][y].setText(String.valueOf(value));
-                    buttons[x][y].setEnabled(false);
-                }
+
+                buttons[x][y].setBackground(colors[value]);
+                buttons[x][y].setContentAreaFilled(value != 0);
+                buttons[x][y].setEnabled(value == 0);
             }
         }
     }

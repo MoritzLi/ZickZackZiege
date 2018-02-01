@@ -5,12 +5,11 @@
     <color name="colorAccent">#FF0097A7</color>
 
     <color name="materialRed">#b71c1c</color>
-    <color name="materialPink">#ff4081</color>
-    <color name="materialOrange">#ff5722</color>
     <color name="materialBlue">#0d47a1</color>
     <color name="materialYellow">#ffd600</color>
     <color name="materialGreen">#5db61e</color>
+    <color name="materialOrange">#ff5722</color>
     <color name="materialPurple">#9c27b0</color>
     <color name="materialCyan">#00bfa5</color>
-    <color name="accent_material_dark">#0097a7</color>
+    <color name="materialPink">#ff4081</color>
 </resources>
