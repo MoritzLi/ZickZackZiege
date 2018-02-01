@@ -19,7 +19,7 @@
         android:elevation="4dp"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
-        app:title="ZickZackZiege"/>
+        app:title="@string/app_name"/>
 
     <ScrollView
         android:layout_width="match_parent"

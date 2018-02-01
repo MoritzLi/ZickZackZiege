@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">Zick Zack Ziege</string>
+    <string name="app_name">Zick-Zack-Ziege</string>
+    <string name="regeln">Zick-Zack-Ziege ist die legendäre, verbesserte Version des Spiels Tic-Tac-Toe.\nZiel des Spiels ist es möglichst viele der unten gezeigten Figuren mit seinem Partner zu erzeugen.
+        Jede Figur gibt eine bestimmte Anzahl an Punkten entsprechend der Legendärität.
+        Gewonnen hat der Spieler mit den meisten Punkten.\nDie Figuren können den Gegner  sowohl waagerecht, als auch senkrecht zerstören.
+        Ein Feld kann Teil mehrerer Figuren sein.
+</string>
 </resources>

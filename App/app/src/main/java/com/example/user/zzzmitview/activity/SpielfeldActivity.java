@@ -3,6 +3,8 @@ package com.example.user.zzzmitview.activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.example.user.zzzmitview.R;
@@ -55,6 +57,12 @@ public class SpielfeldActivity extends AppCompatActivity implements SpielListene
 
         setContentView();
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_left);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
         spieler = new Spieler[getIntent().getIntExtra(MainActivity.INTENT_EXTRA_SPIELERZAHL, 2)];
         for (int i = 0; i < spieler.length; i++) {
             spieler[i] = new Spieler(i + 1);
@@ -92,6 +100,12 @@ public class SpielfeldActivity extends AppCompatActivity implements SpielListene
 
         listView = findViewById(R.id.listView);
         listView.setAdapter(adapter);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
