@@ -93,9 +93,6 @@ public class SpielfeldActivity extends AppCompatActivity implements SpielListene
                 NetzwerkDialog netzwerkDialog = new NetzwerkDialog(this, this);
                 netzwerkDialog.show();
                 break;
-
-            case ONLINE:
-                break;
         }
 
         listView = findViewById(R.id.listView);
@@ -273,9 +270,6 @@ public class SpielfeldActivity extends AppCompatActivity implements SpielListene
 
             case NETZWERK_LOKAL:
                 setContentView(R.layout.activity_spielfeld_netzwerk);
-                break;
-
-            case ONLINE:
                 break;
         }
     }
