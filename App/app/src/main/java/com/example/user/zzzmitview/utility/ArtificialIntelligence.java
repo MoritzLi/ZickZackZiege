@@ -4,8 +4,8 @@ package com.example.user.zzzmitview.utility;
  * KI für den Einzelspieler-Modus
  */
 public class ArtificialIntelligence {
-    private static final int kiID     = 1;
-    public static final  int playerID = 2;
+    private static final int kiID     = 2;
+    public static final  int playerID = 1;
 
     private final Spielfeld            spielfeld;
     private       BinaryTree<Position> kiBaum;

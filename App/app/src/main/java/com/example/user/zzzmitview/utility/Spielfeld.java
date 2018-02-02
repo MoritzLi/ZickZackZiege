@@ -60,8 +60,4 @@ public class Spielfeld {
     public boolean isEmpty(int x, int y) {
         return getValue(x, y) == 0;
     }
-
-    public int[][] getFeld() {
-        return feld;
-    }
 }

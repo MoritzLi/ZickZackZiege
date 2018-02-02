@@ -13,8 +13,8 @@ import com.example.user.zzzmitview.dialog.SpielerzahlDialog;
 import com.example.user.zzzmitview.utility.Spielmodus;
 
 public class MainActivity extends AppCompatActivity {
-    static final String INTENT_EXTRA_SPIELMODUS = "spielmodus";
-    public static final String INTENT_EXTRA_SPIELERZAHL = "spielerzahl";
+    static final        String INTENT_EXTRA_SPIELMODUS    = "spielmodus";
+    public static final String INTENT_EXTRA_SPIELERZAHL   = "spielerzahl";
     public static final String INTENT_EXTRA_SCHWIERIGKEIT = "schwierigkeit";
 
     @Override
@@ -72,7 +72,16 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.tutorial).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                toast("Demnächst verfügbar.");
+                startActivity(
+                        new Intent(
+                                getApplicationContext(),
+                                SpielfeldActivity.class
+                        )
+                                .putExtra(
+                                        INTENT_EXTRA_SPIELMODUS,
+                                        Spielmodus.TUTORIAL.toString()
+                                )
+                );
             }
         });
 
@@ -95,26 +104,7 @@ public class MainActivity extends AppCompatActivity {
                 ).show();
             }
         });
-
-        findViewById(R.id.storymodus).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity
-                        (new Intent(
-                                        getApplicationContext(),
-                                        SpielfeldActivity.class
-                                )
-                                        .putExtra(
-                                                "spielmodus",
-                                                Spielmodus.TUTORIAL.toString()
-                                        )
-                        );
-            }
-
-
-        });
     }
-
 
     public void toast(String pText) {
         Toast t = Toast.makeText(getApplicationContext(), pText, Toast.LENGTH_SHORT);
