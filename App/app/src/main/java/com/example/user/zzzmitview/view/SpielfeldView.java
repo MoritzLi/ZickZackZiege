@@ -16,12 +16,11 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.example.user.zzzmitview.R;
-import com.example.user.zzzmitview.activity.SpielfeldActivity;
 import com.example.user.zzzmitview.utility.Spieler;
 import com.example.user.zzzmitview.utility.Spielfeld;
 
 public class SpielfeldView extends View {
-    private static final int[] colors = {
+    static final int[] colors = {
             android.R.color.transparent,
             R.color.materialRed,
             R.color.materialBlue,
@@ -45,10 +44,10 @@ public class SpielfeldView extends View {
             R.drawable.blitz
     };
 
-    SpielfeldActivity activity;
-
     Spielfeld spielfeld;
     Spieler[] spieler;
+
+    SpielListener listener;
 
     private Paint paint;
 
@@ -148,6 +147,10 @@ public class SpielfeldView extends View {
         isInitialized = true;
     }
 
+    public void reset() {
+
+    }
+
     private void drawBackground() {
         Paint paint = new Paint();
         paint.setStrokeWidth(stroke);
@@ -187,15 +190,15 @@ public class SpielfeldView extends View {
         }
     }
 
-    public void setActivity(SpielfeldActivity activity) {
-        this.activity = activity;
-    }
-
     public void setSpielfeld(Spielfeld spielfeld) {
         this.spielfeld = spielfeld;
     }
 
     public void setSpieler(Spieler[] spieler) {
         this.spieler = spieler;
+    }
+
+    public void setListener(SpielListener listener) {
+        this.listener = listener;
     }
 }

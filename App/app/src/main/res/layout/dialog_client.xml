@@ -27,7 +27,7 @@
         android:inputType="textPersonName"/>
 
     <Button
-        android:id="@+id/ok"
+        android:id="@+id/confirm"
         style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -35,5 +35,17 @@
         android:layout_alignRight="@+id/editText"
         android:layout_below="@+id/editText"
         android:text="Betreten"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/confirm"
+        android:layout_alignTop="@id/confirm"
+        android:layout_marginRight="10dp"
+        android:layout_toLeftOf="@id/confirm"
+        android:layout_toStartOf="@id/confirm"
+        android:visibility="gone"/>
 
 </RelativeLayout>

@@ -40,6 +40,8 @@ public class NetzwerkView extends SpielfeldView {
 
             if (spielfeld.isEmpty(x, y)) {
                 setze(x, y);
+
+                listener.round();
             }
         }
 
@@ -53,12 +55,18 @@ public class NetzwerkView extends SpielfeldView {
         super.initialize();
     }
 
+    @Override
+    public void reset() {
+        go = false;
+        myID = 0;
+    }
+
     private void setze(int x, int y) {
         spielfeld.setValue(myID, x, y);
         if (server == null) {
             client.send("SET " + x + ',' + y);
         } else {
-            server.processMessage("localhost", GameServer.port, "SET " + x + ',' + y);
+            server.received("SET " + x + ',' + y, "localhost", GameServer.port);
         }
 
         go = false;

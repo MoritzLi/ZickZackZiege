@@ -161,7 +161,6 @@ public class ArtificialIntelligence {
         }
 
         spielfeld.setValue(kiID, nextX, nextY);
-        spielfeld.nextRound();
     }
 
     private void baueSpielbaum() {

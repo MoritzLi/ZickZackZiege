@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 
 public class MultiplayerView extends SpielfeldView {
     private int current;
+    private SpielerAdapter adapter;
 
     public MultiplayerView(Context context) {
         super(context);
@@ -33,12 +34,13 @@ public class MultiplayerView extends SpielfeldView {
         if (spielfeld.isEmpty(x, y)) {
             spielfeld.setValue(spieler[current].getId(), x, y);
 
-            activity.refreshPunkte(current);
-
             current++;
             if (current == spieler.length) {
                 current = 0;
             }
+            adapter.setCurrent(current);
+
+            listener.round();
         }
 
         return super.onTouchEvent(event);
@@ -49,5 +51,14 @@ public class MultiplayerView extends SpielfeldView {
         current = 0;
 
         super.initialize();
+    }
+
+    @Override
+    public void reset() {
+        current = 0;
+    }
+
+    public void setAdapter(SpielerAdapter adapter) {
+        this.adapter = adapter;
     }
 }

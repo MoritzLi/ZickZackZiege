@@ -37,7 +37,7 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:id="@+id/titel1"
+                        android:id="@+id/titel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Generell"
@@ -45,13 +45,67 @@
                         android:textSize="24sp"/>
 
                     <TextView
-                        android:id="@+id/details1"
+                        android:id="@+id/details"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_below="@id/titel"
+                        android:layout_marginTop="5dp"
+                        android:text="@string/regeln"
+                        android:textSize="20sp"/>
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                app:cardElevation="4dp"
+                app:contentPadding="5dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/titel1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:text="Ziegen-Rammbock"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="24sp"/>
+
+                    <TextView
+                        android:id="@+id/details1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
                         android:layout_below="@id/titel1"
                         android:layout_marginTop="5dp"
-                        android:text="Zick-Zack-Ziege ist ein Spiel, das auf dem Prinzip von Tic-Tac-Toe beruht. Ziel des Spiels ist es möglichst viele der unten gezeigten Figuren zu erzeugen. Jede Figur gibt eine bestimmte Anzahl an Punkten entsprechend des Schwierigkeitsgrades der Erstellung. Gewonnen hat der Spieler mit den meisten Punkten."
+                        android:layout_toLeftOf="@+id/imageView1"
+                        android:layout_toStartOf="@+id/imageView1"
+                        android:text="Punkte: 2"
                         android:textSize="20sp"/>
+
+                    <ImageView
+                        android:id="@+id/imageView1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_toEndOf="@id/titel1"
+                        android:layout_toRightOf="@id/titel1"
+                        android:adjustViewBounds="true"
+                        app:srcCompat="@drawable/screenshot_ziegen_rammbock"/>
 
                 </RelativeLayout>
 
@@ -73,9 +127,39 @@
                         android:id="@+id/titel2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="TextView"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:text="Korrupte Ziege"
                         android:textColor="@color/colorAccent"
                         android:textSize="24sp"/>
+
+                    <TextView
+                        android:id="@+id/details2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@id/titel2"
+                        android:layout_marginTop="5dp"
+                        android:layout_toLeftOf="@+id/imageView2"
+                        android:layout_toStartOf="@+id/imageView2"
+                        android:text="Punkte: 3"
+                        android:textSize="20sp"/>
+
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_toEndOf="@id/titel2"
+                        android:layout_toRightOf="@id/titel2"
+                        android:adjustViewBounds="true"
+                        app:srcCompat="@drawable/screenshot_ziege_korrupt"/>
 
                 </RelativeLayout>
 
@@ -97,9 +181,39 @@
                         android:id="@+id/titel3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="TextView"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:text="Ziegen-Papa"
                         android:textColor="@color/colorAccent"
                         android:textSize="24sp"/>
+
+                    <TextView
+                        android:id="@+id/details3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@id/titel3"
+                        android:layout_marginTop="5dp"
+                        android:layout_toLeftOf="@+id/imageView3"
+                        android:layout_toStartOf="@+id/imageView3"
+                        android:text="Punkte: 3"
+                        android:textSize="20sp"/>
+
+                    <ImageView
+                        android:id="@+id/imageView3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_toEndOf="@id/titel3"
+                        android:layout_toRightOf="@id/titel3"
+                        android:adjustViewBounds="true"
+                        app:srcCompat="@drawable/screenshot_ziegen_papa"/>
 
                 </RelativeLayout>
 
@@ -121,33 +235,39 @@
                         android:id="@+id/titel4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="TextView"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:text="Ziegen-Mama"
                         android:textColor="@color/colorAccent"
                         android:textSize="24sp"/>
-
-                </RelativeLayout>
-
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                app:cardElevation="4dp"
-                app:contentPadding="5dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
 
                     <TextView
-                        android:id="@+id/titel5"
+                        android:id="@+id/details4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="TextView"
-                        android:textColor="@color/colorAccent"
-                        android:textSize="24sp"/>
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@id/titel4"
+                        android:layout_marginTop="5dp"
+                        android:layout_toLeftOf="@+id/imageView4"
+                        android:layout_toStartOf="@+id/imageView4"
+                        android:text="Punkte: 7"
+                        android:textSize="20sp"/>
+
+                    <ImageView
+                        android:id="@+id/imageView4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_toEndOf="@id/titel4"
+                        android:layout_toRightOf="@id/titel4"
+                        android:adjustViewBounds="true"
+                        app:srcCompat="@drawable/screenshot_ziegen_mama"/>
 
                 </RelativeLayout>
 

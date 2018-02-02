@@ -38,16 +38,12 @@ public class SingleplayerView extends SpielfeldView {
 
             if (spielfeld.isEmpty(x, y)) {
                 spielfeld.setValue(ArtificialIntelligence.playerID, x, y);
-                spielfeld.nextRound();
+                listener.round();
 
-                ki.spielzug();
-                activity.refreshPunkte(0, 1);
-            }
-        } else {
-            spielfeld.clear();
-            activity.refreshPunkte(0, 1);
-            if (schwierigkeit == Schwierigkeit.SCHWIERIG) {
-                ki.spielzug();
+                if (spielfeld.isPlaying()) {
+                    ki.spielzug();
+                    listener.round();
+                }
             }
         }
 
@@ -61,6 +57,7 @@ public class SingleplayerView extends SpielfeldView {
         ki = new ArtificialIntelligence(spielfeld, schwierigkeit);
         if (schwierigkeit == Schwierigkeit.SCHWIERIG) {
             ki.spielzug();
+            listener.round();
         }
 
         super.initialize();
@@ -68,5 +65,12 @@ public class SingleplayerView extends SpielfeldView {
 
     public void setSchwierigkeit(Schwierigkeit schwierigkeit) {
         this.schwierigkeit = schwierigkeit;
+    }
+
+    @Override
+    public void reset() {
+        if (schwierigkeit == Schwierigkeit.SCHWIERIG) {
+            ki.spielzug();
+        }
     }
 }

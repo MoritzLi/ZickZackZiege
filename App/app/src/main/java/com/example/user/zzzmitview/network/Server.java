@@ -2,154 +2,77 @@ package com.example.user.zzzmitview.network;
 
 import com.example.user.zzzmitview.utility.List;
 
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-@SuppressWarnings({"WeakerAccess", "unused"})
-public abstract class Server {
-    // Objekte
+public abstract class Server implements ServerReceiveListener {
     private ServerSocket           serverSocket;
-    private List<ServerConnection> verbindungen;
-    private ServerSchleife         schleife;
+    private List<ServerConnection> connections;
 
-    private class ServerConnection extends Connection {
-        // Objekte
-        final Server server;
+    private Connector connector;
 
-        public ServerConnection(Socket pSocket, Server pServer) {
-            super(pSocket);
-            server = pServer;
-        }
+    Server(int port) throws IOException {
+        serverSocket = new ServerSocket(port);
 
-        /**
-         * Solange der Client Nachrichten sendete, wurden diese empfangen und an die Server weitergereicht.<br>
-         * Abgebrochene Verbindungen wurden erkannt.
-         */
-        public void run() {
-            String lNachricht;
+        connections = new List<>();
 
-            while (!this.isClosed()) {
-                lNachricht = this.receive();
-                if (lNachricht == null) {
-                    if (!this.isClosed()) {
-                        server.closeConnection(this.getRemoteIP(), this.getRemotePort());
-                    }
-                } else
-                    server.processMessage(this.getRemoteIP(), this.getRemotePort(), lNachricht);
+        connector = new Connector();
+        connector.start();
+    }
+
+    private ServerConnection getConnection(String ip, int port) {
+        for (ServerConnection connection : connections) {
+            if (ip.equals(connection.getIP()) && port == connection.getPort()) {
+                return connection;
             }
         }
 
+        return null;
     }
 
-    private class ServerSchleife extends Thread {
-        private final Server server;
-
-        public ServerSchleife(Server pServer) {
-            server = pServer;
-        }
-
-        public void run() {
-            while (isAlive()) {
-                try {
-                    Socket lClientSocket = server.serverSocket.accept();
-                    ServerConnection lNeueSerververbindung = new ServerConnection(lClientSocket, server);
-                    server.ergaenzeVerbindung(lNeueSerververbindung);
-                    lNeueSerververbindung.start();
-                } catch (Exception pFehler) {
-                    System.err.println("Fehler beim Erwarten einer Verbindung in Server: ");
-                    pFehler.printStackTrace();
-                }
-            }
-        }
-    }
-
-    public Server(int pPortNr) {
-        try {
-            serverSocket = new ServerSocket(pPortNr);
-            verbindungen = new List<>();
-            schleife = new ServerSchleife(this);
-            schleife.start();
-        } catch (Exception pFehler) {
-            System.err.println("Fehler beim öffnen der Server: " + pFehler);
+    public void send(String ip, int port, String message) {
+        ServerConnection connection = getConnection(ip, port);
+        if (connection != null) {
+            connection.send(message);
+        } else {
+            System.err.println("Fehler beim Senden: IP " + ip + " mit Port " + port + " nicht vorhanden.");
         }
     }
 
     @Override
-    public String toString() {
-        return "Server von ServerSocket: " + serverSocket;
-    }
-
-    private void ergaenzeVerbindung(ServerConnection pVerbindung) {
-        verbindungen.append(pVerbindung);
-        this.processNewConnection(pVerbindung.getRemoteIP(), pVerbindung.getRemotePort());
-    }
-
-    private ServerConnection SerververbindungVonIPUndPort(String pClientIP, int pClientPort) {
-        ServerConnection lSerververbindung;
-
-        verbindungen.toFirst();
-
-        while (verbindungen.hasAccess()) {
-            lSerververbindung = verbindungen.getContent();
-            if (lSerververbindung.getRemoteIP().equals(pClientIP) && lSerververbindung.getRemotePort() == pClientPort)
-                return lSerververbindung;
-            verbindungen.next();
-        }
-
-        return null; // IP nicht gefunden
-    }
-
-    public void send(String pClientIP, int pClientPort, String pMessage) {
-        ServerConnection lSerververbindung = this.SerververbindungVonIPUndPort(pClientIP, pClientPort);
-        if (lSerververbindung != null)
-            lSerververbindung.send(pMessage);
-        else
-            System.err.println("Fehler beim Senden: IP " + pClientIP + " mit Port " + pClientPort + " nicht vorhanden.");
-    }
-
-    public void sendToAll(String pMessage) {
-        ServerConnection lSerververbindung;
-        verbindungen.toFirst();
-        while (verbindungen.hasAccess()) {
-            lSerververbindung = verbindungen.getContent();
-            lSerververbindung.send(pMessage);
-            verbindungen.next();
+    public void closed(String ip, int port) {
+        ServerConnection connection = getConnection(ip, port);
+        if (connection != null) {
+            connections.remove();
         }
     }
-
-    public void closeConnection(String pClientIP, int pClientPort) {
-        ServerConnection lSerververbindung = this.SerververbindungVonIPUndPort(pClientIP, pClientPort);
-        if (lSerververbindung != null) {
-            this.processClosedConnection(pClientIP, pClientPort);
-            lSerververbindung.close();
-            this.loescheVerbindung(lSerververbindung);
-        } else
-            System.err.println("Fehler beim Schließen der Verbindung: IP " + pClientIP + " mit Port " + pClientPort + " nicht vorhanden.");
-
-    }
-
-    private void loescheVerbindung(ServerConnection pVerbindung) {
-        verbindungen.toFirst();
-        while (verbindungen.hasAccess()) {
-            ServerConnection lClient = verbindungen.getContent();
-            if (lClient == pVerbindung)
-                verbindungen.remove();
-            verbindungen.next();
-        }
-    }
-
-    public abstract void processNewConnection(String pClientIP, int pClientPort);
-
-    public abstract void processMessage(String pClientIP, int pClientPort, String pMessage);
-
-    public abstract void processClosedConnection(String pClientIP, int pClientPort);
 
     public void close() {
+        for (ServerConnection connection : connections) {
+            connection.close();
+        }
+
+        connector.interrupt();
+
         try {
             serverSocket.close();
-            serverSocket = null;
-        } catch (Exception pFehler) {
-            System.err.println("Fehler beim Schließen des Servers: " + pFehler);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private class Connector extends Thread {
+        @Override
+        public void run() {
+            while (!serverSocket.isClosed()) {
+                try {
+                    Socket clientSocket = serverSocket.accept();
+                    connections.append(new ServerConnection(clientSocket, Server.this));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }

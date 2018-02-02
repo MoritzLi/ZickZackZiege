@@ -3,6 +3,8 @@ package com.example.user.zzzmitview.network;
 import com.example.user.zzzmitview.utility.List;
 import com.example.user.zzzmitview.utility.NetzwerkSpieler;
 
+import java.io.IOException;
+
 public class GameServer extends Server {
     public static final int port = 5453;
 
@@ -14,7 +16,7 @@ public class GameServer extends Server {
 
     private NetzwerkListener listener;
 
-    public GameServer() {
+    public GameServer() throws IOException {
         super(port);
 
         spielGestartet = false;
@@ -25,43 +27,40 @@ public class GameServer extends Server {
     }
 
     @Override
-    public void processNewConnection(String pClientIP, int pClientPort) {
+    public void received(String message, String ip, int port) {
+        int i1 = message.indexOf(' ');
+        int i2 = message.indexOf(',');
 
-    }
-
-    @Override
-    public void processMessage(String pClientIP, int pClientPort, String pMessage) {
-        int i1 = pMessage.indexOf(' ');
-        int i2 = pMessage.indexOf(',');
-
-        String befehl = (i1 > 0 ? pMessage.substring(0, i1) : pMessage).toUpperCase();
+        String befehl = (i1 > 0 ? message.substring(0, i1) : message).toUpperCase();
 
         switch (befehl) {
             case "REGISTER":
                 if (!spielGestartet && spielerList.size() < 8) {
-                    if (!spielerList.find(new NetzwerkSpieler(pClientIP))) {
-                        NetzwerkSpieler s = new NetzwerkSpieler(spielerList.size() + 1, pClientIP, pClientPort);
-                        s.setName(pMessage.substring(pMessage.indexOf(' ') + 1));
+                    if (!spielerList.find(new NetzwerkSpieler(ip))) {
+                        NetzwerkSpieler s = new NetzwerkSpieler(spielerList.size() + 1, ip, port);
+                        if (i1 > 0) {
+                            s.setName(message.substring(i1 + 1));
+                        }
 
                         spielerList.append(s);
 
                         if (listener != null) {
-                            listener.onPlayerRegister(s);
+                            listener.onPlayersChanged();
                         }
                     } else {
-                        send(pClientIP, pClientPort, "-ERR es existiert bereits eine Registrierung für diese IP-Adresse");
+                        send(ip, port, "-ERR es existiert bereits eine Registrierung für diese IP-Adresse");
                     }
                 }
                 break;
 
             case "SET":
                 if (spielGestartet) {
-                    if (spielerArray[aktuellerSpieler].equals(pClientIP)) {
+                    if (spielerArray[aktuellerSpieler].equals(ip)) {
                         int id = spielerArray[aktuellerSpieler].getId();
                         int x = Integer.parseInt(
-                                pMessage.substring(i1 + 1, i2)
+                                message.substring(i1 + 1, i2)
                         ), y = Integer.parseInt(
-                                pMessage.substring(i2 + 1)
+                                message.substring(i2 + 1)
                         );
 
                         for (int j = 1; j < spielerArray.length; j++) {
@@ -79,7 +78,7 @@ public class GameServer extends Server {
                         }
 
                         aktuellerSpieler++;
-                        if (aktuellerSpieler >= spielerArray.length) {
+                        if (aktuellerSpieler == spielerArray.length) {
                             aktuellerSpieler = 0;
                             if (listener != null) {
                                 listener.onYourTurn();
@@ -93,28 +92,26 @@ public class GameServer extends Server {
                             );
                         }
                     }
-
-
-
                 }
                 break;
 
             default:
-                send(pClientIP, pClientPort, "-ERR nicht Teil des Protokolls");
+                send(ip, port, "-ERR nicht Teil des Protokolls");
                 break;
         }
     }
 
     @Override
-    public void processClosedConnection(String pClientIP, int pClientPort) {
-        if (spielerList.find(new NetzwerkSpieler(pClientIP))) {
+    public void closed(String ip, int port) {
+        super.closed(ip, port);
+        if (spielerList.find(new NetzwerkSpieler(ip))) {
             if (spielGestartet) {
                 NetzwerkSpieler[] old = spielerArray;
                 spielerArray = new NetzwerkSpieler[old.length - 1];
                 int place = spielerArray.length;
                 int i     = 0;
                 for (NetzwerkSpieler spieler : old) {
-                    if (!spieler.equals(pClientIP)) {
+                    if (!spieler.equals(ip)) {
                         spielerArray[i] = spieler;
                         i++;
                     } else {
@@ -123,30 +120,41 @@ public class GameServer extends Server {
                 }
 
                 if (place == aktuellerSpieler) {
-                    NetzwerkSpieler next = spielerArray[aktuellerSpieler];
-                    send(
-                            next.getIP(),
-                            next.getPort(),
-                            "GO"
-                    );
+                    if (aktuellerSpieler == spielerArray.length) {
+                        aktuellerSpieler = 0;
+                        if (listener != null) {
+                            listener.onYourTurn();
+                        }
+                    } else {
+                        NetzwerkSpieler next = spielerArray[aktuellerSpieler];
+                        send(
+                                next.getIP(),
+                                next.getPort(),
+                                "GO"
+                        );
+                    }
                 }
             } else {
                 spielerList.toFirst();
                 boolean removed = false;
-                for (int id = 1; id <= spielerList.size(); spielerList.next()) {
+                for (int id = 1; id <= spielerList.size(); ) {
                     if (removed) {
                         NetzwerkSpieler spieler = spielerList.getContent();
                         spielerList.remove();
                         spielerList.insertBefore(new NetzwerkSpieler(id, spieler.getIP(), spieler.getPort()));
-                    } else if (spielerList.getContent().equals(pClientIP)) {
+                        id++;
+                    } else if (spielerList.getContent().equals(ip)) {
                         spielerList.remove();
                         removed = true;
+                    } else {
+                        spielerList.next();
+                        id++;
                     }
                 }
             }
 
             if (listener != null) {
-                listener.onPlayerUnregister();
+                listener.onPlayersChanged();
             }
         }
     }

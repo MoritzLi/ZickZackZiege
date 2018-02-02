@@ -7,35 +7,46 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.example.user.zzzmitview.R;
+import com.example.user.zzzmitview.dialog.ErgebnisDialog;
+import com.example.user.zzzmitview.dialog.IdleDialog;
 import com.example.user.zzzmitview.dialog.NetzwerkDialog;
+import com.example.user.zzzmitview.dialog.ServerDialog;
+import com.example.user.zzzmitview.dialog.VerlassenDialog;
 import com.example.user.zzzmitview.network.GameClient;
 import com.example.user.zzzmitview.network.GameServer;
 import com.example.user.zzzmitview.network.NetzwerkListener;
-import com.example.user.zzzmitview.utility.NetzwerkSpieler;
+import com.example.user.zzzmitview.utility.CallbackListener;
 import com.example.user.zzzmitview.utility.Schwierigkeit;
 import com.example.user.zzzmitview.utility.Spieler;
 import com.example.user.zzzmitview.utility.Spielfeld;
 import com.example.user.zzzmitview.utility.Spielmodus;
+import com.example.user.zzzmitview.view.MultiplayerView;
 import com.example.user.zzzmitview.view.NetzwerkView;
 import com.example.user.zzzmitview.view.SingleplayerView;
+import com.example.user.zzzmitview.view.SpielListener;
 import com.example.user.zzzmitview.view.SpielerAdapter;
 import com.example.user.zzzmitview.view.SpielfeldView;
 import com.example.user.zzzmitview.view.StoryView;
 
-public class SpielfeldActivity extends AppCompatActivity {
-    private Spieler[] spieler;
-    private Spielfeld spielfeld;
+public class SpielfeldActivity extends AppCompatActivity implements SpielListener, CallbackListener {
+    private Spieler[]      spieler;
+    private Spielfeld      spielfeld;
     private SpielerAdapter adapter;
-    private SpielfeldView view;
-    private NetzwerkDialog dialog;
+    private SpielfeldView  view;
+
+    private Spielmodus spielmodus;
 
     private GameServer server;
     private GameClient client;
 
+    private IdleDialog   idleDialog;
+    private ServerDialog serverDialog;
+    private ListView     listView;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Spielmodus spielmodus = getIntent().hasExtra(MainActivity.INTENT_EXTRA_SPIELMODUS) ?
+        spielmodus = getIntent().hasExtra(MainActivity.INTENT_EXTRA_SPIELMODUS) ?
                 Spielmodus.valueOf(
                         getIntent()
                                 .getStringExtra(
@@ -44,7 +55,13 @@ public class SpielfeldActivity extends AppCompatActivity {
                 ) :
                 Spielmodus.EINZELSPIELER;
 
-        setContentView(spielmodus);
+        setContentView();
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_left);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         spieler = new Spieler[getIntent().getIntExtra(MainActivity.INTENT_EXTRA_SPIELERZAHL, 2)];
         for (int i = 0; i < spieler.length; i++) {
@@ -56,7 +73,9 @@ public class SpielfeldActivity extends AppCompatActivity {
         view = findViewById(R.id.view);
         view.setSpielfeld(spielfeld);
         view.setSpieler(spieler);
-        view.setActivity(this);
+        view.setListener(this);
+
+        adapter = new SpielerAdapter(getApplicationContext(), spieler);
 
         switch (spielmodus) {
             case EINZELSPIELER:
@@ -65,15 +84,14 @@ public class SpielfeldActivity extends AppCompatActivity {
                 break;
 
             case MEHRSPIELER:
+                MultiplayerView multiplayerView = (MultiplayerView) view;
+                multiplayerView.setAdapter(adapter);
+                adapter.setCurrent(0);
                 break;
 
             case NETZWERK_LOKAL:
-                dialog = new NetzwerkDialog(this);
-                dialog.setCancelable(false);
-                dialog.show();
-                break;
-
-            case ONLINE:
+                NetzwerkDialog netzwerkDialog = new NetzwerkDialog(this, this);
+                netzwerkDialog.show();
                 break;
 
             case STORYMODUS:
@@ -98,83 +116,170 @@ public class SpielfeldActivity extends AppCompatActivity {
                 break;
         }
 
-        adapter = new SpielerAdapter(getApplicationContext(), spieler);
-        ListView listView = findViewById(R.id.listView);
+        listView = findViewById(R.id.listView);
         listView.setAdapter(adapter);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (spielmodus == Spielmodus.MEHRSPIELER || spielmodus == Spielmodus.NETZWERK_LOKAL) {
+            new VerlassenDialog(this, this).show();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
     public void finish() {
         super.finish();
+
         if (server != null) {
             server.close();
-        } else if (client != null) {
+        }
+        if (client != null) {
             client.close();
         }
-    }
-
-    public void refreshPunkte(int... indices) {
-        for (int index : indices) {
-            spielfeld.getPoints(spieler[index]);
+        if (idleDialog != null && idleDialog.isShowing()) {
+            idleDialog.dismiss();
         }
-
-        adapter.notifyDataSetChanged();
+        if (serverDialog != null && serverDialog.isShowing()) {
+            serverDialog.dismiss();
+        }
     }
 
-    public void notifyNetzwerk(GameClient client, GameServer server) {
-        this.client = client;
-        this.server = server;
+    @Override
+    public void round() {
+        spielfeld.getPoints(spieler);
+        spielfeld.nextRound();
 
-        final NetzwerkView netzwerkView = (NetzwerkView) view;
-        netzwerkView.setClient(client);
-        netzwerkView.setServer(server);
-
-        NetzwerkListener listener = new NetzwerkListener() {
+        runOnUiThread(new Runnable() {
             @Override
-            public void onPlayerRegister(NetzwerkSpieler spieler) {
-
+            public void run() {
+                adapter.notifyDataSetChanged();
             }
+        });
 
-            @Override
-            public void onPlayerUnregister() {
+        if (!spielfeld.isPlaying())
+            end();
+    }
 
+    @Override
+    public void notify(Class source, boolean success, Object... results) {
+        if (success) {
+            if (source == ErgebnisDialog.class) {
+                spielfeld.clear();
+
+                spielfeld.getPoints(spieler);
+                adapter.notifyDataSetChanged();
+
+                view.reset();
+                view.invalidate();
+
+                if (spielmodus == Spielmodus.NETZWERK_LOKAL) {
+                    if (client != null) {
+                        idleDialog = new IdleDialog(this, this);
+                        idleDialog.show();
+                    }
+                }
+            } else if (source == NetzwerkDialog.class) {
+                Object networkComponent = results[0];
+
+                final NetzwerkView netzwerkView = (NetzwerkView) view;
+
+                NetzwerkListener listener = new NetzwerkListener() {
+                    @Override
+                    public void onPlayersChanged() {
+                        if (serverDialog.isShowing()) {
+                            serverDialog.setListData(server.getSpieler(), SpielfeldActivity.this);
+                        } else {
+                            spieler = server.getSpieler();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    adapter = new SpielerAdapter(getApplicationContext(), spieler);
+                                    listView.setAdapter(adapter);
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onGameStarted(int spielerCount, int myID) {
+                        if (idleDialog != null) {
+                            idleDialog.dismiss();
+                        } else if (serverDialog != null) {
+                            serverDialog.dismiss();
+                        }
+
+                        spielfeld = new Spielfeld(spielerCount);
+                        netzwerkView.setSpielfeld(spielfeld);
+                        netzwerkView.setMyID(myID);
+                        netzwerkView.setGo(SpielfeldActivity.this.server != null);
+                    }
+
+                    @Override
+                    public void onFieldSet(int id, int x, int y) {
+                        spielfeld.setValue(id, x, y);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                netzwerkView.invalidate();
+                            }
+                        });
+                        round();
+                    }
+
+                    @Override
+                    public void onYourTurn() {
+                        netzwerkView.setGo(true);
+                    }
+                };
+
+                if (networkComponent instanceof GameClient) {
+                    client = (GameClient) networkComponent;
+
+                    client.setListener(listener);
+
+                    netzwerkView.setClient(client);
+
+                    idleDialog = new IdleDialog(this, this);
+                    idleDialog.show();
+                } else {
+                    server = (GameServer) networkComponent;
+
+                    server.setListener(listener);
+
+                    netzwerkView.setServer(server);
+
+                    serverDialog = new ServerDialog(this, this, server);
+                    serverDialog.show();
+                    serverDialog.setListData(server.getSpieler(), this);
+                }
             }
+        } else {
+            finish();
+        }
+    }
 
-            @Override
-            public void onGameStarted(int spielerCount, int myID) {
-                dialog.dismiss();
-
-                spielfeld = new Spielfeld(spielerCount);
-                netzwerkView.setSpielfeld(spielfeld);
-                netzwerkView.setMyID(myID);
-                netzwerkView.setGo(SpielfeldActivity.this.server != null);
-            }
-
-            @Override
-            public void onFieldSet(int id, int x, int y) {
-                spielfeld.setValue(id, x, y);
-                runOnUiThread(new Runnable() {
+    public void end() {
+        runOnUiThread(
+                new Runnable() {
                     @Override
                     public void run() {
-                        netzwerkView.invalidate();
+                        ErgebnisDialog ergebnisDialog = new ErgebnisDialog(SpielfeldActivity.this, spieler, SpielfeldActivity.this);
+                        ergebnisDialog.show();
                     }
-                });
-            }
-
-            @Override
-            public void onYourTurn() {
-                netzwerkView.setGo(true);
-            }
-        };
-
-        if (server == null) {
-            client.setListener(listener);
-        } else {
-            server.setListener(listener);
-        }
+                }
+        );
     }
 
-    private void setContentView(Spielmodus spielmodus) {
+    private void setContentView() {
         switch (spielmodus) {
             case EINZELSPIELER:
                 setContentView(R.layout.activity_spielfeld_singleplayer);
