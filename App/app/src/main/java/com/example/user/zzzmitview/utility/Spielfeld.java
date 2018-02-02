@@ -1,7 +1,5 @@
 package com.example.user.zzzmitview.utility;
 
-import android.util.Log;
-
 public class Spielfeld {
     private final int[][] feld;
     private       int     spielrunde;
@@ -61,5 +59,9 @@ public class Spielfeld {
 
     public boolean isEmpty(int x, int y) {
         return getValue(x, y) == 0;
+    }
+
+    public int[][] getFeld() {
+        return feld;
     }
 }

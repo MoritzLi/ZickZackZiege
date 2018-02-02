@@ -39,7 +39,7 @@ public class ArtificialIntelligence {
                 baueSpielbaum2();
                 boolean besetzt = false;
                 for (int x = 0; x < spielfeld.getFieldCount(); x++) {
-                    if (spielfeld.getValue(x, 1) == kiID)
+                    if (spielfeld.getValue(x, 1) != 0)
                         besetzt = true;
                 }
                 if (besetzt) {
@@ -50,10 +50,10 @@ public class ArtificialIntelligence {
 
                 besetzt = false;
                 for (int y = 0; y < spielfeld.getFieldCount(); y++) {
-                    if (spielfeld.getValue(1, y) == kiID)
+                    if (spielfeld.getValue(1, y) != 0)
                         besetzt = true;
                 }
-                if (besetzt) {
+                if (!besetzt) {
                     kiBaum = kiBaum.getRightTree();
                 } else {
                     kiBaum = kiBaum.getLeftTree();

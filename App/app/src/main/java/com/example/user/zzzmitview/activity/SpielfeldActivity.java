@@ -3,6 +3,7 @@ package com.example.user.zzzmitview.activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ListView;
 
 import com.example.user.zzzmitview.R;
@@ -19,12 +20,13 @@ import com.example.user.zzzmitview.view.NetzwerkView;
 import com.example.user.zzzmitview.view.SingleplayerView;
 import com.example.user.zzzmitview.view.SpielerAdapter;
 import com.example.user.zzzmitview.view.SpielfeldView;
+import com.example.user.zzzmitview.view.StoryView;
 
 public class SpielfeldActivity extends AppCompatActivity {
-    private Spieler[]      spieler;
-    private Spielfeld      spielfeld;
+    private Spieler[] spieler;
+    private Spielfeld spielfeld;
     private SpielerAdapter adapter;
-    private SpielfeldView  view;
+    private SpielfeldView view;
     private NetzwerkDialog dialog;
 
     private GameServer server;
@@ -72,6 +74,27 @@ public class SpielfeldActivity extends AppCompatActivity {
                 break;
 
             case ONLINE:
+                break;
+
+            case STORYMODUS:
+                break;
+
+            case TUTORIAL:
+                final StoryView v = findViewById(R.id.storyView);
+                v.setSpielfeld(spielfeld);
+                v.setSpielfeldView(view);
+                v.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (v.tapZaehler < v.d1.length) {
+                            v.invalidate();
+                        } else {
+                            findViewById(R.id.layout1).setVisibility(View.VISIBLE);
+                            v.invalidate();
+                        }
+                        v.tapZaehler++;
+                    }
+                });
                 break;
         }
 
@@ -165,8 +188,10 @@ public class SpielfeldActivity extends AppCompatActivity {
                 setContentView(R.layout.activity_spielfeld_netzwerk);
                 break;
 
-            case ONLINE:
+            case TUTORIAL:
+                setContentView(R.layout.tutorial_feld);
                 break;
+
         }
     }
 }
