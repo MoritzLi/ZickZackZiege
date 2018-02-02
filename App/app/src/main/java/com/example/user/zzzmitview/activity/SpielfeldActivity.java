@@ -31,19 +31,19 @@ import com.example.user.zzzmitview.view.StoryView;
 import com.example.user.zzzmitview.view.TutorialView;
 
 public class SpielfeldActivity extends AppCompatActivity implements SpielListener, CallbackListener {
-    private Spieler[] spieler;
-    private Spielfeld spielfeld;
+    private Spieler[]      spieler;
+    private Spielfeld      spielfeld;
     private SpielerAdapter adapter;
-    private SpielfeldView view;
+    private SpielfeldView  view;
 
     private Spielmodus spielmodus;
 
     private GameServer server;
     private GameClient client;
 
-    private IdleDialog idleDialog;
+    private IdleDialog   idleDialog;
     private ServerDialog serverDialog;
-    private ListView listView;
+    private ListView     listView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -143,7 +143,11 @@ public class SpielfeldActivity extends AppCompatActivity implements SpielListene
 
     @Override
     public void round() {
-        spielfeld.getPoints(spieler);
+        if (spielmodus != Spielmodus.TUTORIAL) {
+            spielfeld.getPoints(spieler, 0);
+        } else {
+            spielfeld.getPoints(spieler, StoryView.getCurrentMode());
+        }
         spielfeld.nextRound();
 
         runOnUiThread(new Runnable() {
@@ -163,7 +167,11 @@ public class SpielfeldActivity extends AppCompatActivity implements SpielListene
             if (source == ErgebnisDialog.class) {
                 spielfeld.clear();
 
-                spielfeld.getPoints(spieler);
+                if (spielmodus != Spielmodus.TUTORIAL) {
+                    spielfeld.getPoints(spieler, 0);
+                } else {
+                    spielfeld.getPoints(spieler, StoryView.getCurrentMode());
+                }
                 adapter.notifyDataSetChanged();
 
                 view.reset();

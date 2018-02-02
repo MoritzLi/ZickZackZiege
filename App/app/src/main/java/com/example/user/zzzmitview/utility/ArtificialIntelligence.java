@@ -4,8 +4,8 @@ package com.example.user.zzzmitview.utility;
  * KI für den Einzelspieler-Modus
  */
 public class ArtificialIntelligence {
-    private static final int kiID     = 2;
-    public static final  int playerID = 1;
+    public static final int kiID     = 2;
+    public static final int playerID = 1;
 
     private final Spielfeld            spielfeld;
     private       BinaryTree<Position> kiBaum;
@@ -139,11 +139,11 @@ public class ArtificialIntelligence {
                     for (int y = 0; y < spielfeld.getFieldCount(); y++) {
                         if (spielfeld.isEmpty(x, y)) {
                             spielfeld.setValue(kiID, x, y);
-                            int profit = spielfeld.getPoints(kiID);
+                            int profit = spielfeld.getPoints(kiID, 0);
                             spielfeld.clear(x, y);
 
                             spielfeld.setValue(playerID, x, y);
-                            profit += spielfeld.getPoints(playerID);
+                            profit += spielfeld.getPoints(playerID, 0);
                             spielfeld.clear(x, y);
 
                             if (profit > max) {

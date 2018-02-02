@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 
 import com.example.user.zzzmitview.utility.ArtificialIntelligence;
 import com.example.user.zzzmitview.utility.Schwierigkeit;
+import com.example.user.zzzmitview.utility.Spieler;
 
 public class SingleplayerView extends SpielfeldView {
     private Schwierigkeit schwierigkeit;
@@ -52,7 +53,12 @@ public class SingleplayerView extends SpielfeldView {
 
     @Override
     void initialize() {
-        spieler[0].setName("Computer");
+        for (Spieler s : spieler) {
+            if (s.getId() == ArtificialIntelligence.kiID) {
+                s.setName("Computer");
+                break;
+            }
+        }
 
         ki = new ArtificialIntelligence(spielfeld, schwierigkeit);
         if (schwierigkeit == Schwierigkeit.SCHWIERIG) {

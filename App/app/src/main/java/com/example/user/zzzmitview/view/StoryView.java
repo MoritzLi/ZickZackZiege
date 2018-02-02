@@ -15,6 +15,12 @@ import com.example.user.zzzmitview.R;
 import com.example.user.zzzmitview.utility.ArtificialIntelligence;
 
 public class StoryView extends View {
+    public static final int TUTORIAL_RAMMBOCK = 1;
+    public static final int TUTORIAL_KORRUPTE = 2;
+    public static final int TUTORIAL_PAPA     = 3;
+    public static final int TUTORIAL_MAMA     = 4;
+    private static int mode;
+
     private TutorialView spielfeldView;
 
     private boolean isInitialized;
@@ -59,6 +65,10 @@ public class StoryView extends View {
 
     public StoryView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+    }
+
+    public static int getCurrentMode() {
+        return mode;
     }
 
     @Override
@@ -110,6 +120,8 @@ public class StoryView extends View {
         ziegeY = getHeight() / 8 * 7;
 
         dialogIndex = 0;
+
+        mode = TUTORIAL_RAMMBOCK;
 
         isInitialized = true;
     }
