@@ -13,7 +13,7 @@
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
-        app:title="Singelplayer"/>
+        app:title="Singelplayer" />
 
     <view
         android:id="@+id/view"

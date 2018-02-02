@@ -18,9 +18,9 @@ public class NetzwerkDialog extends CallbackDialog {
     private View enterIP;
     private View contentView;
 
-    private final String     nickname;
-    private       GameServer server;
-    private       GameClient client;
+    private final String nickname;
+    private GameServer server;
+    private GameClient client;
 
     public NetzwerkDialog(Activity context, CallbackListener listener) {
         super(context, listener);
@@ -73,8 +73,8 @@ public class NetzwerkDialog extends CallbackDialog {
             public void onClick(View v) {
                 if (progressBar.getVisibility() != View.VISIBLE) {
                     progressBar.setVisibility(View.VISIBLE);
-                    EditText     editText = enterIP.findViewById(R.id.editText);
-                    final String text     = editText.getText().toString().replace(" ", "");
+                    EditText editText = enterIP.findViewById(R.id.editText);
+                    final String text = editText.getText().toString().replace(" ", "");
                     if (text.length() > 0) {
                         try {
                             client = new GameClient(text, nickname);

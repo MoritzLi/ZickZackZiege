@@ -29,19 +29,19 @@ import com.example.user.zzzmitview.view.SpielfeldView;
 import com.example.user.zzzmitview.view.StoryView;
 
 public class SpielfeldActivity extends AppCompatActivity implements SpielListener, CallbackListener {
-    private Spieler[]      spieler;
-    private Spielfeld      spielfeld;
+    private Spieler[] spieler;
+    private Spielfeld spielfeld;
     private SpielerAdapter adapter;
-    private SpielfeldView  view;
+    private SpielfeldView view;
 
     private Spielmodus spielmodus;
 
     private GameServer server;
     private GameClient client;
 
-    private IdleDialog   idleDialog;
+    private IdleDialog idleDialog;
     private ServerDialog serverDialog;
-    private ListView     listView;
+    private ListView listView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

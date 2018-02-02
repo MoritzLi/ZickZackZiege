@@ -9,10 +9,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class SQLiteConnector extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "highscores";
 
-    private static final String TABLE_SCORES       = "scores";
-    private static final String SCORE_ID           = "id";
-    private static final String SCORE_SPIELER      = "title";
-    private static final String SCORE_PUNKTE       = "stufe";
+    private static final String TABLE_SCORES = "scores";
+    private static final String SCORE_ID = "id";
+    private static final String SCORE_SPIELER = "title";
+    private static final String SCORE_PUNKTE = "stufe";
     private static final String SCORE_GESAMTPUNKTE = "datum";
 
     private final SQLiteDatabase database;
@@ -58,7 +58,7 @@ public class SQLiteConnector extends SQLiteOpenHelper {
         Cursor cursor = database.query(TABLE_SCORES, new String[]{SCORE_ID, SCORE_SPIELER, SCORE_PUNKTE, SCORE_GESAMTPUNKTE}, null, null, null, null, SCORE_ID);
 
         Score[] scores = new Score[cursor.getCount()];
-        int     i      = 0;
+        int i = 0;
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext(), i++) {
             scores[i] = new Score(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2), cursor.getInt(3));
         }
