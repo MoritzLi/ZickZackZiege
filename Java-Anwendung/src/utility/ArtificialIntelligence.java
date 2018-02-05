@@ -4,7 +4,7 @@ package utility;
  * KI für den Einzelspieler-Modus
  */
 public class ArtificialIntelligence {
-    private static final int kiID     = 1;
+    public static final int kiID = 1;
     public static final  int playerID = 2;
 
     private final Spielfeld            spielfeld;

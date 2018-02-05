@@ -1,3 +1,5 @@
+package utility;
+
 public class QueryResult {
     private String[][] data;
     private String[] columnNames;
@@ -31,7 +33,7 @@ public class QueryResult {
 
     /**
      * Die Anfrage liefert die Typenbezeichnung der Spalten der Ergebnistabelle als Feld
-     * vom Typ String zurueck. Die Bezeichnungen entsprechen den Angaben in der MySQL-Datenbank.
+     * vom Typ String zurueck. Die Bezeichnungen entsprechen den Angaben in der MySQL-utility.Datenbank.
      */
     public String[] getColumnTypes() {
         return columnTypes;
