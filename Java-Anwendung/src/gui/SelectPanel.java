@@ -1,6 +1,9 @@
 package gui;
 
-import javax.swing.*;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
 
 class SelectPanel extends JPanel {
     private static final int buttonHeight = 75;
@@ -14,9 +17,15 @@ class SelectPanel extends JPanel {
     private final JButton button2;
     private final JButton button3;
 
+    private final JButton back;
+
     SelectPanel(int buttonCount, int width, int height) {
         setLayout(null);
         setSize(width, height);
+
+        back = new JButton("Zurück");
+        back.setBounds(10, 10, buttonWidth / 2, buttonHeight / 2);
+        add(back);
 
         button1 = new JButton();
         button1.setBounds(paddingLeft, paddingTop, buttonWidth, buttonHeight);
@@ -42,5 +51,13 @@ class SelectPanel extends JPanel {
 
     JButton getButton3() {
         return button3;
+    }
+
+    void addBackListener(ActionListener listener) {
+        back.addActionListener(listener);
+    }
+
+    void hideBack() {
+        back.setVisible(false);
     }
 }

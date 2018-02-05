@@ -1,6 +1,10 @@
 package gui;
 
-import javax.swing.*;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 class TextInputPanel extends JPanel {
     private static final int buttonHeight = 75;
@@ -14,9 +18,15 @@ class TextInputPanel extends JPanel {
 
     private final JButton button;
 
+    private final JButton back;
+
     TextInputPanel(int width, int height) {
         setLayout(null);
         setSize(width, height);
+
+        back = new JButton("Zurück");
+        back.setBounds(10, 10, buttonWidth / 2, buttonHeight / 2);
+        add(back);
 
         textField = new JTextField();
         textField.setBounds(paddingLeft, paddingTop, buttonWidth, buttonHeight);
@@ -34,5 +44,9 @@ class TextInputPanel extends JPanel {
 
     String getTextInput() {
         return textField.getText();
+    }
+
+    void addBackListener(ActionListener listener) {
+        back.addActionListener(listener);
     }
 }
