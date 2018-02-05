@@ -3,6 +3,7 @@ package gui;
 import network.GameClient;
 import network.GameServer;
 import network.NetzwerkListener;
+import utility.Datenbank;
 import utility.Spielfeld;
 
 import javax.swing.*;
@@ -10,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import static gui.SingleSpielfeldGUI.colors;
+import static utility.Datenbank.username;
 
 class NetzwerkSpielfeldGUI extends JFrame implements ActionListener {
     private static final int fieldSize = 60;
@@ -23,11 +25,13 @@ class NetzwerkSpielfeldGUI extends JFrame implements ActionListener {
 
     private final GameServer server;
     private final GameClient client;
+    private final int spieleranzahl;
 
     NetzwerkSpielfeldGUI(int spielerCount, int myID, GameServer server, GameClient client) {
         super("ZickZackZiege");
         this.server = server;
         this.client = client;
+        spieleranzahl = spielerCount;
 
         NetzwerkListener listener = new NetzwerkListener() {
             @Override
@@ -124,6 +128,20 @@ class NetzwerkSpielfeldGUI extends JFrame implements ActionListener {
                 buttons[x][y].setContentAreaFilled(value != 0);
                 buttons[x][y].setEnabled(value == 0);
             }
+        }
+        if (!spielfeld.isPlaying()) {
+            int mypoin = spielfeld.getPoints(myID);
+            int gesamtpoin = 0;
+            for (int i = 1; i <= 8; i++) {
+                int poin = spielfeld.getPoints(i);
+                gesamtpoin = gesamtpoin + poin;
+                if (i != myID && poin > mypoin) {
+                    return;
+                }
+            }
+
+            Datenbank hochladen = new Datenbank();
+            hochladen.mehrSpieler(username, mypoin, gesamtpoin, spieleranzahl);
         }
     }
 }
