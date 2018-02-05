@@ -132,16 +132,38 @@ class NetzwerkSpielfeldGUI extends JFrame implements ActionListener {
         if (!spielfeld.isPlaying()) {
             int mypoin = spielfeld.getPoints(myID);
             int gesamtpoin = 0;
+            boolean spieli = true;
             for (int i = 1; i <= 8; i++) {
                 int poin = spielfeld.getPoints(i);
                 gesamtpoin = gesamtpoin + poin;
                 if (i != myID && poin > mypoin) {
-                    return;
+                    double mypoind = (double) mypoin;
+                    double gesamtpoind = (double) gesamtpoin;
+                    double quote = mypoind / gesamtpoind;
+                    quote = Math.round(10000.0 * quote) / 10000.0;
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "Du hast mit " + mypoin + " Punkten verloren!!! Deine Quote beträgt " + quote,
+                            "Spiel beendet",
+                            JOptionPane.INFORMATION_MESSAGE
+                    );
+                    spieli = false;
                 }
             }
-
-            Datenbank hochladen = new Datenbank();
-            hochladen.mehrSpieler(username, mypoin, gesamtpoin, spieleranzahl);
+            if (spieli) {
+                double mypoind = (double) mypoin;
+                double gesamtpoind = (double) gesamtpoin;
+                double quote = mypoind / gesamtpoind;
+                quote = Math.round(10000.0 * quote) / 10000.0;
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Du hast mit " + mypoin + " Punkten gewonnen!!! Deine Quote beträgt " + quote,
+                        "Spiel beendet",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+                Datenbank hochladen = new Datenbank();
+                hochladen.mehrSpieler(username, mypoin, gesamtpoin, spieleranzahl);
+            }
         }
     }
 }

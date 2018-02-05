@@ -89,8 +89,28 @@ class SingleSpielfeldGUI extends JFrame implements ActionListener {
                         String users = username;
                         int spielerpunkte = spielfeld.getPoints(ArtificialIntelligence.playerID);
                         int botpunkte = spielfeld.getPoints(ArtificialIntelligence.kiID);
+                        double spielerpunkted = (double) spielerpunkte;
+                        double botpunkted = (double) botpunkte;
+                        double zusm = spielerpunkted + botpunkted;
+                        double quote = spielerpunkte / zusm;
+                        quote = Math.round(10000.0 * quote) / 10000.0;
                         Datenbank hochladen = new Datenbank();
                         hochladen.botSpiel(users, spielerpunkte, botpunkte);
+                        if (spielerpunkte > botpunkte) {
+                            JOptionPane.showMessageDialog(
+                                    this,
+                                    "Du hast mit " + spielerpunkte + " Punkten gewonnen!!! Deine Quote beträgt " + quote,
+                                    "Spiel beendet",
+                                    JOptionPane.INFORMATION_MESSAGE
+                            );
+                        } else {
+                            JOptionPane.showMessageDialog(
+                                    this,
+                                    "Du hast mit " + spielerpunkte + " Punkten verloren!!! Deine Quote beträgt " + quote,
+                                    "Spiel beendet",
+                                    JOptionPane.INFORMATION_MESSAGE
+                            );
+                        }
                     }
 
 

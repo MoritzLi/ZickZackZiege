@@ -18,8 +18,9 @@ public class Datenbank {
         LocalDateTime s = LocalDateTime.now();
         double punkted = (double) punkte;
         double punkte2d = (double) punkte2;
-        double quote = punkted / punkte2d;
-        quote = Math.round(100.0 * quote) / 100.0;
+        double zusm = punkte2d + punkted;
+        double quote = punkted / zusm;
+        quote = Math.round(10000.0 * quote) / 10000.0;
         verbinden.executeStatement("INSERT into einzelhighscore VALUES('" + name + "', '" + s + "', '" + punkte + "',  '" + quote + "')");
     }
 
@@ -32,54 +33,47 @@ public class Datenbank {
         verbinden.executeStatement("INSERT into mehrspielerhighscore VALUES('" + name + "', '" + s + "', '" + punkte + "',  '" + quote + "', '" + spieler + "')");
     }
 
-    public void anmelden(String name, String passwort) {
+    public boolean anmelden(String name, String passwort) {
         String id1;
         verbinden.executeStatement("SELECT id FROM spieler WHERE name = '" + name + "' AND passwort = '" + passwort + "'");
         QueryResult ergebnis = verbinden.getCurrentQueryResult();
 
         if (ergebnis.getColumnCount() != 0 && ergebnis.getRowCount() != 0) {
-            System.out.println("Anmeldung war erfolgreich");
             username = name;
-            return;
-
+            return true;
         }
-        System.out.println("Anmeldung war nicht erfolgreich");
+        return false;
     }
 
-    public void register(String name, String passwort) {
+    public String register(String name, String passwort) {
         if (name.length() == 0) {
-            System.out.println("Name darf nicht leer sein!");
-            return;
+            return ("Name darf nicht leer sein");
         }
         verbinden.executeStatement("SELECT name FROM spieler WHERE name = '" + name + "'");
         QueryResult ergebnis = verbinden.getCurrentQueryResult();
 
         if (ergebnis.getColumnCount() == 0 && ergebnis.getRowCount() == 0) {
             verbinden.executeStatement("INSERT into spieler VALUES(null, '" + name + "','" + passwort + "' )");
-            System.out.println("Registrierung war erfolgreich");
             username = name;
-            return;
+            return ("Registrierung war erfolgreich");
         }
 
-        System.out.println("Name schon vorhanden, bitte wähle einen anderen Namen");
+        return ("Name schon vorhanden, bitte wähle einen anderen Namen");
     }
 
     public String[][] gebeHighsoreBot(String attribut) {
         verbinden.executeStatement("SELECT name, punkte, quote FROM einzelhighscore ORDER by '" + attribut + "'");
         QueryResult ergebnis = verbinden.getCurrentQueryResult();
-        String[][] Daten = ergebnis.getData();
-
-        return Daten;
+        return ergebnis.getData();
     }
 
     public String[][] gebeHighsoreMehr(String attribut) {
         verbinden.executeStatement("SELECT name, punkte, quote FROM einzelhighscore ORDER by '" + attribut + "'");
         QueryResult ergebnis = verbinden.getCurrentQueryResult();
-        String[][] Daten = ergebnis.getData();
 
         //if (ergebnis.getColumnCount() != 0 && ergebnis.getRowCount() != 0) {
 
         //}
-        return Daten;
+        return ergebnis.getData();
     }
 }
