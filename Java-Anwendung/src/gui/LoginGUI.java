@@ -6,6 +6,8 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
+import utility.Datenbank;
+
 public class LoginGUI extends JFrame {
     private static final int buttonHeight = 75;
     private static final int buttonWidth  = 200;
@@ -41,18 +43,28 @@ public class LoginGUI extends JFrame {
         JButton login = new JButton("Anmelden");
         login.setBounds(paddingLeft, paddingTop + (buttonHeight + paddingCenter) * 2, buttonWidth, buttonHeight);
         login.addActionListener(e -> {
-            String nickname = name.getText();
-            String password = passwort.getText();
-            // Anmelden
+            String    nickname = name.getText();
+            String    password = passwort.getText();
+            Datenbank anmelden = new Datenbank();
+            if (anmelden.anmelden(nickname, password)) {
+                setVisible(false);
+                MenuGUI menuGUI = new MenuGUI();
+                menuGUI.setVisible(true);
+            }
         });
         add(login);
 
         JButton register = new JButton("Registrieren");
         register.setBounds(paddingLeft, paddingTop + (buttonHeight + paddingCenter) * 3, buttonWidth, buttonHeight);
         register.addActionListener(e -> {
-            String nickname = name.getText();
-            String password = passwort.getText();
-            // Registrieren
+            String    nickname = name.getText();
+            String    password = passwort.getText();
+            Datenbank anmelden = new Datenbank();
+            if (anmelden.register(nickname, password)) {
+                setVisible(false);
+                MenuGUI menuGUI = new MenuGUI();
+                menuGUI.setVisible(true);
+            }
         });
         add(register);
 

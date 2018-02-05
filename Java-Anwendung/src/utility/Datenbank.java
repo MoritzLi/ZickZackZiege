@@ -32,7 +32,7 @@ public class Datenbank {
         verbinden.executeStatement("INSERT into mehrspielerhighscore VALUES('" + name + "', '" + s + "', '" + punkte + "',  '" + quote + "', '" + spieler + "')");
     }
 
-    public void anmelden(String name, String passwort) {
+    public boolean anmelden(String name, String passwort) {
         String id1;
         verbinden.executeStatement("SELECT id FROM spieler WHERE name = '" + name + "' AND passwort = '" + passwort + "'");
         QueryResult ergebnis = verbinden.getCurrentQueryResult();
@@ -40,16 +40,16 @@ public class Datenbank {
         if (ergebnis.getColumnCount() != 0 && ergebnis.getRowCount() != 0) {
             System.out.println("Anmeldung war erfolgreich");
             username = name;
-            return;
-
+            return true;
         }
         System.out.println("Anmeldung war nicht erfolgreich");
+        return false;
     }
 
-    public void register(String name, String passwort) {
+    public boolean register(String name, String passwort) {
         if (name.length() == 0) {
             System.out.println("Name darf nicht leer sein!");
-            return;
+            return false;
         }
         verbinden.executeStatement("SELECT name FROM spieler WHERE name = '" + name + "'");
         QueryResult ergebnis = verbinden.getCurrentQueryResult();
@@ -58,10 +58,11 @@ public class Datenbank {
             verbinden.executeStatement("INSERT into spieler VALUES(null, '" + name + "','" + passwort + "' )");
             System.out.println("Registrierung war erfolgreich");
             username = name;
-            return;
+            return true;
         }
 
         System.out.println("Name schon vorhanden, bitte wähle einen anderen Namen");
+        return false;
     }
 
     public String[][] gebeHighsoreBot(String attribut) {
