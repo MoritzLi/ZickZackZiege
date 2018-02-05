@@ -59,34 +59,22 @@ public class db {
         System.out.println("Name schon vorhanden, bitte wähle einen anderen Namen");
     }
 
-    public void gebeHighsoreBot() {
-        verbinden.executeStatement("SELECT name, punkte, quote FROM einzelhighscore");
+    public String[][] gebeHighsoreBot(String attribut) {
+        verbinden.executeStatement("SELECT name, punkte, quote FROM einzelhighscore ORDER by '" + attribut + "'");
         QueryResult ergebnis = verbinden.getCurrentQueryResult();
         String[][] Daten = ergebnis.getData();
 
-        if (ergebnis.getColumnCount() != 0 && ergebnis.getRowCount() != 0) {
-            for (int i = 0; i < ergebnis.getRowCount(); i++) {
-                for (int u = 0; u < ergebnis.getColumnCount(); u++) {
-                    System.out.print(Daten[i][u] + " ");
-                }
-                System.out.println();
-            }
-        }
+        return Daten;
     }
 
-    public void gebeHighsoreMehr() {
-        verbinden.executeStatement("SELECT name, punkte, quote FROM mehrspielerhighscore");
-        //verbinden.executeStatement("SELECT name, punkte, quote FROM mehrspielerhighscore ORDER by ...");
+    public String[][] gebeHighsoreMehr(String attribut) {
+        verbinden.executeStatement("SELECT name, punkte, quote FROM einzelhighscore ORDER by '" + attribut + "'");
         QueryResult ergebnis = verbinden.getCurrentQueryResult();
         String[][] Daten = ergebnis.getData();
 
-        if (ergebnis.getColumnCount() != 0 && ergebnis.getRowCount() != 0) {
-            for (int i = 0; i < ergebnis.getRowCount(); i++) {
-                for (int u = 0; u < ergebnis.getColumnCount(); u++) {
-                    System.out.print(Daten[i][u] + " ");
-                }
-                System.out.println();
-            }
-        }
+        //if (ergebnis.getColumnCount() != 0 && ergebnis.getRowCount() != 0) {
+
+        //}
+        return Daten;
     }
 }
