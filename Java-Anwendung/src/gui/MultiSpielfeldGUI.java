@@ -73,11 +73,10 @@ class MultiSpielfeldGUI extends JFrame implements ActionListener {
                         refreshUI();
 
                         if (!spielfeld.isPlaying()) {
-                            System.out.println(spieler[0].getPunkte());
                             int zahl = 0;
                             int spielers = -1;
                             for(int i = 0; i < spieler.length; i++) {
-                                if(spieler[i].getPunkte() > zahl ){
+                                if(spieler[i].getPunkte() >= zahl ){
                                     spielers = i;
                                     zahl = spieler[i].getPunkte();
                                 }
