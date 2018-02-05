@@ -1,8 +1,6 @@
 package gui;
 
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 class TextInputPanel extends JPanel {
     private static final int buttonHeight = 75;

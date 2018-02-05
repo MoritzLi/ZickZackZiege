@@ -1,9 +1,9 @@
 package network;
 
-import java.io.IOException;
-
 import utility.List;
 import utility.NetzwerkSpieler;
+
+import java.io.IOException;
 
 public class GameServer extends Server {
     public static final int port = 5453;

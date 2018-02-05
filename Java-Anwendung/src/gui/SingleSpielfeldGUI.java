@@ -1,15 +1,13 @@
 package gui;
 
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-
 import utility.ArtificialIntelligence;
 import utility.Schwierigkeit;
 import utility.Spielfeld;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 class SingleSpielfeldGUI extends JFrame implements ActionListener {
     static Color[] colors = {

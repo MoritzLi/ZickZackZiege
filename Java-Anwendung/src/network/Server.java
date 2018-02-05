@@ -1,10 +1,10 @@
 package network;
 
+import utility.List;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-
-import utility.List;
 
 public abstract class Server implements ServerReceiveListener {
     private ServerSocket           serverSocket;

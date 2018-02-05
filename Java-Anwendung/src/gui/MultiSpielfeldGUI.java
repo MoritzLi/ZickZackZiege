@@ -1,13 +1,11 @@
 package gui;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-
 import utility.Spieler;
 import utility.Spielfeld;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import static gui.SingleSpielfeldGUI.colors;
 
@@ -63,17 +61,20 @@ class MultiSpielfeldGUI extends JFrame implements ActionListener {
         Object source = e.getSource();
         for (int x = 0; x < buttons.length; x++) {
             for (int y = 0; y < buttons[x].length; y++) {
-                if (buttons[x][y] == source && buttons[x][y].isEnabled()) {
-                    spielfeld.setValue(spieler[current].getId(), x, y);
-                    spielfeld.nextRound();
+                if (buttons[x][y] == source) {
+                    if (buttons[x][y].isEnabled()) {
+                        spielfeld.setValue(spieler[current].getId(), x, y);
+                        spielfeld.nextRound();
 
-                    current++;
-                    if (current == spieler.length) {
-                        current = 0;
+                        current++;
+                        if (current == spieler.length) {
+                            current = 0;
+                        }
+
+                        refreshUI();
+
+                        spielfeld.getPoints(spieler);
                     }
-
-                    refreshUI();
-
                     return;
                 }
             }

@@ -1,15 +1,13 @@
 package gui;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-
 import network.GameClient;
 import network.GameServer;
 import network.NetzwerkListener;
 import utility.Spielfeld;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import static gui.SingleSpielfeldGUI.colors;
 

@@ -1,8 +1,6 @@
 package gui;
 
-import javax.swing.JButton;
-import javax.swing.JList;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 class ListPanel<Type> extends JPanel {
     private static final int buttonHeight = 75;

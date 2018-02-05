@@ -1,8 +1,10 @@
-import gui.MenuGUI;
+import gui.Anmelden;
 
 class Start {
     public static void main(String[] arguments) throws Exception {
-        MenuGUI gui = new MenuGUI();
-        gui.setVisible(true);
+        Anmelden gui = new Anmelden();
+        //gui.setVisible(true);
+        db data = new db();
+        data.gebeHighsoreMehr();
     }
 }
