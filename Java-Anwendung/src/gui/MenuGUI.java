@@ -1,13 +1,14 @@
 package gui;
 
+import java.io.IOException;
+
+import javax.swing.JFrame;
+
 import network.GameClient;
 import network.GameServer;
 import network.NetzwerkListener;
 import utility.NetzwerkSpieler;
 import utility.Schwierigkeit;
-
-import javax.swing.*;
-import java.io.IOException;
 
 public class MenuGUI extends JFrame {
     private SelectPanel                panelMenu;
@@ -168,6 +169,7 @@ public class MenuGUI extends JFrame {
 
         panelServer.setListData(new NetzwerkSpieler[0]);
 
+        panelServer.getButton().setText("Spiel starten");
         panelServer.getButton().addActionListener(e -> server.starteSpiel());
     }
 
