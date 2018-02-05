@@ -6,7 +6,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
-public class Anmelden extends JFrame {
+public class LoginGUI extends JFrame {
     private static final int buttonHeight = 75;
     private static final int buttonWidth  = 200;
 
@@ -14,7 +14,7 @@ public class Anmelden extends JFrame {
     private static final int paddingTop    = 40;
     private static final int paddingCenter = 30;
 
-    public Anmelden() {
+    public LoginGUI() {
         super("Anmelden");
 
         setLayout(null);
