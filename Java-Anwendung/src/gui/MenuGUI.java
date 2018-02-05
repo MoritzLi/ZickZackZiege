@@ -51,6 +51,8 @@ public class MenuGUI extends JFrame {
 
         panelMenu.getButton2().setText("Einstellungen");
         panelMenu.getButton2().addActionListener(e -> setContentPane(panelSettings));
+
+        panelMenu.hideBack();
     }
 
     private void initStartPanel() {
@@ -64,6 +66,8 @@ public class MenuGUI extends JFrame {
 
         panelNewGame.getButton3().setText("Netzwerk");
         panelNewGame.getButton3().addActionListener(e -> setContentPane(panelNetwork));
+
+        panelNewGame.addBackListener(e -> setContentPane(panelMenu));
     }
 
     private void initSingleplayerPanel() {
@@ -74,6 +78,8 @@ public class MenuGUI extends JFrame {
 
         panelSingleplayer.getButton2().setText("Schwierig");
         panelSingleplayer.getButton2().addActionListener(e -> new SingleSpielfeldGUI(Schwierigkeit.SCHWIERIG));
+
+        panelSingleplayer.addBackListener(e -> setContentPane(panelNewGame));
     }
 
     private void initCountPanel() {
@@ -89,6 +95,8 @@ public class MenuGUI extends JFrame {
                 exception.printStackTrace();
             }
         });
+
+        panelCount.addBackListener(e -> setContentPane(panelNewGame));
     }
 
     private void initNetworkPanel() {
@@ -100,7 +108,9 @@ public class MenuGUI extends JFrame {
         panelNetwork.getButton2().setText("Netzwerkspiel erstellen");
         panelNetwork.getButton2().addActionListener(e -> {
             try {
-                server = new GameServer();
+                if (server == null) {
+                    server = new GameServer();
+                }
                 server.setListener(new NetzwerkListener() {
                     @Override
                     public void onPlayersChanged() {
@@ -128,6 +138,8 @@ public class MenuGUI extends JFrame {
                 e1.printStackTrace();
             }
         });
+
+        panelNetwork.addBackListener(e -> setContentPane(panelNewGame));
     }
 
     private void initJoinPanel() {
@@ -162,6 +174,8 @@ public class MenuGUI extends JFrame {
                 exception.printStackTrace();
             }
         });
+
+        panelJoin.addBackListener(e -> setContentPane(panelNetwork));
     }
 
     private void initServerPanel() {
@@ -171,11 +185,12 @@ public class MenuGUI extends JFrame {
 
         panelServer.getButton().setText("Spiel starten");
         panelServer.getButton().addActionListener(e -> server.starteSpiel());
+
+        panelServer.addBackListener(e -> setContentPane(panelNetwork));
     }
 
     private void initSettingsPanel() {
-//        panelSettings = new JPanel();
-//        panelSettings.setSize(getWidth(), getHeight());
-//        panelSettings.setLayout(null);
+        panelSettings = new SelectPanel(0, getWidth(), getHeight());
+        panelSettings.addBackListener(e -> setContentPane(panelMenu));
     }
 }

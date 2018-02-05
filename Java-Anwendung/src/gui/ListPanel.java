@@ -1,6 +1,10 @@
 package gui;
 
-import javax.swing.*;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JList;
+import javax.swing.JPanel;
 
 class ListPanel<Type> extends JPanel {
     private static final int buttonHeight = 75;
@@ -14,16 +18,22 @@ class ListPanel<Type> extends JPanel {
 
     private final JButton button;
 
+    private final JButton back;
+
     ListPanel(int width, int height) {
         setLayout(null);
         setSize(width, height);
 
+        back = new JButton("Zurück");
+        back.setBounds(10, 10, buttonWidth / 2, buttonHeight / 2);
+        add(back);
+
         list = new JList<>();
-        list.setBounds(paddingLeft, paddingTop / 4, buttonWidth, (int) (buttonWidth * 1.5));
+        list.setBounds(paddingLeft, 3 * paddingTop / 4, buttonWidth, 250);
         add(list);
 
         button = new JButton();
-        button.setBounds(paddingLeft, paddingTop / 4 + paddingCenter + list.getHeight(), buttonWidth, buttonHeight);
+        button.setBounds(paddingLeft, list.getY() + paddingCenter + list.getHeight(), buttonWidth, buttonHeight);
         button.setText("OK");
         add(button);
     }
@@ -34,5 +44,9 @@ class ListPanel<Type> extends JPanel {
 
     void setListData(Type[] data) {
         list.setListData(data);
+    }
+
+    void addBackListener(ActionListener listener) {
+        back.addActionListener(listener);
     }
 }
