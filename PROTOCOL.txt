@@ -2,6 +2,10 @@ REGISTER:
 Client -> Server
 Wird als Spieler registriert
 
+REGISTER name:
+Client -> Server
+Wird als Spieler mit Name registriert
+
 SET x,y:
 Client -> Server
 Client setzt sein Zeichen auf ein Spielfeld
@@ -13,3 +17,7 @@ Ein Client hat sein Zeichen auf ein Spielfeld gesetzt
 START n,id:
 Server -> Client
 Spiel startet.
+
+GO
+Server -> Client
+Client ist am Zug
