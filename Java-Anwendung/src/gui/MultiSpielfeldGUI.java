@@ -21,7 +21,6 @@ class MultiSpielfeldGUI extends JFrame implements ActionListener {
 
     MultiSpielfeldGUI(int spielerCount) {
         super("ZickZackZiege");
-
         setLayout(null);
 
         spieler = new Spieler[spielerCount];
@@ -73,7 +72,37 @@ class MultiSpielfeldGUI extends JFrame implements ActionListener {
 
                         refreshUI();
 
-                        spielfeld.getPoints(spieler);
+                        if (!spielfeld.isPlaying()) {
+                            System.out.println(spieler[0].getPunkte());
+                            int zahl = 0;
+                            int spielers = -1;
+                            for(int i = 0; i < spieler.length; i++) {
+                                if(spieler[i].getPunkte() > zahl ){
+                                    spielers = i;
+                                    zahl = spieler[i].getPunkte();
+                                }
+                            }
+                            if(spielers != -1) {
+                                String name = spieler[spielers].getName();
+                                JOptionPane.showMessageDialog(
+                                        this,
+                                        name + " hat gewonnen!!!",
+                                        "Spiel beendet",
+                                        JOptionPane.INFORMATION_MESSAGE
+                                );
+                            }
+                            else{
+                                JOptionPane.showMessageDialog(
+                                        this,
+                                        "Keiner hat gewonnen!!!",
+                                        "Spiel beendet",
+                                        JOptionPane.INFORMATION_MESSAGE
+                                );
+
+                            }
+
+                            }
+
                     }
                     return;
                 }
