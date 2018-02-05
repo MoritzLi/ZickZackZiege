@@ -1,14 +1,13 @@
 package gui;
 
-import java.io.IOException;
-
-import javax.swing.JFrame;
-
 import network.GameClient;
 import network.GameServer;
 import network.NetzwerkListener;
 import utility.NetzwerkSpieler;
 import utility.Schwierigkeit;
+
+import javax.swing.*;
+import java.io.IOException;
 
 public class MenuGUI extends JFrame {
     private SelectPanel                panelMenu;
@@ -49,11 +48,11 @@ public class MenuGUI extends JFrame {
         panelMenu.getButton1().setText("Neues Spiel");
         panelMenu.getButton1().addActionListener(e -> setContentPane(panelNewGame));
 
-        panelMenu.getButton2().setText("Einstellungen");
+        panelMenu.getButton2().setText("Highscore-Liste");
         panelMenu.getButton2().addActionListener(e -> setContentPane(panelSettings));
-
         panelMenu.hideBack();
     }
+
 
     private void initStartPanel() {
         panelNewGame = new SelectPanel(3, getWidth(), getHeight());

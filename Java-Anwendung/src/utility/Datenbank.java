@@ -71,6 +71,13 @@ public class Datenbank {
         verbinden.executeStatement("SELECT name, punkte, quote FROM einzelhighscore ORDER by '" + attribut + "'");
         QueryResult ergebnis = verbinden.getCurrentQueryResult();
 
+
+        //for(int i = 0; i < ergebnis.getRowCount(); i++){
+        //  for(int u = 0; u < ergebnis.getColumnCount(); u++){
+        //    System.out.print(Daten[i][u]+" ");
+        //}
+        //System.out.println();
+        //}
         //if (ergebnis.getColumnCount() != 0 && ergebnis.getRowCount() != 0) {
 
         //}

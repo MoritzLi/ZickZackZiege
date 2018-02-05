@@ -1,10 +1,7 @@
 package gui;
 
+import javax.swing.*;
 import java.awt.event.ActionListener;
-
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 class TextInputPanel extends JPanel {
     private static final int buttonHeight = 75;

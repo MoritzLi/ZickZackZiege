@@ -47,13 +47,14 @@ public class LoginGUI extends JFrame {
                 menuGUI.setLocation(getLocation());
                 menuGUI.setVisible(true);
                 setVisible(false);
+            } else {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Anmeldung war nicht erfolgreich",
+                        "Falsche Anmeldung",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
             }
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Anmeldung war nicht erfolgreich",
-                    "Falsche Anmeldung",
-                    JOptionPane.INFORMATION_MESSAGE
-            );
         });
         add(login);
 
