@@ -1,10 +1,11 @@
 package gui;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 public class Anmelden extends JFrame {
-
-    private JFrame fenster = new JFrame();
     private JLabel lEingabe;
     private JLabel lEingabe2;
     private JTextField tEingabe;
@@ -12,9 +13,11 @@ public class Anmelden extends JFrame {
 
 
     public Anmelden() {
-        fenster.setSize(300, 250);
-        fenster.setLocation(150, 320);
-        fenster.setVisible(true);
+        super("");
+
+        setLayout(null);
+
+        setSize(300, 250);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         lEingabe = new JLabel("Eingabe");
@@ -29,8 +32,6 @@ public class Anmelden extends JFrame {
         lEingabe2 = new JLabel("Echo");
         lEingabe2.setBounds(150, 10, 100, 20);
         add(lEingabe2);
-
-        //hier ergänzt ihr bitte ein neues TextField
 
         erzeugeEcho = new JButton("Echo bitte");
         erzeugeEcho.setBounds(10, 70, 100, 20);
