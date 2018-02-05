@@ -62,19 +62,16 @@ public class db {
     public String[][] gebeHighsoreBot(String attribut) {
         verbinden.executeStatement("SELECT name, punkte, quote FROM einzelhighscore ORDER by '" + attribut + "'");
         QueryResult ergebnis = verbinden.getCurrentQueryResult();
-        String[][] Daten = ergebnis.getData();
-
-        return Daten;
+        return ergebnis.getData();
     }
 
     public String[][] gebeHighsoreMehr(String attribut) {
         verbinden.executeStatement("SELECT name, punkte, quote FROM einzelhighscore ORDER by '" + attribut + "'");
         QueryResult ergebnis = verbinden.getCurrentQueryResult();
-        String[][] Daten = ergebnis.getData();
 
         //if (ergebnis.getColumnCount() != 0 && ergebnis.getRowCount() != 0) {
 
         //}
-        return Daten;
+        return ergebnis.getData();
     }
 }
