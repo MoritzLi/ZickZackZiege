@@ -47,9 +47,10 @@ public class LoginGUI extends JFrame {
             String    password = passwort.getText();
             Datenbank anmelden = new Datenbank();
             if (anmelden.anmelden(nickname, password)) {
-                setVisible(false);
                 MenuGUI menuGUI = new MenuGUI();
+                menuGUI.setLocation(getLocation());
                 menuGUI.setVisible(true);
+                setVisible(false);
             }
         });
         add(login);
@@ -61,9 +62,10 @@ public class LoginGUI extends JFrame {
             String    password = passwort.getText();
             Datenbank anmelden = new Datenbank();
             if (anmelden.register(nickname, password)) {
-                setVisible(false);
                 MenuGUI menuGUI = new MenuGUI();
+                menuGUI.setLocation(getLocation());
                 menuGUI.setVisible(true);
+                setVisible(false);
             }
         });
         add(register);
