@@ -29,7 +29,7 @@ public class ErgebnisDialog extends CallbackDialog {
         for (Spieler s : spieler) {
             View v = getLayoutInflater().inflate(R.layout.list_item_spieler, viewGroup, false);
 
-            TextView name   = v.findViewById(R.id.spieler);
+            TextView name = v.findViewById(R.id.spieler);
             TextView punkte = v.findViewById(R.id.punkte);
 
             name.setText(s.getName());

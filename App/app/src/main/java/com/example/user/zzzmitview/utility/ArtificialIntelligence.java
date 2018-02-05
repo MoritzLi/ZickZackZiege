@@ -4,8 +4,8 @@ package com.example.user.zzzmitview.utility;
  * KI für den Einzelspieler-Modus
  */
 public class ArtificialIntelligence {
-    private static final int kiID     = 1;
-    public static final  int playerID = 2;
+    public static final int kiID     = 2;
+    public static final int playerID = 1;
 
     private final Spielfeld            spielfeld;
     private       BinaryTree<Position> kiBaum;
@@ -39,7 +39,7 @@ public class ArtificialIntelligence {
                 baueSpielbaum2();
                 boolean besetzt = false;
                 for (int x = 0; x < spielfeld.getFieldCount(); x++) {
-                    if (spielfeld.getValue(x, 1) == kiID)
+                    if (spielfeld.getValue(x, 1) != 0)
                         besetzt = true;
                 }
                 if (besetzt) {
@@ -50,10 +50,10 @@ public class ArtificialIntelligence {
 
                 besetzt = false;
                 for (int y = 0; y < spielfeld.getFieldCount(); y++) {
-                    if (spielfeld.getValue(1, y) == kiID)
+                    if (spielfeld.getValue(1, y) != 0)
                         besetzt = true;
                 }
-                if (besetzt) {
+                if (!besetzt) {
                     kiBaum = kiBaum.getRightTree();
                 } else {
                     kiBaum = kiBaum.getLeftTree();
@@ -139,11 +139,11 @@ public class ArtificialIntelligence {
                     for (int y = 0; y < spielfeld.getFieldCount(); y++) {
                         if (spielfeld.isEmpty(x, y)) {
                             spielfeld.setValue(kiID, x, y);
-                            int profit = spielfeld.getPoints(kiID);
+                            int profit = spielfeld.getPoints(kiID, 0);
                             spielfeld.clear(x, y);
 
                             spielfeld.setValue(playerID, x, y);
-                            profit += spielfeld.getPoints(playerID);
+                            profit += spielfeld.getPoints(playerID, 0);
                             spielfeld.clear(x, y);
 
                             if (profit > max) {

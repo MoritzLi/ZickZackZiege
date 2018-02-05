@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.Socket;
 
 abstract class Client implements ClientReceiveListener {
-    private Socket           socket;
+    private Socket socket;
     private ClientConnection connection;
 
     public Client(final String ip, final int port) throws IOException {

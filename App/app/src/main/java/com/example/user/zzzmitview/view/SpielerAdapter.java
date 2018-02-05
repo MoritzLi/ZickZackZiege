@@ -1,9 +1,6 @@
 package com.example.user.zzzmitview.view;
 
 import android.content.Context;
-import android.graphics.ColorFilter;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -19,7 +16,7 @@ import com.example.user.zzzmitview.utility.Spieler;
 public class SpielerAdapter extends BaseAdapter {
     private final Spieler[] spieler;
     private final Context   context;
-    private       int       current;
+    private int current;
 
     public SpielerAdapter(@NonNull Context context, @NonNull Spieler[] objects) {
         super();

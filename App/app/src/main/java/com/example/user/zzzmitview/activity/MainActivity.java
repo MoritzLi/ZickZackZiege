@@ -72,7 +72,16 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.tutorial).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                toast("Demnächst verfügbar.");
+                startActivity(
+                        new Intent(
+                                getApplicationContext(),
+                                SpielfeldActivity.class
+                        )
+                                .putExtra(
+                                        INTENT_EXTRA_SPIELMODUS,
+                                        Spielmodus.TUTORIAL.toString()
+                                )
+                );
             }
         });
 

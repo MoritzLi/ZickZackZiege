@@ -1,7 +1,6 @@
 package com.example.user.zzzmitview.dialog;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 

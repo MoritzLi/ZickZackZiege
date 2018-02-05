@@ -7,8 +7,8 @@ import com.example.user.zzzmitview.utility.CallbackListener;
 
 public abstract class CallbackDialog extends AppCompatDialog {
     private final CallbackListener listener;
-    private       boolean          success;
-    private       Object[]         result;
+    private boolean success;
+    private Object[] result;
 
     CallbackDialog(Activity context, CallbackListener listener) {
         super(context);

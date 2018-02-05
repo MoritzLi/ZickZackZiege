@@ -17,7 +17,7 @@ import com.example.user.zzzmitview.view.NetzwerkSpielerAdapter;
 
 public class ServerDialog extends CallbackDialog {
     private ListView listView;
-    private View     confirm;
+    private View confirm;
 
     private GameServer server;
 
@@ -44,9 +44,9 @@ public class ServerDialog extends CallbackDialog {
             }
         });
 
-        WifiManager wm       = (WifiManager) getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        String      ip       = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
-        TextView    textView = findViewById(R.id.ipAdresse);
+        WifiManager wm = (WifiManager) getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
+        TextView textView = findViewById(R.id.ipAdresse);
         textView.setText(ip);
     }
 

@@ -19,7 +19,7 @@
         android:elevation="4dp"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
-        app:title="@string/app_name"/>
+        app:title="@string/app_name" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -90,7 +90,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Tutorial"
+                        android:text="Storymode"
                         android:textAppearance="@style/TextAppearance.AppCompat.Button"
                         android:textColorLink="@android:color/holo_blue_dark"
                         android:textSize="18sp"/>

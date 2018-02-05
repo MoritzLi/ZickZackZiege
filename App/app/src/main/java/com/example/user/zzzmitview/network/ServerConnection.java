@@ -18,7 +18,7 @@ class ServerConnection {
     private final ServerReceiveListener listener;
 
     private final String ip;
-    private final int    port;
+    private final int port;
 
     ServerConnection(Socket socket, ServerReceiveListener listener) throws IOException {
         this.socket = socket;

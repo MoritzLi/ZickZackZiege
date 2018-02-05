@@ -27,6 +27,8 @@ import com.example.user.zzzmitview.view.SingleplayerView;
 import com.example.user.zzzmitview.view.SpielListener;
 import com.example.user.zzzmitview.view.SpielerAdapter;
 import com.example.user.zzzmitview.view.SpielfeldView;
+import com.example.user.zzzmitview.view.StoryView;
+import com.example.user.zzzmitview.view.TutorialView;
 
 public class SpielfeldActivity extends AppCompatActivity implements SpielListener, CallbackListener {
     private Spieler[]      spieler;
@@ -93,6 +95,13 @@ public class SpielfeldActivity extends AppCompatActivity implements SpielListene
                 NetzwerkDialog netzwerkDialog = new NetzwerkDialog(this, this);
                 netzwerkDialog.show();
                 break;
+
+            case TUTORIAL:
+                TutorialView tutorialView = (TutorialView) view;
+                tutorialView.setSchwierigkeit(Schwierigkeit.EINFACH);
+                StoryView v = findViewById(R.id.storyView);
+                v.setSpielfeldView(tutorialView);
+                break;
         }
 
         listView = findViewById(R.id.listView);
@@ -134,7 +143,11 @@ public class SpielfeldActivity extends AppCompatActivity implements SpielListene
 
     @Override
     public void round() {
-        spielfeld.getPoints(spieler);
+        if (spielmodus != Spielmodus.TUTORIAL) {
+            spielfeld.getPoints(spieler, 0);
+        } else {
+            spielfeld.getPoints(spieler, StoryView.getCurrentMode());
+        }
         spielfeld.nextRound();
 
         runOnUiThread(new Runnable() {
@@ -154,7 +167,11 @@ public class SpielfeldActivity extends AppCompatActivity implements SpielListene
             if (source == ErgebnisDialog.class) {
                 spielfeld.clear();
 
-                spielfeld.getPoints(spieler);
+                if (spielmodus != Spielmodus.TUTORIAL) {
+                    spielfeld.getPoints(spieler, 0);
+                } else {
+                    spielfeld.getPoints(spieler, StoryView.getCurrentMode());
+                }
                 adapter.notifyDataSetChanged();
 
                 view.reset();
@@ -271,6 +288,11 @@ public class SpielfeldActivity extends AppCompatActivity implements SpielListene
             case NETZWERK_LOKAL:
                 setContentView(R.layout.activity_spielfeld_netzwerk);
                 break;
+
+            case TUTORIAL:
+                setContentView(R.layout.activity_spielfeld_tutorial);
+                break;
+
         }
     }
 }

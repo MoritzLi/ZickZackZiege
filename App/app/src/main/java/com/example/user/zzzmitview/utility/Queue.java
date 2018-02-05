@@ -90,7 +90,7 @@ public class Queue<ContentType> implements Iterable<ContentType> {
     }
 
     private class Node {
-        private Node        next;
+        private Node next;
         private ContentType content;
 
         private Node(ContentType content) {

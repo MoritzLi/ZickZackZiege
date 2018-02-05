@@ -1,6 +1,6 @@
 package com.example.user.zzzmitview.utility;
 
-import android.util.Log;
+import com.example.user.zzzmitview.view.StoryView;
 
 public class Spielfeld {
     private final int[][] feld;
@@ -21,13 +21,26 @@ public class Spielfeld {
         }
     }
 
-    public void getPoints(Spieler... spieler) {
+    public void getPoints(Spieler[] spieler, int mode) {
         for (Spieler s : spieler) {
-            s.setPunkte(getPoints(s.getId()));
+            s.setPunkte(getPoints(s.getId(), mode));
         }
     }
 
-    public int getPoints(int spielerID) {
+    public int getPoints(int spielerID, int mode) {
+        switch (mode) {
+            case StoryView.TUTORIAL_RAMMBOCK:
+                return Auswertung.auswertung(spielerID, feld, true, false, false, false);
+
+            case StoryView.TUTORIAL_KORRUPTE:
+                return Auswertung.auswertung(spielerID, feld, false, true, false, false);
+
+            case StoryView.TUTORIAL_PAPA:
+                return Auswertung.auswertung(spielerID, feld, false, false, true, false);
+
+            case StoryView.TUTORIAL_MAMA:
+                return Auswertung.auswertung(spielerID, feld, false, false, false, true);
+        }
         return Auswertung.auswertung(spielerID, feld);
     }
 

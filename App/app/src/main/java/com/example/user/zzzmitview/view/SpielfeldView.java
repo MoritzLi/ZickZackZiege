@@ -19,7 +19,12 @@ import com.example.user.zzzmitview.R;
 import com.example.user.zzzmitview.utility.Spieler;
 import com.example.user.zzzmitview.utility.Spielfeld;
 
-public class SpielfeldView extends View {
+/**
+ * View für das Spielfeld
+ * Sub-Klassen müssen das setzen des Feldes in "onTouchEvent" selbst implementieren
+ * Erwartet, dass spieler, spielfeld und listener gesetzt werden vor dem ersten Abbilden der View
+ */
+public abstract class SpielfeldView extends View {
     static final int[] colors = {
             android.R.color.transparent,
             R.color.materialRed,
@@ -110,14 +115,17 @@ public class SpielfeldView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         invalidate();
-
         return super.onTouchEvent(event);
     }
 
+    /**
+     * Sollte in der Sub-Klasse überschrieben werden, falls weitere Initialisierungsschritte notwendig sind
+     * Wird nur einmal aufgerufen.
+     */
     @CallSuper
     void initialize() {
-        fieldSize = getWidth() / spielfeld.getFieldCount();
         stroke = 3;
+        fieldSize = getWidth() / spielfeld.getFieldCount();
 
         paint = new Paint();
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -147,10 +155,14 @@ public class SpielfeldView extends View {
         isInitialized = true;
     }
 
-    public void reset() {
+    /**
+     * Wird aufgerufen, um das Spielfeld auf ein neues Spiel vorzubreiten.
+     */
+    public abstract void reset();
 
-    }
-
+    /**
+     * Zeichnet das Raster in eine Bitmap.
+     */
     private void drawBackground() {
         Paint paint = new Paint();
         paint.setStrokeWidth(stroke);
@@ -170,13 +182,16 @@ public class SpielfeldView extends View {
         }
     }
 
+    /**
+     * Zeichnet die Symbole der Spieler in eine transparente Bitmap, die über den Hintergrund gelegt wird.
+     */
     private void drawFields() {
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
 
         bitmapFields = Bitmap.createBitmap(
-                fieldSize * spielfeld.getFieldCount(),
-                fieldSize * spielfeld.getFieldCount(),
+                getWidth(),
+                getHeight(),
                 Bitmap.Config.ARGB_4444
         );
         Canvas canvas = new Canvas(bitmapFields);
