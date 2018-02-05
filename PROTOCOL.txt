@@ -13,3 +13,7 @@ Ein Client hat sein Zeichen auf ein Spielfeld gesetzt
 START n,id:
 Server -> Client
 Spiel startet.
+
+GO
+Server -> Client
+Client ist am Zug
