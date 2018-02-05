@@ -1,12 +1,15 @@
+package utility;
+
 import java.time.LocalDateTime;
 
-public class db {
+public class Datenbank {
     String name;
     int punkte;
     int spieler;
     private DatabaseConnector verbinden;
+    public static String username;
 
-    public db() {
+    public Datenbank() {
         verbinden = new DatabaseConnector("localhost", 3306, "zickzackziege", "root", "");
         System.out.println(verbinden.getErrorMessage());
     }
@@ -36,6 +39,7 @@ public class db {
 
         if (ergebnis.getColumnCount() != 0 && ergebnis.getRowCount() != 0) {
             System.out.println("Anmeldung war erfolgreich");
+            username = name;
             return;
 
         }
@@ -53,6 +57,7 @@ public class db {
         if (ergebnis.getColumnCount() == 0 && ergebnis.getRowCount() == 0) {
             verbinden.executeStatement("INSERT into spieler VALUES(null, '" + name + "','" + passwort + "' )");
             System.out.println("Registrierung war erfolgreich");
+            username = name;
             return;
         }
 

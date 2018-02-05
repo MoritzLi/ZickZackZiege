@@ -1,6 +1,7 @@
 package gui;
 
 import utility.ArtificialIntelligence;
+import utility.Datenbank;
 import utility.Schwierigkeit;
 import utility.Spielfeld;
 
@@ -8,6 +9,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import static utility.Datenbank.username;
 
 class SingleSpielfeldGUI extends JFrame implements ActionListener {
     static Color[] colors = {
@@ -81,6 +84,15 @@ class SingleSpielfeldGUI extends JFrame implements ActionListener {
                     spielfeld.nextRound();
 
                     refreshUI();
+
+                    if (!spielfeld.isPlaying()) {
+                        String users = username;
+                        int spielerpunkte = spielfeld.getPoints(ArtificialIntelligence.playerID);
+                        int botpunkte = spielfeld.getPoints(ArtificialIntelligence.kiID);
+                        Datenbank hochladen = new Datenbank();
+                        hochladen.botSpiel(users, spielerpunkte, botpunkte);
+                    }
+
 
                     return;
                 }

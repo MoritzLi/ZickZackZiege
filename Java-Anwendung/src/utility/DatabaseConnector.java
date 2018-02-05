@@ -1,9 +1,9 @@
+package utility;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
-
-import utility.Queue;
 
 public class DatabaseConnector {
     private Connection connection;
@@ -11,11 +11,11 @@ public class DatabaseConnector {
     private String message = null;
 
     /**
-     * Ein Objekt vom Typ DatabaseConnector wird erstellt, und eine Verbindung zur Datenbank
+     * Ein Objekt vom Typ utility.DatabaseConnector wird erstellt, und eine Verbindung zur utility.Datenbank
      * wird aufgebaut. Mit den Parametern pIP und pPort werden die IP-Adresse und die
-     * Port-Nummer uebergeben, unter denen die Datenbank mit Namen pDatabase zu erreichen ist.
+     * Port-Nummer uebergeben, unter denen die utility.Datenbank mit Namen pDatabase zu erreichen ist.
      * Mit den Parametern pUsername und pPassword werden Benutzername und Passwort fuer die
-     * Datenbank uebergeben.
+     * utility.Datenbank uebergeben.
      */
     public DatabaseConnector(String pIP, int pPort, String pDatabase, String pUsername, String pPassword) {
         try {
@@ -30,7 +30,7 @@ public class DatabaseConnector {
 
     /**
      * Der Auftrag schickt den im Parameter pSQLStatement enthaltenen SQL-Befehl an die
-     * Datenbank ab.
+     * utility.Datenbank ab.
      * Handelt es sich bei pSQLStatement um einen SQL-Befehl, der eine Ergebnismenge
      * liefert, so kann dieses Ergebnis anschließend mit der Methode getCurrentQueryResult
      * abgerufen werden.
@@ -86,7 +86,7 @@ public class DatabaseConnector {
 
     /**
      * Die Anfrage liefert das Ergebnis des letzten mit der Methode executeStatement an
-     * die Datenbank geschickten SQL-Befehls als Ob-jekt vom Typ QueryResult zurueck.
+     * die utility.Datenbank geschickten SQL-Befehls als Ob-jekt vom Typ utility.QueryResult zurueck.
      * Wurde bisher kein SQL-Befehl abgeschickt oder ergab der letzte Aufruf von
      * executeStatement keine Ergebnismenge (z.B. bei einem INSERT-Befehl oder einem
      * Syntaxfehler), so wird null geliefert.
