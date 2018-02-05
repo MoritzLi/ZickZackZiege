@@ -27,8 +27,8 @@ public class Datenbank {
         LocalDateTime s = LocalDateTime.now();
         double punkted = (double) punkte;
         double punkte2d = (double) punkte2;
-        double quote = punkte2d / punkted;
-        quote = Math.round(100.0 * quote) / 100.0;
+        double quote = punkted / punkte2d;
+        quote = Math.round(10000.0 * quote) / 10000.0;
         verbinden.executeStatement("INSERT into mehrspielerhighscore VALUES('" + name + "', '" + s + "', '" + punkte + "',  '" + quote + "', '" + spieler + "')");
     }
 
