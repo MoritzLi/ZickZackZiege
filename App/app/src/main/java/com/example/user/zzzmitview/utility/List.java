@@ -32,27 +32,27 @@ public class List<ContentType> implements Iterable<ContentType> {
     /**
      * Konstruktor. Erlaubt das direkte Füllen der Liste mit dem Inhalt eines Arrays desselben Datentyps.
      *
-     * @param array Neuer Listeninhalt
+     * @param content Neuer Listeninhalt
      */
-    public List(ContentType... array) {
+    public List(ContentType... content) {
         first = null;
         last = null;
         current = null;
         length = 0;
-        concat(array);
+        concat(content);
     }
 
     /**
      * Konstruktor. Erlaubt das direkte Füllen der Liste mit dem Inhalt einer {@link java.util.List} desselben Datentyps.
      *
-     * @param list Neuer Listeninhalt
+     * @param content Neuer Listeninhalt
      */
-    public List(java.util.List<ContentType> list) {
+    public List(Iterable<ContentType> content) {
         first = null;
         last = null;
         current = null;
         length = 0;
-        concat(list);
+        concat(content);
     }
 
     /**
@@ -199,15 +199,14 @@ public class List<ContentType> implements Iterable<ContentType> {
     }
 
     /**
-     * Ersetzt das Objekt an der aktuellen Listenposition durch ein per Parameter Übergebenes.
+     * Liefert das Objekt vor dem Aktuellen, ohne den Pointer zu verschieben.
      *
-     * @param pContent Neues Listenobjekt
+     * @return Vorheriges Listenobjekt.
      */
-    public List<ContentType> setContent(ContentType pContent) {
-        if (pContent != null && this.hasAccess())
-            current.content = pContent;
-
-        return this;
+    public ContentType getPrevious() {
+        if (hasAccess() && current.previous != null)
+            return current.previous.content;
+        return null;
     }
 
     /**
@@ -222,14 +221,26 @@ public class List<ContentType> implements Iterable<ContentType> {
     }
 
     /**
-     * Liefert das Objekt vor dem Aktuellen, ohne den Pointer zu verschieben.
+     * Liefert das Objekt an einem bestimmten Listenindex. Entspricht Aufrufen von {@link #toIndex(int)} und anschließend {@link #getContent()}.
      *
-     * @return Vorheriges Listenobjekt.
+     * @param index Listenindex
+     * @return Listenobjekt
      */
-    public ContentType getPrevious() {
-        if (hasAccess() && current.previous != null)
-            return current.previous.content;
-        return null;
+    public ContentType getObjectAt(int index) {
+        toIndex(index);
+        return getContent();
+    }
+
+    /**
+     * Ersetzt das Objekt an der aktuellen Listenposition durch ein per Parameter Übergebenes.
+     *
+     * @param pContent Neues Listenobjekt
+     */
+    public List<ContentType> setContent(ContentType pContent) {
+        if (pContent != null && this.hasAccess())
+            current.content = pContent;
+
+        return this;
     }
 
     /**
@@ -310,14 +321,24 @@ public class List<ContentType> implements Iterable<ContentType> {
     }
 
     /**
-     * Hängt eine native java.util Liste ans Ende der aktuellen Liste an ohne den Pointer zu verschieben.
-     *
-     * @param pList {@link java.util.List}, die angehängt werden soll.
-     * @return Instanz der geänderten Liste.
+     * Entfernt das Objekt, auf das der Pointer zeigt. Der Pointer steht danach auf dem Nachfolgeelement.
      */
-    public List<ContentType> concat(java.util.List<ContentType> pList) {
-        for (ContentType t : pList) {
-            append(t);
+    public List<ContentType> remove() {
+        if (this.hasAccess() && !this.isEmpty()) {
+            if (current == first)
+                first = first.next;
+            else
+                current.previous.next = current.next;
+            if (current == last)
+                last = current.previous;
+            else
+                current.next.previous = current.previous;
+            Node temp = current;
+            next();
+            temp.content = null;
+            temp.next = null;
+            temp.previous = null;
+            length--;
         }
 
         return this;
@@ -349,36 +370,26 @@ public class List<ContentType> implements Iterable<ContentType> {
     }
 
     /**
-     * Entfernt das Objekt, auf das der Pointer zeigt. Der Pointer steht danach auf dem Nachfolgeelement.
-     */
-    public List<ContentType> remove() {
-        if (this.hasAccess() && !this.isEmpty()) {
-            if (current == first)
-                first = first.next;
-            else
-                current.previous.next = current.next;
-            if (current == last)
-                last = current.previous;
-            else
-                current.next.previous = current.previous;
-            Node temp = current;
-            next();
-            temp.content = null;
-            temp.next = null;
-            temp.previous = null;
-            length--;
-        }
-
-        return this;
-    }
-
-    /**
-     * Hängt ein Array ans Ende der aktuellen Liste an ohne den Pointer zu verschieben.
+     * Hängt ein Array ans Ende der aktuellen Liste an,
+     * ohne den Pointer zu verschieben.
      *
      * @param array Array, das angehängt werden soll.
      */
     public List<ContentType> concat(ContentType[] array) {
         for (ContentType c : array)
+            append(c);
+
+        return this;
+    }
+
+    /**
+     * Hängt ein iterierbare Sammlung ans Ende der aktuellen Liste an,
+     * ohne den Pointer zu verschieben.
+     *
+     * @param collection Sammlung, die angehängt werden soll.
+     */
+    public List<ContentType> concat(Iterable<ContentType> collection) {
+        for (ContentType c : collection)
             append(c);
 
         return this;
@@ -419,17 +430,6 @@ public class List<ContentType> implements Iterable<ContentType> {
                 return true;
         }
         return false;
-    }
-
-    /**
-     * Liefert das Objekt an einem bestimmten Listenindex. Entspricht Aufrufen von {@link #toIndex(int)} und anschließend {@link #getContent()}.
-     *
-     * @param index Listenindex
-     * @return Listenobjekt
-     */
-    public ContentType getObjectAt(int index) {
-        toIndex(index);
-        return getContent();
     }
 
     /**
