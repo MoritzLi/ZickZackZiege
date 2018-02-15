@@ -1,9 +1,7 @@
 package gui;
 
+import javax.swing.*;
 import java.awt.event.ActionListener;
-
-import javax.swing.JButton;
-import javax.swing.JPanel;
 
 class SelectPanel extends JPanel {
     private static final int buttonHeight = 75;
