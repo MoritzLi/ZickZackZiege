@@ -1,4 +1,4 @@
-package com.example.user.zzzmitview.utility;
+package com.example.user.zzzmitview.database;
 
 public class Score {
     private final int id;

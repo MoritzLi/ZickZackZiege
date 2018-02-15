@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.user.zzzmitview.R;
-import com.example.user.zzzmitview.utility.CallbackListener;
 
 public class VerlassenDialog extends CallbackDialog {
     public VerlassenDialog(Activity context, CallbackListener listener) {

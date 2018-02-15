@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.example.user.zzzmitview.R;
+import com.example.user.zzzmitview.dialog.CallbackListener;
 import com.example.user.zzzmitview.dialog.ErgebnisDialog;
 import com.example.user.zzzmitview.dialog.IdleDialog;
 import com.example.user.zzzmitview.dialog.NetzwerkDialog;
@@ -16,7 +17,6 @@ import com.example.user.zzzmitview.dialog.VerlassenDialog;
 import com.example.user.zzzmitview.network.GameClient;
 import com.example.user.zzzmitview.network.GameServer;
 import com.example.user.zzzmitview.network.NetzwerkListener;
-import com.example.user.zzzmitview.utility.CallbackListener;
 import com.example.user.zzzmitview.utility.Schwierigkeit;
 import com.example.user.zzzmitview.utility.Spieler;
 import com.example.user.zzzmitview.utility.Spielfeld;

@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.example.user.zzzmitview.R;
 import com.example.user.zzzmitview.network.GameServer;
-import com.example.user.zzzmitview.utility.CallbackListener;
 import com.example.user.zzzmitview.utility.NetzwerkSpieler;
 import com.example.user.zzzmitview.view.NetzwerkSpielerAdapter;
 

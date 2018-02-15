@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 
 import com.example.user.zzzmitview.R;
-import com.example.user.zzzmitview.utility.CallbackListener;
 
 public class IdleDialog extends CallbackDialog {
     public IdleDialog(Activity context, CallbackListener listener) {

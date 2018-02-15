@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.user.zzzmitview.R;
-import com.example.user.zzzmitview.utility.CallbackListener;
 import com.example.user.zzzmitview.utility.Spieler;
 
 public class ErgebnisDialog extends CallbackDialog {

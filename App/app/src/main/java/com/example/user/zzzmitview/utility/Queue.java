@@ -28,21 +28,12 @@ public class Queue<ContentType> implements Iterable<ContentType> {
             append(object);
     }
 
-    public int size() {
-        return size;
+    public boolean isEmpty() {
+        return first == null;
     }
 
     public ContentType getContent() {
         return first.content;
-    }
-
-    public Queue<ContentType> remove() {
-        if (!isEmpty()) {
-            this.first = first.next;
-            size--;
-        }
-
-        return this;
     }
 
     public Queue<ContentType> append(ContentType object) {
@@ -60,8 +51,24 @@ public class Queue<ContentType> implements Iterable<ContentType> {
         return this;
     }
 
-    public boolean isEmpty() {
-        return first == null;
+    public Queue<ContentType> remove() {
+        if (!isEmpty()) {
+            this.first = first.next;
+            size--;
+        }
+
+        return this;
+    }
+
+    public Queue<ContentType> clear() {
+        first = null;
+        last = null;
+        size = 0;
+        return this;
+    }
+
+    public int size() {
+        return size;
     }
 
     @NonNull
@@ -80,13 +87,6 @@ public class Queue<ContentType> implements Iterable<ContentType> {
                 return content;
             }
         };
-    }
-
-    public Queue<ContentType> clear() {
-        first = null;
-        last = null;
-        size = 0;
-        return this;
     }
 
     private class Node {

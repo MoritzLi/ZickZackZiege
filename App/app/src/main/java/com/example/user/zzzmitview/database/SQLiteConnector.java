@@ -1,4 +1,4 @@
-package com.example.user.zzzmitview.utility;
+package com.example.user.zzzmitview.database;
 
 import android.content.ContentValues;
 import android.content.Context;
